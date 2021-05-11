@@ -11,19 +11,25 @@ public class PlayerController : MonoBehaviour {
     public float isGroundedRayLength = 0.1f;
     public LayerMask layerMaskForGrounded;
 
+    [SerializeField] public UI_Inventory uiInventory;
+    public int inventorySize = 32;
+
     private Rigidbody2D rb;
     private Collider2D boxCollider;
+    private Inventory inventory;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<Collider2D>();
+        inventory = new Inventory(inventorySize);
+        uiInventory.SetPlayer(this);
+        uiInventory.SetInventory(inventory);
     }
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded()) {
             velocity.y = jumpforce;
-        }
-        else {
+        } else {
             if (velocity.y > 0) {
                 velocity.y -= Time.deltaTime * jumpDecelleration;
             }
@@ -34,12 +40,20 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    void OnCollisionEnter2D(Collision2D collisionInfo) {
+        WorldItem worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
+        if (worldItem != null) {
+            inventory.AddItem(worldItem.GetItem());
+            worldItem.DestroySelf();
+        }
+    }
+
     private void FixedUpdate() {
         float xInput = Input.GetAxisRaw("Horizontal");
 
         velocity.x = Mathf.MoveTowards(velocity.x, (speed / 100) * xInput, walkAcceleration * Time.deltaTime);
 
-        rb.velocity = (Vector2) velocity;
+        rb.velocity = (Vector2)velocity;
     }
 
     private bool IsGrounded() {

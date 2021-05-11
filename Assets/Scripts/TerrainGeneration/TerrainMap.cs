@@ -20,7 +20,7 @@ public class TerrainMap : MonoBehaviour {
     private Transform player;
     private TerrainNoise terrainNoise;
     private VoxelMap voxelMap;
-    private bool isActive = true;
+    public bool isActive = true;
 
     private List<Color> colorList = new List<Color>();
     private static readonly int MapTexture = Shader.PropertyToID("MapTexture");
@@ -43,8 +43,9 @@ public class TerrainMap : MonoBehaviour {
         voxelMap = FindObjectOfType<VoxelMap>();
 
         RefreshColors();
-
         NewTexture();
+
+        SetMapState(isActive);
     }
 
     private void Update() {
@@ -181,7 +182,11 @@ public class TerrainMap : MonoBehaviour {
 
     private void ToggleMap() {
         isActive = !isActive;
-        map.SetActive(isActive);
+        SetMapState(isActive);
+    }
+
+    private void SetMapState(bool state) {
+        map.SetActive(state);
         RecalculateMap();
     }
 }
