@@ -88,36 +88,38 @@ public class TerrainMap : MonoBehaviour {
     }
 
     public void RecalculateMap() {
-        var position = player.position;
-        var pos = new Vector3Int((int)position.x, (int)position.y, 0);
-        var offset = new Vector2Int(mapRenderResolution / 2, mapRenderResolution / 2);
+        if (isActive) {
+            var position = player.position;
+            var pos = new Vector3Int((int)position.x, (int)position.y, 0);
+            var offset = new Vector2Int(mapRenderResolution / 2, mapRenderResolution / 2);
 
-        RefreshColors();
+            RefreshColors();
 
-        for (int x = mapRenderResolution, index = 0; x > 0; x--) {
-            for (var y = 0; y < mapRenderResolution; y++, index++) {
-                colors[index] = Color.black;
-                float pointState = FindNoise(x + pos.x - offset.x, y + pos.y - offset.y);
-                if (renderType == RenderType.BWCave) {
-                    pointState = terrainNoise.Perlin2D(x + pos.x - offset.x, y + pos.y - offset.y);
-                }
-                if (pointState > 0) {
-                    colors[index] = FindColor(pointState);
+            for (int x = mapRenderResolution, index = 0; x > 0; x--) {
+                for (var y = 0; y < mapRenderResolution; y++, index++) {
+                    colors[index] = Color.black;
+                    float pointState = FindNoise(x + pos.x - offset.x, y + pos.y - offset.y);
+                    if (renderType == RenderType.BWCave) {
+                        pointState = terrainNoise.Perlin2D(x + pos.x - offset.x, y + pos.y - offset.y);
+                    }
+                    if (pointState > 0) {
+                        colors[index] = FindColor(pointState);
+                    }
                 }
             }
-        }
 
-        var radius = mapRenderResolution / zoomInterval;
-        for (var x = offset.x - radius; x < offset.x + radius; x++) {
-            for (var y = offset.y - radius; y < offset.y + radius; y++) {
-                var playerIndex = y * mapRenderResolution + x;
-                colors[playerIndex] = Color.white;
+            var radius = mapRenderResolution / zoomInterval;
+            for (var x = offset.x - radius; x < offset.x + radius; x++) {
+                for (var y = offset.y - radius; y < offset.y + radius; y++) {
+                    var playerIndex = y * mapRenderResolution + x;
+                    colors[playerIndex] = Color.white;
+                }
             }
-        }
 
-        texture.SetPixels(colors);
-        texture.Apply();
-        mapMaterial.SetTexture(MapTexture, texture);
+            texture.SetPixels(colors);
+            texture.Apply();
+            mapMaterial.SetTexture(MapTexture, texture);
+        }
     }
 
     private void RefreshColors() {
@@ -180,5 +182,6 @@ public class TerrainMap : MonoBehaviour {
     private void ToggleMap() {
         isActive = !isActive;
         map.SetActive(isActive);
+        RecalculateMap();
     }
 }
