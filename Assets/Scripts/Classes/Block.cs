@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
+public enum BlockType {
+    Empty,
+    Stone,
+    Dirt,
+    Rock,
+    Grass,
+    White
+};
+
+[Serializable]
 public class Block {
     public string texturePath;
     public BlockType blockType;

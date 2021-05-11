@@ -3,16 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-[Serializable]
-public enum BlockType {
-    Empty,
-    Stone,
-    Dirt,
-    Rock,
-    Grass,
-    White
-};
-
 public static class BlockManager {
     private static readonly string Path = Application.persistentDataPath + "/blocks.json";
 
