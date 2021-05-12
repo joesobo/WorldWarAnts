@@ -113,20 +113,19 @@ public class VoxelChunk : MonoBehaviour {
                     // Deleting
                     if (stencil.fillType == 0) {
                         // link voxel[i].state to appropriate block
-                        Block deletingBlock = blockCollection.blocks.Find(block => (int)block.blockType == voxels[i].state);
+                        Block deletingBlock = blockCollection.blocks[voxels[i].state];
                         // get item id out of that
                         ItemType itemType = deletingBlock.itemType;
                         // int amount = deletingBlock.amount;
                         // create new item with that id
                         Item item = new Item { itemType = itemType, amount = 1 };
                         // spawn item
-                        WorldItem.SpawnWorldItem(transform.position, item);
+                        WorldItem.SpawnWorldItem((new Vector3(voxels[i].position.x, voxels[i].position.y, 0) * 8) + (transform.position), item);
                         // update state
                         voxels[i].state = stencil.Apply(x, y, voxels[i].state);
                         didUpdate = true;
                     }
                     // Placing
-                    Debug.Log(voxels[i].state);
                     if (stencil.fillType != 0 && voxels[i].state == 0) {
                         voxels[i].state = stencil.Apply(x, y, voxels[i].state);
                         didUpdate = true;

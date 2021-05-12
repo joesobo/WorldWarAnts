@@ -15,7 +15,7 @@ public class WorldItem : MonoBehaviour {
 
         return worldItem;
     }
-    
+
     public static WorldItem DropItem(Vector3 position, Item item) {
         Vector3 randomDir = new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0);
         WorldItem worldItem = SpawnWorldItem(position + (randomDir * dropSpeed), item);
