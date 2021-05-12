@@ -27,6 +27,10 @@ public class WorldItem : MonoBehaviour {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    void OnTriggerEnter2D(Collider2D collider) {
+        //TODO: if within trigger area start moving towards collider
+    }
+
     void OnCollisionEnter2D(Collision2D collisionInfo) {
         PlayerController player = collisionInfo.gameObject.GetComponent<PlayerController>();
         WorldItem worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
