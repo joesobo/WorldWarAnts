@@ -27,6 +27,24 @@ public class WorldItem : MonoBehaviour {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    void OnCollisionEnter2D(Collision2D collisionInfo) {
+        PlayerController player = collisionInfo.gameObject.GetComponent<PlayerController>();
+        WorldItem worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
+
+        if (player != null) {
+            player.AddToInventory(this);
+        }
+
+        if (worldItem != null && worldItem != this && this.item.itemType == worldItem.item.itemType) {
+            if (this.item.amount > worldItem.item.amount) {
+                worldItem.DestroySelf();
+            } else {
+                worldItem.item.amount += this.item.amount;
+                this.DestroySelf();
+            }
+        }
+    }
+
     public void SetItem(Item item) {
         this.item = item;
         spriteRenderer.sprite = item.GetSprite();

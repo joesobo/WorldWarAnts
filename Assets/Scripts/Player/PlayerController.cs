@@ -40,13 +40,18 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collisionInfo) {
-        WorldItem worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
-        if (worldItem != null) {
-            inventory.AddItem(worldItem.GetItem());
-            worldItem.DestroySelf();
-        }
+    public void AddToInventory(WorldItem worldItem) {
+        inventory.AddItem(worldItem.GetItem());
+        worldItem.DestroySelf();
     }
+
+    // void OnCollisionEnter2D(Collision2D collisionInfo) {
+    //     WorldItem worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
+    //     if (worldItem != null) {
+    //         inventory.AddItem(worldItem.GetItem());
+    //         worldItem.DestroySelf();
+    //     }
+    // }
 
     private void FixedUpdate() {
         float xInput = Input.GetAxisRaw("Horizontal");
