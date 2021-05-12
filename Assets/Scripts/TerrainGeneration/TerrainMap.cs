@@ -22,7 +22,7 @@ public class TerrainMap : MonoBehaviour {
     private VoxelMap voxelMap;
     public bool isActive = true;
 
-    private List<Color> colorList = new List<Color>();
+    private readonly List<Color> colorList = new List<Color>();
     private static readonly int MapTexture = Shader.PropertyToID("MapTexture");
 
     public enum RenderType {
@@ -33,7 +33,7 @@ public class TerrainMap : MonoBehaviour {
         GrassPerlin,
         LiveMap,
         FullMap,
-        BWCave
+        BwCave
     };
 
     private void Start() {
@@ -100,7 +100,7 @@ public class TerrainMap : MonoBehaviour {
                 for (var y = 0; y < mapRenderResolution; y++, index++) {
                     colors[index] = Color.black;
                     float pointState = FindNoise(x + pos.x - offset.x, y + pos.y - offset.y);
-                    if (renderType == RenderType.BWCave) {
+                    if (renderType == RenderType.BwCave) {
                         pointState = terrainNoise.Perlin2D(x + pos.x - offset.x, y + pos.y - offset.y);
                     }
                     if (pointState > 0) {
@@ -177,7 +177,7 @@ public class TerrainMap : MonoBehaviour {
     }
 
     private Color FindColor(float pointState) {
-        return renderType == RenderType.BWCave ? Color.Lerp(Color.black, Color.white, pointState) : colorList[(int)pointState];
+        return renderType == RenderType.BwCave ? Color.Lerp(Color.black, Color.white, pointState) : colorList[(int)pointState];
     }
 
     private void ToggleMap() {

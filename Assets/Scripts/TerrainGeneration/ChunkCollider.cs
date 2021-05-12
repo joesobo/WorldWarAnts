@@ -9,7 +9,7 @@ public class ChunkCollider : MonoBehaviour {
     private Vector2[] edgePoints;
 
     public void Generate2DCollider(VoxelChunk chunk, int chunkResolution) {
-        this.chunkResolution = (float) chunkResolution;
+        this.chunkResolution = chunkResolution;
 
         currentColliders = chunk.gameObject.GetComponents<EdgeCollider2D>();
         foreach (var t in currentColliders) {
@@ -31,9 +31,9 @@ public class ChunkCollider : MonoBehaviour {
     }
 
     private void CalculateMeshOutlines(VoxelChunk chunk) {
-        for (int vertexIndex = 0; vertexIndex < chunk.vertices.Length; vertexIndex++) {
+        for (var vertexIndex = 0; vertexIndex < chunk.vertices.Length; vertexIndex++) {
             if (!chunk.checkedVertices.Contains(vertexIndex)) {
-                int newOutlineVertex = GetConnectedOutlineVertex(vertexIndex, chunk);
+                var newOutlineVertex = GetConnectedOutlineVertex(vertexIndex, chunk);
                 if (newOutlineVertex == -1) continue;
                 chunk.checkedVertices.Add(vertexIndex);
 
@@ -48,7 +48,7 @@ public class ChunkCollider : MonoBehaviour {
     private void FollowOutline(int vertexIndex, VoxelChunk chunk) {
         chunk.outlines[chunk.outlines.Count - 1].Add(vertexIndex);
         chunk.checkedVertices.Add(vertexIndex);
-        int nextVertexIndex = GetConnectedOutlineVertex(vertexIndex, chunk);
+        var nextVertexIndex = GetConnectedOutlineVertex(vertexIndex, chunk);
 
         if (nextVertexIndex != -1) {
             FollowOutline(nextVertexIndex, chunk);
@@ -57,11 +57,11 @@ public class ChunkCollider : MonoBehaviour {
 
     private int GetConnectedOutlineVertex(int vertexIndex, VoxelChunk chunk) {
         foreach (var triangle in chunk.triangleDictionary[chunk.vertices[vertexIndex]]) {
-            for (int i = 0; i < 3; i++) {
+            for (var i = 0; i < 3; i++) {
                 if (triangle[i].x == chunk.vertices[vertexIndex].x / chunkResolution &&
                     triangle[i].y == chunk.vertices[vertexIndex].y / chunkResolution) {
                     Vector3 findVertice = triangle[(i + 1) % 3] * chunkResolution;
-                    int nextVertexIndex = chunk.verticeDictionary[findVertice];
+                    var nextVertexIndex = chunk.verticeDictionary[findVertice];
                     if (!chunk.checkedVertices.Contains(nextVertexIndex) &&
                         IsOutlineEdge(vertexIndex, nextVertexIndex, chunk)) {
                         return nextVertexIndex;
@@ -75,17 +75,17 @@ public class ChunkCollider : MonoBehaviour {
 
     private bool IsOutlineEdge(int vertexA, int vertexB, VoxelChunk chunk) {
         var trianglesContainingVertexA = chunk.triangleDictionary[chunk.vertices[vertexA]];
-        int sharedTriangleCount = 0;
+        var sharedTriangleCount = 0;
         var chunkVertice = new Vector2(chunk.vertices[vertexB].x / chunkResolution,
             chunk.vertices[vertexB].y / chunkResolution);
 
-        for (int i = 0; i < trianglesContainingVertexA.Count; i++) {
-            if ((trianglesContainingVertexA[i].a.x == chunkVertice.x &&
-                 trianglesContainingVertexA[i].a.y == chunkVertice.y) ||
-                (trianglesContainingVertexA[i].b.x == chunkVertice.x &&
-                 trianglesContainingVertexA[i].b.y == chunkVertice.y) ||
-                (trianglesContainingVertexA[i].c.x == chunkVertice.x &&
-                 trianglesContainingVertexA[i].c.y == chunkVertice.y)
+        for (var i = 0; i < trianglesContainingVertexA.Count; i++) {
+            if ((trianglesContainingVertexA[i].A.x == chunkVertice.x &&
+                 trianglesContainingVertexA[i].A.y == chunkVertice.y) ||
+                (trianglesContainingVertexA[i].B.x == chunkVertice.x &&
+                 trianglesContainingVertexA[i].B.y == chunkVertice.y) ||
+                (trianglesContainingVertexA[i].C.x == chunkVertice.x &&
+                 trianglesContainingVertexA[i].C.y == chunkVertice.y)
             ) {
                 sharedTriangleCount++;
                 if (sharedTriangleCount > 1) {

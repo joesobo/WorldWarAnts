@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory {
@@ -22,12 +23,10 @@ public class Inventory {
 
     public void AddItem(Item item) {
         if (item.IsStackable()) {
-            bool itemAlreadyInInventory = false;
-            foreach (Item inventoryItem in itemList) {
-                if (inventoryItem.itemType == item.itemType) {
-                    inventoryItem.amount += item.amount;
-                    itemAlreadyInInventory = true;
-                }
+            var itemAlreadyInInventory = false;
+            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem.itemType == item.itemType)) {
+                inventoryItem.amount += item.amount;
+                itemAlreadyInInventory = true;
             }
             if (!itemAlreadyInInventory) {
                 itemList.Add(item);
@@ -42,11 +41,9 @@ public class Inventory {
     public void RemoveItem(Item item) {
         if (item.IsStackable()) {
             Item itemInInventory = null;
-            foreach (Item inventoryItem in itemList) {
-                if (inventoryItem.itemType == item.itemType) {
-                    inventoryItem.amount -= item.amount;
-                    itemInInventory = inventoryItem;
-                }
+            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem.itemType == item.itemType)) {
+                inventoryItem.amount -= item.amount;
+                itemInInventory = inventoryItem;
             }
             if (itemInInventory != null && itemInInventory.amount <= 0) {
                 itemList.Remove(itemInInventory);
@@ -58,7 +55,7 @@ public class Inventory {
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void PickupItem(Item item) {
+    public static void PickupItem(Item item) {
         //TODO: implement picking up
     }
 

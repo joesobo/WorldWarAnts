@@ -15,7 +15,6 @@ public partial class VoxelMap : MonoBehaviour {
     private WorldManager worldManager;
     [HideInInspector] public ChunkSaveLoadManager chunkSaveLoadManager;
     [HideInInspector] public Transform player;
-    private Rigidbody2D playerRb;
 
     [HideInInspector] public List<VoxelChunk> chunks;
     public Dictionary<Vector2Int, VoxelChunk> existingChunks;
@@ -29,7 +28,6 @@ public partial class VoxelMap : MonoBehaviour {
         worldManager = FindObjectOfType<WorldManager>();
         chunkSaveLoadManager = FindObjectOfType<ChunkSaveLoadManager>();
         player = FindObjectOfType<PlayerController>().transform;
-        BlockCollection blockList = BlockManager.ReadBlocks();
 
         chunkResolution = 16;
 
@@ -56,7 +54,7 @@ public partial class VoxelMap : MonoBehaviour {
     // ReSharper disable Unity.PerformanceAnalysis
     public void FreshGeneration() {
         var oldChunks = FindObjectsOfType<VoxelChunk>();
-        for (int i = oldChunks.Length - 1; i >= 0; i--) {
+        for (var i = oldChunks.Length - 1; i >= 0; i--) {
             Destroy(oldChunks[i].gameObject);
         }
 

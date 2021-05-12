@@ -10,9 +10,6 @@ using Object = UnityEngine.Object;
 public class BlockMap : EditorWindow {
     private BlockCollection blockList;
     private ReorderableList reorderableList;
-    private string blockName;
-    private Color mapColor;
-    private Texture2D blockTexture;
     private List<Texture2D> textures;
     private Material blocksMaterial;
     private Texture2DArray textureArray;
@@ -81,7 +78,7 @@ public class BlockMap : EditorWindow {
                     block.texturePath = GetPathFromTexture(textures[index]);
                 }
             }
-            
+
             rect.y += 20;
             rect.height = 30;
             block.blockType = (BlockType)EditorGUI.EnumPopup(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), "Block", block.blockType);

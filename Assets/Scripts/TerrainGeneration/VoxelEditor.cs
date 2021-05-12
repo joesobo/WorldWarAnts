@@ -6,7 +6,7 @@ using UnityEngine;
 public class VoxelEditor : MonoBehaviour {
     private const int UPDATE_INTERVAL = 2;
 
-    private List<string> FillTypeNames = new List<string>();
+    private readonly List<string> fillTypeNames = new List<string>();
     private static readonly string[] RadiusNames = { "0", "1", "2", "3", "4", "5" };
     private static readonly string[] StencilNames = { "Square", "Circle" };
 
@@ -23,8 +23,8 @@ public class VoxelEditor : MonoBehaviour {
     private Camera mainCamera;
     private TerrainMap terrainMap;
 
-    private Vector3 oldPoint, chunkPos, absChunkPos;
-    private Vector2Int diff, absCheckPos, currentPos;
+    private Vector3 oldPoint, chunkPos;
+    private Vector2Int diff;
     private int oldTypeIndex, xStart, xEnd, yStart, yEnd;
     private RaycastHit hitInfo;
     private VoxelStencil activeStencil;
@@ -38,7 +38,7 @@ public class VoxelEditor : MonoBehaviour {
     public void Startup(VoxelMap map) {
         var blockCollection = BlockManager.ReadBlocks();
         foreach (var block in blockCollection.blocks) {
-            FillTypeNames.Add(block.blockType.ToString());
+            fillTypeNames.Add(block.blockType.ToString());
         }
 
         voxelResolution = map.voxelResolution;
@@ -185,7 +185,7 @@ public class VoxelEditor : MonoBehaviour {
     private void OnGUI() {
         GUILayout.BeginArea(new Rect(4f, 4f, 150f, 1000f));
         GUILayout.Label("Fill Type");
-        fillTypeIndex = GUILayout.SelectionGrid(fillTypeIndex, FillTypeNames.ToArray(), 2);
+        fillTypeIndex = GUILayout.SelectionGrid(fillTypeIndex, fillTypeNames.ToArray(), 2);
         GUILayout.Label("Radius");
         radiusIndex = GUILayout.SelectionGrid(radiusIndex, RadiusNames, 6);
         GUILayout.Label("Stencil");

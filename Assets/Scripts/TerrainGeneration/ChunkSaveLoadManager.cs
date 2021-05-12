@@ -30,7 +30,7 @@ public class ChunkSaveLoadManager : MonoBehaviour {
     private void OpenRegion(Vector2 regionPos) {
         if (worldManager.worldName != "") {
             Directory.CreateDirectory(worldPath);
-            string path = worldPath + "/region(" + regionPos.x + "," + regionPos.y + ").sav";
+            var path = worldPath + "/region(" + regionPos.x + "," + regionPos.y + ").sav";
 
             if (!streamPositions.Contains(regionPos)) {
                 streams.Add(new FileStream(path, FileMode.OpenOrCreate));
@@ -41,7 +41,7 @@ public class ChunkSaveLoadManager : MonoBehaviour {
 
     private void CloseRegion(Vector2 regionPos) {
         if (streamPositions.Contains(regionPos)) {
-            int index = streamPositions.IndexOf(regionPos);
+            var index = streamPositions.IndexOf(regionPos);
 
             streams[index].Close();
             streams.RemoveAt(index);
@@ -51,7 +51,7 @@ public class ChunkSaveLoadManager : MonoBehaviour {
 
     private void UpdateRegionData(Vector2 regionPos, RegionData regionData) {
         if (streamPositions.Contains(regionPos)) {
-            int index = streamPositions.IndexOf(regionPos);
+            var index = streamPositions.IndexOf(regionPos);
             var stream = streams[index];
 
             stream.SetLength(0);
@@ -60,7 +60,7 @@ public class ChunkSaveLoadManager : MonoBehaviour {
     }
 
     private RegionData LoadRegionData(Vector2 regionPos) {
-        string path = worldPath + "/region(" + regionPos.x + "," + regionPos.y + ").sav";
+        var path = worldPath + "/region(" + regionPos.x + "," + regionPos.y + ").sav";
 
         if (streamPositions.Contains(regionPos) && streams[streamPositions.IndexOf(regionPos)].Length > 0) {
             if (File.Exists(path)) {
@@ -75,10 +75,10 @@ public class ChunkSaveLoadManager : MonoBehaviour {
     }
 
     private Vector2 RegionPosFromChunkPos(Vector2 chunkPos) {
-        float xVal = chunkPos.x / (float)halfRes;
-        float yVal = chunkPos.y / (float)halfRes;
-        int regionX = xVal < 0f ? (int)Mathf.Ceil(xVal) : (int)Mathf.Floor(xVal);
-        int regionY = yVal < 0f ? (int)Mathf.Ceil(yVal) : (int)Mathf.Floor(yVal);
+        var xVal = chunkPos.x / halfRes;
+        var yVal = chunkPos.y / halfRes;
+        var regionX = xVal < 0f ? (int)Mathf.Ceil(xVal) : (int)Mathf.Floor(xVal);
+        var regionY = yVal < 0f ? (int)Mathf.Ceil(yVal) : (int)Mathf.Floor(yVal);
         return new Vector2(regionX, regionY);
     }
 
@@ -104,7 +104,7 @@ public class ChunkSaveLoadManager : MonoBehaviour {
         if (worldManager.worldName != "") {
             var regionPos = RegionPosFromChunkPos(chunkPos);
             var data = LoadRegionData(regionPos);
-            bool hasBeenAdded = false;
+            var hasBeenAdded = false;
 
             foreach (var chunkData in data.chunkDatas.Where(chunkData =>
                 chunkData.xPos == chunkPos.x && chunkData.yPos == chunkPos.y)) {
@@ -145,7 +145,7 @@ public class ChunkSaveLoadManager : MonoBehaviour {
     }
 
     public void CheckForEmptyRegions() {
-        for (int i = 0; i < regionList.Count - 1; i++) {
+        for (var i = 0; i < regionList.Count - 1; i++) {
             var region = regionList[i];
             if (region.childCount == 0) {
                 CloseRegion(GetRegionPosition(region));
@@ -180,10 +180,10 @@ public class ChunkSaveLoadManager : MonoBehaviour {
     }
 
     private static Vector2 GetRegionPosition(Object region) {
-        string regionName = region.name.Substring(7);
-        string[] checkPos = regionName.Split(',');
-        int xPos = int.Parse(checkPos[0]);
-        int yPos = int.Parse(checkPos[1]);
+        var regionName = region.name.Substring(7);
+        var checkPos = regionName.Split(',');
+        var xPos = int.Parse(checkPos[0]);
+        var yPos = int.Parse(checkPos[1]);
         return new Vector2(xPos, yPos);
     }
 }

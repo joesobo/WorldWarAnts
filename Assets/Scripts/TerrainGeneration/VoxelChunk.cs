@@ -10,7 +10,6 @@ public class VoxelChunk : MonoBehaviour {
     public bool shouldUpdateCollider = false;
     public GameObject voxelPointPrefab;
     [HideInInspector] public VoxelChunk xNeighbor, yNeighbor, xyNeighbor;
-    private ComputeShader shader;
 
     public Voxel[] voxels;
     private float voxelSize, halfSize;
@@ -62,7 +61,7 @@ public class VoxelChunk : MonoBehaviour {
         voxels = new Voxel[resolution * resolution];
 
         for (int i = 0, y = 0; y < resolution; y++) {
-            for (int x = 0; x < resolution; x++, i++) {
+            for (var x = 0; x < resolution; x++, i++) {
                 CreateVoxelPoint(i, x, y);
             }
         }
@@ -79,46 +78,46 @@ public class VoxelChunk : MonoBehaviour {
 
     private void SetVoxelColors() {
         if (voxelMaterials.Count <= 0) return;
-        for (int i = 0; i < voxels.Length; i++) {
+        for (var i = 0; i < voxels.Length; i++) {
             voxelMaterials[i].color = voxels[i].state == 0 ? Color.black : Color.white;
         }
     }
 
     public bool Apply(VoxelStencil stencil) {
-        int xStart = stencil.XStart;
+        var xStart = stencil.XStart;
         if (xStart < 0) {
             xStart = 0;
         }
 
-        int xEnd = stencil.XEnd;
+        var xEnd = stencil.XEnd;
         if (xEnd >= resolution) {
             xEnd = resolution - 1;
         }
 
-        int yStart = stencil.YStart;
+        var yStart = stencil.YStart;
         if (yStart < 0) {
             yStart = 0;
         }
 
-        int yEnd = stencil.YEnd;
+        var yEnd = stencil.YEnd;
         if (yEnd >= resolution) {
             yEnd = resolution - 1;
         }
 
-        bool didUpdate = false;
-        for (int y = yStart; y <= yEnd; y++) {
-            int i = y * resolution + xStart;
-            for (int x = xStart; x <= xEnd; x++, i++) {
+        var didUpdate = false;
+        for (var y = yStart; y <= yEnd; y++) {
+            var i = y * resolution + xStart;
+            for (var x = xStart; x <= xEnd; x++, i++) {
                 if (voxels[i].state != stencil.fillType) {
                     // Deleting
                     if (stencil.fillType == 0) {
                         // link voxel[i].state to appropriate block
-                        Block deletingBlock = blockCollection.blocks[voxels[i].state];
+                        var deletingBlock = blockCollection.blocks[voxels[i].state];
                         // get item id out of that
-                        ItemType itemType = deletingBlock.itemType;
-                        int amount = deletingBlock.amount;
+                        var itemType = deletingBlock.itemType;
+                        var amount = deletingBlock.amount;
                         // create new item with that id
-                        Item item = new Item { itemType = itemType, amount = amount };
+                        var item = new Item { itemType = itemType, amount = amount };
                         // spawn item
                         WorldItem.SpawnWorldItem((new Vector3(voxels[i].position.x, voxels[i].position.y, 0) * 8) + (transform.position), item);
                         // update state

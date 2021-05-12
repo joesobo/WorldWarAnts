@@ -108,7 +108,7 @@ public class VoxelMesh : MonoBehaviour {
         shader.Dispatch(0, numThreadsPerResolution, numThreadsPerResolution, 1);
 
         ComputeBuffer.CopyCount(triangleBuffer, triCountBuffer, 0);
-        int[] triCountArray = {0};
+        int[] triCountArray = { 0 };
         triCountBuffer.GetData(triCountArray);
         int numTris = triCountArray[0];
 
@@ -127,8 +127,8 @@ public class VoxelMesh : MonoBehaviour {
         VoxelChunk chunk) {
         for (int i = 0; i < numTris; i++) {
             for (int j = 0; j < 3; j++) {
-                colors[i * 3 + j] = new Color32((byte) (tris[i].red * 255), (byte) (tris[i].green * 255),
-                    (byte) (tris[i].blue * 255), 255);
+                colors[i * 3 + j] = new Color32((byte)(tris[i].Red * 255), (byte)(tris[i].Green * 255),
+                    (byte)(tris[i].Blue * 255), 255);
 
                 triangles[i * 3 + j] = i * 3 + j;
 
@@ -146,9 +146,8 @@ public class VoxelMesh : MonoBehaviour {
     private static void AddTriangleToDictionary(int vertexIndexKey, Triangle triangle, VoxelChunk chunk) {
         if (chunk.triangleDictionary.ContainsKey(chunk.vertices[vertexIndexKey])) {
             chunk.triangleDictionary[chunk.vertices[vertexIndexKey]].Add(triangle);
-        }
-        else {
-            var triangleList = new List<Triangle> {triangle};
+        } else {
+            var triangleList = new List<Triangle> { triangle };
             chunk.triangleDictionary.Add(chunk.vertices[vertexIndexKey], triangleList);
         }
     }
@@ -164,8 +163,7 @@ public class VoxelMesh : MonoBehaviour {
             if (chunk.xNeighbor) {
                 statePositions[y * voxelResolution + voxelResolution + y] =
                     chunk.xNeighbor.voxels[y * voxelResolution].state;
-            }
-            else {
+            } else {
                 statePositions[y * voxelResolution + voxelResolution + y] = -1;
             }
         }
@@ -173,16 +171,14 @@ public class VoxelMesh : MonoBehaviour {
         for (int x = 0; x < voxelResolution; x++) {
             if (chunk.yNeighbor) {
                 statePositions[(voxelResolution + 1) * voxelResolution + x] = chunk.yNeighbor.voxels[x].state;
-            }
-            else {
+            } else {
                 statePositions[(voxelResolution + 1) * voxelResolution + x] = -1;
             }
         }
 
         if (chunk.xyNeighbor) {
             statePositions[(voxelResolution + 1) * (voxelResolution + 1) - 1] = chunk.xyNeighbor.voxels[0].state;
-        }
-        else {
+        } else {
             statePositions[(voxelResolution + 1) * (voxelResolution + 1) - 1] = -1;
         }
     }

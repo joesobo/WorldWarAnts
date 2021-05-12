@@ -6,8 +6,8 @@ using UnityEngine;
 public static class BlockManager {
     private static readonly string Path = Application.persistentDataPath + "/blocks.json";
 
-    public static Dictionary<BlockType, int> BlockIndexDictionary = new Dictionary<BlockType, int>();
-    public static Dictionary<BlockType, Color> BlockColorDictionary = new Dictionary<BlockType, Color>();
+    public static readonly Dictionary<BlockType, int> BlockIndexDictionary = new Dictionary<BlockType, int>();
+    public static readonly Dictionary<BlockType, Color> BlockColorDictionary = new Dictionary<BlockType, Color>();
 
     public static void WriteBlocks(BlockCollection collection, Block newBlock) {
         if (newBlock != null) {

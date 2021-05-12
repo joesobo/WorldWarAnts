@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour {
     public int jumpforce = 5;
     public float jumpDecelleration = 1;
 
-    public float isGroundedRayLength = 0.1f;
+    public float groundedRayLength = 0.1f;
     public LayerMask layerMaskForGrounded;
 
     [SerializeField] public UI_Inventory uiInventory;
@@ -45,26 +45,17 @@ public class PlayerController : MonoBehaviour {
         worldItem.DestroySelf();
     }
 
-    // void OnCollisionEnter2D(Collision2D collisionInfo) {
-    //     WorldItem worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
-    //     if (worldItem != null) {
-    //         inventory.AddItem(worldItem.GetItem());
-    //         worldItem.DestroySelf();
-    //     }
-    // }
-
     private void FixedUpdate() {
-        float xInput = Input.GetAxisRaw("Horizontal");
+        var xInput = Input.GetAxisRaw("Horizontal");
 
         velocity.x = Mathf.MoveTowards(velocity.x, (speed / 100) * xInput, walkAcceleration * Time.deltaTime);
 
-        rb.velocity = (Vector2)velocity;
+        rb.velocity = velocity;
     }
 
     private bool IsGrounded() {
         var bounds = boxCollider.bounds;
-        var hit = Physics2D.BoxCast(bounds.center, bounds.size, 0f, Vector2.down, .1f,
-            layerMaskForGrounded.value);
+        var hit = Physics2D.BoxCast(bounds.center, bounds.size, 0f, Vector2.down, groundedRayLength, layerMaskForGrounded.value);
         return hit.collider;
     }
 }

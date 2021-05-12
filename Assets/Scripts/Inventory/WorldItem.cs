@@ -3,55 +3,55 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldItem : MonoBehaviour {
-    private static float dropSpeed = 5f;
+    private const float DropSpeed = 5f;
     private Item item;
     private SpriteRenderer spriteRenderer;
 
     public static WorldItem SpawnWorldItem(Vector3 position, Item item) {
-        Transform transform = Instantiate(ItemAssets.Instance.worldItemPrefab, position, Quaternion.identity);
+        var transform = Instantiate(ItemAssets.Instance.worldItemPrefab, position, Quaternion.identity);
 
-        WorldItem worldItem = transform.GetComponent<WorldItem>();
+        var worldItem = transform.GetComponent<WorldItem>();
         worldItem.SetItem(item);
 
         return worldItem;
     }
 
     public static WorldItem DropItem(Vector3 position, Item item) {
-        Vector3 randomDir = new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0);
-        WorldItem worldItem = SpawnWorldItem(position + (randomDir * dropSpeed), item);
-        worldItem.GetComponent<Rigidbody2D>().AddForce(randomDir * dropSpeed, ForceMode2D.Impulse);
+        var randomDir = new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0);
+        var worldItem = SpawnWorldItem(position + (randomDir * DropSpeed), item);
+        worldItem.GetComponent<Rigidbody2D>().AddForce(randomDir * DropSpeed, ForceMode2D.Impulse);
         return worldItem;
     }
 
-    void Awake() {
+    private void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    void OnTriggerEnter2D(Collider2D collider) {
+    private void OnTriggerEnter2D(Collider2D collider) {
         //TODO: if within trigger area start moving towards collider
     }
 
-    void OnCollisionEnter2D(Collision2D collisionInfo) {
-        PlayerController player = collisionInfo.gameObject.GetComponent<PlayerController>();
-        WorldItem worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
+    private void OnCollisionEnter2D(Collision2D collisionInfo) {
+        var player = collisionInfo.gameObject.GetComponent<PlayerController>();
+        var worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
 
         if (player != null) {
             player.AddToInventory(this);
         }
 
-        if (worldItem != null && worldItem != this && this.item.itemType == worldItem.item.itemType) {
-            if (this.item.amount > worldItem.item.amount) {
+        if (worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType) {
+            if (item.amount > worldItem.item.amount) {
                 worldItem.DestroySelf();
             } else {
-                worldItem.item.amount += this.item.amount;
-                this.DestroySelf();
+                worldItem.item.amount += item.amount;
+                DestroySelf();
             }
         }
     }
 
-    public void SetItem(Item item) {
-        this.item = item;
-        spriteRenderer.sprite = item.GetSprite();
+    private void SetItem(Item newItem) {
+        item = newItem;
+        spriteRenderer.sprite = newItem.GetSprite();
     }
 
     public Item GetItem() {

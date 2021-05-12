@@ -44,12 +44,8 @@ public class TerrainNoise : MonoBehaviour {
     public Vector2 offset = Vector2.zero;
 
     private int voxelResolution, chunkResolution;
+    private float maxNoiseVal, minNoiseVal;
 
-    private float noiseHeight;
-    private float maxNoiseVal;
-    private float minNoiseVal;
-    private float halfResolution;
-    
     private Vector2[] octaveOffsets;
 
     public enum TerrainType {
@@ -134,7 +130,6 @@ public class TerrainNoise : MonoBehaviour {
 
     private float Noise1D(float x) {
         var scaledXHeight = x / 1f / voxelResolution;
-        float noiseHeight;
         var freq = frequency;
         var amp = amplitude;
         var noiseRange = range;
@@ -146,7 +141,7 @@ public class TerrainNoise : MonoBehaviour {
             noiseRange += amp;
             sum += Mathf.PerlinNoise((scaledXHeight + seed) * freq, 0) * amp;
         }
-        noiseHeight = sum / noiseRange;
+        var noiseHeight = sum / noiseRange;
         noiseHeight *= chunkResolution * voxelResolution;
         return noiseHeight;
     }
@@ -187,11 +182,11 @@ public class TerrainNoise : MonoBehaviour {
 
         if (InRange(y, Mathf.RoundToInt(noiseHeight), 3)) {
             return GetBlockTypeIndex(BlockType.Grass);
-        } else if (InRange(y, Mathf.RoundToInt(noiseHeight), 8)) {
-            return GetBlockTypeIndex(PercentChangeBlocks(noiseVal, 80, BlockType.Stone, PercentChangeBlocks(noiseVal, 25, BlockType.Dirt, BlockType.Empty)));
-        } else {
-            return -1;
         }
+        if (InRange(y, Mathf.RoundToInt(noiseHeight), 8)) {
+            return GetBlockTypeIndex(PercentChangeBlocks(noiseVal, 80, BlockType.Stone, PercentChangeBlocks(noiseVal, 25, BlockType.Dirt, BlockType.Empty)));
+        }
+        return -1;
     }
 
     private static BlockType PercentChangeBlocks(float noiseVal, int percent, BlockType block1, BlockType block2) {

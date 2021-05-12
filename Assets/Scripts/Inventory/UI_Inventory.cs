@@ -40,41 +40,37 @@ public class UI_Inventory : MonoBehaviour {
     }
 
     private void RefreshInventoryItems() {
-        List<Item> itemList = inventory.GetItems();
+        var itemList = inventory.GetItems();
 
         foreach (Transform child in slotContainer) {
             Destroy(child.gameObject);
         }
 
-        for (int i = 0; i < inventory.size; i++) {
-            RectTransform transform = Instantiate(itemSlotPrefab, Vector3.zero, Quaternion.identity, slotContainer).GetComponent<RectTransform>();
-            transform.gameObject.SetActive(true);
-            ItemSlot slot = transform.GetComponent<ItemSlot>();
-            Image slotImage = transform.Find("Image").GetComponent<Image>();
-            TextMeshProUGUI text = transform.Find("Amount").GetComponent<TextMeshProUGUI>();
+        for (var i = 0; i < inventory.size; i++) {
+            var itemSlotTransform = Instantiate(itemSlotPrefab, Vector3.zero, Quaternion.identity, slotContainer).GetComponent<RectTransform>();
+            itemSlotTransform.gameObject.SetActive(true);
+            var slot = itemSlotTransform.GetComponent<ItemSlot>();
+            var slotImage = itemSlotTransform.Find("Image").GetComponent<Image>();
+            var text = itemSlotTransform.Find("Amount").GetComponent<TextMeshProUGUI>();
 
             if (i < itemList.Count) {
-                Item item = itemList[i];
+                var item = itemList[i];
 
                 //pickup item
                 slot.LeftClick = () => {
-                    inventory.PickupItem(item);
+                    Inventory.PickupItem(item);
                 };
 
                 //drop item
                 slot.RightClick = () => {
-                    Item tempItem = new Item { itemType = item.itemType, amount = item.amount };
+                    var tempItem = new Item { itemType = item.itemType, amount = item.amount };
                     inventory.RemoveItem(item);
                     WorldItem.DropItem(player.transform.position, tempItem);
                 };
 
                 slotImage.sprite = item.GetSprite();
                 slotImage.color = Color.white;
-                if (item.amount > 1) {
-                    text.SetText(item.amount.ToString());
-                } else {
-                    text.SetText("");
-                }
+                text.SetText(item.amount > 1 ? item.amount.ToString() : "");
             }
         }
     }
