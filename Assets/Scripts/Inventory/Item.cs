@@ -1,32 +1,35 @@
 using System;
 using UnityEngine;
 
+public enum ItemType {
+    Empty,
+    Dirt,
+    Rock,
+    Test
+};
+
 [Serializable]
 public class Item {
-    public enum ItemType {
-        dirt,
-        rock,
-        test
-    };
-
     public ItemType itemType;
     public int amount;
 
     public Sprite GetSprite() {
         switch (itemType) {
             default:
-            case ItemType.dirt: return ItemAssets.Instance.dirtSprite;
-            case ItemType.rock: return ItemAssets.Instance.rockSprite;
-            case ItemType.test: return ItemAssets.Instance.testSprite;
+            case ItemType.Empty: return null;
+            case ItemType.Dirt: return ItemAssets.Instance.dirtSprite;
+            case ItemType.Rock: return ItemAssets.Instance.rockSprite;
+            case ItemType.Test: return ItemAssets.Instance.testSprite;
         }
     }
 
     public bool IsStackable() {
         switch (itemType) {
             default:
-            case ItemType.dirt: return true;
-            case ItemType.rock: return true;
-            case ItemType.test: return false;
+            case ItemType.Empty: return false;
+            case ItemType.Dirt: return true;
+            case ItemType.Rock: return true;
+            case ItemType.Test: return false;
         }
     }
 }

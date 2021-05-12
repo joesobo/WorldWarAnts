@@ -36,9 +36,9 @@ public class VoxelEditor : MonoBehaviour {
     };
 
     public void Startup(VoxelMap map) {
-        var blockTypeNames = System.Enum.GetNames(typeof(BlockType));
-        foreach (var blockType in blockTypeNames) {
-            FillTypeNames.Add(blockType);
+        var blockCollection = BlockManager.ReadBlocks();
+        foreach (var block in blockCollection.blocks) {
+            FillTypeNames.Add(block.blockType.ToString());
         }
 
         voxelResolution = map.voxelResolution;
@@ -67,8 +67,7 @@ public class VoxelEditor : MonoBehaviour {
         if (Time.frameCount % UPDATE_INTERVAL != 0) return;
         if (Input.GetMouseButton(0)) {
             if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo)) {
-                if (hitInfo.collider.gameObject == gameObject &&
-                    (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {
+                if (hitInfo.collider.gameObject == gameObject && (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {
                     EditVoxels(hitInfo.point);
                     oldPoint = hitInfo.point;
                     oldTypeIndex = fillTypeIndex;

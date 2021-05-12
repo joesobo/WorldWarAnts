@@ -62,7 +62,7 @@ public class BlockMap : EditorWindow {
             reorderableList = new ReorderableList(blockList.blocks, typeof(Block), true, true, true, true);
         }
 
-        reorderableList.elementHeight = EditorGUIUtility.singleLineHeight * 2f + 10f;
+        reorderableList.elementHeight = EditorGUIUtility.singleLineHeight * 4f + 20f;
 
         reorderableList.drawHeaderCallback = (rect) => {
             EditorGUI.LabelField(rect, "Blocks", EditorStyles.boldLabel);
@@ -74,16 +74,25 @@ public class BlockMap : EditorWindow {
             textures.Add(GetTextureFromPath(block.texturePath));
 
             if (index < textures.Count) {
-                textures[index] = (Texture2D)EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), "Texture", textures[index], typeof(Texture2D), false);
+                textures[index] = (Texture2D)EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width - 40, EditorGUIUtility.singleLineHeight), "Texture", textures[index], typeof(Texture2D), false);
+                EditorGUI.TextField(new Rect(rect.x + rect.width - 30, rect.y, 30, EditorGUIUtility.singleLineHeight), index.ToString());
+
                 if (block.texturePath == "" && GetPathFromTexture(textures[index]) != "") {
                     block.texturePath = GetPathFromTexture(textures[index]);
                 }
             }
+            
             rect.y += 20;
             rect.height = 30;
-            block.color = EditorGUI.ColorField(new Rect(rect.x, rect.y, 60, EditorGUIUtility.singleLineHeight), block.color);
-            block.blockType = (BlockType)EditorGUI.EnumPopup(new Rect(rect.x + 70, rect.y, rect.width - 110, EditorGUIUtility.singleLineHeight), block.blockType);
-            EditorGUI.TextField(new Rect(rect.x + rect.width - 30, rect.y, 30, EditorGUIUtility.singleLineHeight), index.ToString());
+            block.blockType = (BlockType)EditorGUI.EnumPopup(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), "Block", block.blockType);
+
+            rect.y += 20;
+            rect.height = 30;
+            block.itemType = (ItemType)EditorGUI.EnumPopup(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), "Item", block.itemType);
+
+            rect.y += 20;
+            rect.height = 30;
+            block.color = EditorGUI.ColorField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), block.color);
         };
 
         reorderableList.onSelectCallback = (list) => {
@@ -96,7 +105,7 @@ public class BlockMap : EditorWindow {
         };
 
         reorderableList.onAddCallback = (list) => {
-            var block = new Block(BlockType.Empty, Color.black, "");
+            var block = new Block(BlockType.Empty, Color.black, "", ItemType.Empty);
             BlockManager.WriteBlocks(blockList, block);
             Refresh();
         };

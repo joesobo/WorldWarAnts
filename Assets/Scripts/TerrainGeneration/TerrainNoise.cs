@@ -1,40 +1,47 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class TerrainNoise : MonoBehaviour {
+    [PropertySpace(SpaceAfter = 10)]
     public TerrainType terrainType = TerrainType.Perlin;
 
+    [ShowIfGroup("terrainType", TerrainType.Perlin), BoxGroup("terrainType/Perlin"), DisableIf("useRandomSeed")]
     public int seed = 0;
+    [BoxGroup("terrainType/Perlin")]
     public bool useRandomSeed;
+    [BoxGroup("terrainType/Perlin")]
     public float height1, height2, height3, height4 = 0;
 
-    [Header("Height Noise")]
-    [Range(0.1f, 1)]
+    [ShowIfGroup("terrainType", TerrainType.Perlin), BoxGroup("terrainType/Height Noise"), Range(0.1f, 1)]
     public float frequency = 1f;
-    [Range(1, 8)]
+    [BoxGroup("terrainType/Height Noise"), Range(1, 8)]
     public int octaves = 1;
-    [Range(1f, 4f)]
+    [BoxGroup("terrainType/Height Noise"), Range(1f, 4f)]
     public float lacunarity = 2f;
-    [Range(0f, 1f)]
+    [BoxGroup("terrainType/Height Noise"), Range(0f, 1f)]
     public float persistence = 0.5f;
-    [Range(0, 2)]
+    [BoxGroup("terrainType/Height Noise"), Range(0, 2)]
     public float amplitude = 1f;
-    [Range(0, 2)]
+    [BoxGroup("terrainType/Height Noise"), Range(0, 2)]
     public float range = 1f;
 
-    [Header("Cave Noise")]
-    [Range(0.1f, 1)]
+    [Space, ShowIfGroup("terrainType", TerrainType.Perlin), BoxGroup("terrainType/Cave Noise"), Range(0.1f, 1)]
     public float caveFrequency = 1f;
-    [Range(1, 8)]
+    [BoxGroup("terrainType/Cave Noise"), Range(1, 8)]
     public int caveOctaves = 1;
-    [Range(0f, 2f)]
+    [BoxGroup("terrainType/Cave Noise"), Range(0f, 2f)]
     public float caveLacunarity = 2f;
-    [Range(0f, 2f)]
+    [BoxGroup("terrainType/Cave Noise"), Range(0f, 2f)]
     public float cavePersistence = 0.5f;
-    [Range(0, 2)]
+    [BoxGroup("terrainType/Cave Noise"), Range(0, 2)]
     public float caveAmplitude = 1f;
+    [BoxGroup("terrainType/Cave Noise"), Range(0.0001f, 2)]
+    public float scale;
+    [BoxGroup("terrainType/Cave Noise")]
+    public Vector2 offset = Vector2.zero;
 
     private int voxelResolution, chunkResolution;
 
@@ -42,9 +49,7 @@ public class TerrainNoise : MonoBehaviour {
     private float maxNoiseVal;
     private float minNoiseVal;
     private float halfResolution;
-    [Range(0.0001f, 2)]
-    public float scale;
-    public Vector2 offset = Vector2.zero;
+    
     private Vector2[] octaveOffsets;
 
     public enum TerrainType {

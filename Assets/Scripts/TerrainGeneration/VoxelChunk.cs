@@ -25,6 +25,7 @@ public class VoxelChunk : MonoBehaviour {
     public List<List<int>> outlines;
     public Dictionary<Vector2, List<Triangle>> triangleDictionary;
     private static readonly int Resolution = Shader.PropertyToID("Resolution");
+    private BlockCollection blockCollection;
 
     public void Initialize(bool useVoxelPoints, int resolution) {
         this.useVoxelPoints = useVoxelPoints;
@@ -36,6 +37,8 @@ public class VoxelChunk : MonoBehaviour {
         material.SetVector(Resolution, Vector2.one * resolution);
         GetComponent<MeshRenderer>().material = material;
         mesh.name = "VoxelChunk Mesh";
+
+        blockCollection = BlockManager.ReadBlocks();
 
         ResetValues();
 
@@ -63,7 +66,7 @@ public class VoxelChunk : MonoBehaviour {
                 CreateVoxelPoint(i, x, y);
             }
         }
-        
+
         var currentColliders = gameObject.GetComponents<EdgeCollider2D>();
         foreach (var t in currentColliders) {
             Destroy(t);
@@ -107,8 +110,27 @@ public class VoxelChunk : MonoBehaviour {
             int i = y * resolution + xStart;
             for (int x = xStart; x <= xEnd; x++, i++) {
                 if (voxels[i].state != stencil.fillType) {
-                    voxels[i].state = stencil.Apply(x, y, voxels[i].state);
-                    didUpdate = true;
+                    // Deleting
+                    if (stencil.fillType == 0) {
+                        // link voxel[i].state to appropriate block
+                        Block deletingBlock = blockCollection.blocks.Find(block => (int)block.blockType == voxels[i].state);
+                        // get item id out of that
+                        ItemType itemType = deletingBlock.itemType;
+                        // int amount = deletingBlock.amount;
+                        // create new item with that id
+                        Item item = new Item { itemType = itemType, amount = 1 };
+                        // spawn item
+                        WorldItem.SpawnWorldItem(transform.position, item);
+                        // update state
+                        voxels[i].state = stencil.Apply(x, y, voxels[i].state);
+                        didUpdate = true;
+                    }
+                    // Placing
+                    Debug.Log(voxels[i].state);
+                    if (stencil.fillType != 0 && voxels[i].state == 0) {
+                        voxels[i].state = stencil.Apply(x, y, voxels[i].state);
+                        didUpdate = true;
+                    }
                 }
             }
         }

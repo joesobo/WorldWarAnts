@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
 public enum BlockType {
     Empty,
     Stone,
@@ -17,11 +16,13 @@ public class Block {
     public string texturePath;
     public BlockType blockType;
     public Color color;
+    public ItemType itemType;
 
-    public Block(BlockType blockType, Color color, string texturePath) {
+    public Block(BlockType blockType, Color color, string texturePath, ItemType itemType) {
         this.blockType = blockType;
         this.color = color;
         this.texturePath = texturePath;
+        this.itemType = itemType;
     }
 }
 

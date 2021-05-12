@@ -15,9 +15,9 @@ public class Inventory {
         this.size = size;
 
         //TEST: please remove
-        AddItem(new Item { itemType = Item.ItemType.dirt, amount = 1 });
-        AddItem(new Item { itemType = Item.ItemType.rock, amount = 1 });
-        AddItem(new Item { itemType = Item.ItemType.test, amount = 1 });
+        AddItem(new Item { itemType = ItemType.Dirt, amount = 1 });
+        AddItem(new Item { itemType = ItemType.Rock, amount = 1 });
+        AddItem(new Item { itemType = ItemType.Test, amount = 1 });
     }
 
     public void AddItem(Item item) {
