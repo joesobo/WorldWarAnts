@@ -116,9 +116,9 @@ public class VoxelChunk : MonoBehaviour {
                         Block deletingBlock = blockCollection.blocks[voxels[i].state];
                         // get item id out of that
                         ItemType itemType = deletingBlock.itemType;
-                        // int amount = deletingBlock.amount;
+                        int amount = deletingBlock.amount;
                         // create new item with that id
-                        Item item = new Item { itemType = itemType, amount = 1 };
+                        Item item = new Item { itemType = itemType, amount = amount };
                         // spawn item
                         WorldItem.SpawnWorldItem((new Vector3(voxels[i].position.x, voxels[i].position.y, 0) * 8) + (transform.position), item);
                         // update state

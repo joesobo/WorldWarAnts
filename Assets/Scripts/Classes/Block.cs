@@ -17,12 +17,14 @@ public class Block {
     public BlockType blockType;
     public Color color;
     public ItemType itemType;
+    public int amount;
 
-    public Block(BlockType blockType, Color color, string texturePath, ItemType itemType) {
+    public Block(BlockType blockType, Color color, string texturePath, ItemType itemType, int amount) {
         this.blockType = blockType;
         this.color = color;
         this.texturePath = texturePath;
         this.itemType = itemType;
+        this.amount = amount;
     }
 }
 

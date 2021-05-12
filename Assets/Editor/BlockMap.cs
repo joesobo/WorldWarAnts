@@ -88,7 +88,8 @@ public class BlockMap : EditorWindow {
 
             rect.y += 20;
             rect.height = 30;
-            block.itemType = (ItemType)EditorGUI.EnumPopup(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), "Item", block.itemType);
+            block.itemType = (ItemType)EditorGUI.EnumPopup(new Rect(rect.x, rect.y, rect.width / 2, EditorGUIUtility.singleLineHeight), "Item", block.itemType);
+            block.amount = EditorGUI.IntField(new Rect(rect.width / 2 + 40, rect.y, rect.width / 2, EditorGUIUtility.singleLineHeight), "Amount", block.amount);
 
             rect.y += 20;
             rect.height = 30;
@@ -105,7 +106,7 @@ public class BlockMap : EditorWindow {
         };
 
         reorderableList.onAddCallback = (list) => {
-            var block = new Block(BlockType.Empty, Color.black, "", ItemType.Empty);
+            var block = new Block(BlockType.Empty, Color.black, "", ItemType.Empty, 0);
             BlockManager.WriteBlocks(blockList, block);
             Refresh();
         };
