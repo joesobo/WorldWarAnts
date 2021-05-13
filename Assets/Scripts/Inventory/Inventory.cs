@@ -14,19 +14,23 @@ public class Inventory {
     public Inventory(int size) {
         itemList = new List<Item>();
         this.size = size;
-
-        //TEST: please remove
-        // AddItem(new Item { itemType = ItemType.Dirt, amount = 1 });
-        // AddItem(new Item { itemType = ItemType.Rock, amount = 1 });
-        // AddItem(new Item { itemType = ItemType.Test, amount = 1 });
     }
 
     public void AddItem(Item item) {
         if (item.IsStackable()) {
             var itemAlreadyInInventory = false;
-            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem.itemType == item.itemType)) {
-                inventoryItem.amount += item.amount;
-                itemAlreadyInInventory = true;
+            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem.itemType == item.itemType && inventoryItem.amount < Item.maxAmount)) {
+                int totalAmount = inventoryItem.amount + item.amount;
+                if (totalAmount <= Item.maxAmount) {
+                    inventoryItem.amount += item.amount;
+                    itemAlreadyInInventory = true;
+                } else {
+                    inventoryItem.amount = Item.maxAmount;
+                    item.amount = totalAmount - Item.maxAmount;
+                    itemAlreadyInInventory = true;
+                    AddItem(item);
+                    break;
+                }
             }
             if (!itemAlreadyInInventory) {
                 itemList.Add(item);

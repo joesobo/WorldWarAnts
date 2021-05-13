@@ -64,12 +64,18 @@ public class WorldItem : MonoBehaviour {
 
         if (player != null) {
             player.AddToInventory(this);
-        } else if (worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType) {
+        } else if (worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType && worldItem.item.amount < Item.maxAmount) {
             if (item.amount > worldItem.item.amount) {
                 worldItem.DestroySelf();
             } else {
-                worldItem.item.amount += item.amount;
-                DestroySelf();
+                int totalAmount = worldItem.item.amount + item.amount;
+                if (totalAmount <= Item.maxAmount) {
+                    worldItem.item.amount += item.amount;
+                    DestroySelf();
+                } else {
+                    worldItem.item.amount = Item.maxAmount;
+                    item.amount = totalAmount - Item.maxAmount;
+                }
             }
         }
     }
