@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-
-public class VoxelStencilCircle : VoxelStencil {
-	
+﻿public class VoxelStencilCircle : VoxelStencil {
 	private int sqrRadius;
 	
 	public override void Initialize (int fillType, int radius) {

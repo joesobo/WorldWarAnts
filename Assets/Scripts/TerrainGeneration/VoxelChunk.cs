@@ -111,18 +111,19 @@ public class VoxelChunk : MonoBehaviour {
                 if (voxels[i].state != stencil.fillType) {
                     // Deleting
                     if (stencil.fillType == 0) {
-                        // link voxel[i].state to appropriate block
                         var deletingBlock = blockCollection.blocks[voxels[i].state];
-                        // get item id out of that
-                        var itemType = deletingBlock.itemType;
-                        var amount = deletingBlock.amount;
-                        // create new item with that id
-                        var item = new Item { itemType = itemType, amount = amount };
-                        // spawn item
-                        WorldItem.SpawnWorldItem((new Vector3(voxels[i].position.x, voxels[i].position.y, 0) * 8) + (transform.position), item);
-                        // update state
-                        voxels[i].state = stencil.Apply(x, y, voxels[i].state);
-                        didUpdate = true;
+                        var tempState = stencil.Apply(x, y, voxels[i].state);
+
+                        if (tempState == stencil.fillType) {
+                            voxels[i].state = tempState;
+                            
+                            var itemType = deletingBlock.itemType;
+                            var amount = deletingBlock.amount;
+                            var item = new Item { itemType = itemType, amount = amount };
+
+                            WorldItem.SpawnWorldItem((new Vector3(voxels[i].position.x, voxels[i].position.y, 0) * 8) + (transform.position), item);
+                            didUpdate = true;
+                        }
                     }
                     // Placing
                     if (stencil.fillType != 0 && voxels[i].state == 0) {
