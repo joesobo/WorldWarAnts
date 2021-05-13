@@ -12,16 +12,11 @@ public class UI_Inventory : MonoBehaviour {
     public GameObject inventoryController;
     public Transform slotContainer;
     public Transform itemSlotPrefab;
+    [HideInInspector]
     public bool isActive = false;
 
     private void Awake() {
         SetInventoryState(isActive);
-    }
-
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.E)) {
-            ToggleInventory();
-        }
     }
 
     public void SetPlayer(PlayerController player) {
@@ -57,12 +52,12 @@ public class UI_Inventory : MonoBehaviour {
                 var item = itemList[i];
 
                 //pickup item
-                slot.LeftClick = () => {
+                slot.Pickup = () => {
                     Inventory.PickupItem(item);
                 };
 
                 //drop item
-                slot.RightClick = () => {
+                slot.Drop = () => {
                     var tempItem = new Item { itemType = item.itemType, amount = item.amount };
                     inventory.RemoveItem(item);
                     WorldItem.DropItem(player.transform.position, tempItem);
@@ -75,7 +70,7 @@ public class UI_Inventory : MonoBehaviour {
         }
     }
 
-    private void ToggleInventory() {
+    public void ToggleInventory() {
         isActive = !isActive;
         SetInventoryState(isActive);
     }

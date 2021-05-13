@@ -2,12 +2,13 @@ using System;
 using UnityEngine;
 
 public class ItemSlot : MonoBehaviour {
-    public Action LeftClick = null;
-    public Action RightClick = null;
+    public Action Drop = null;
+    public Action Pickup = null;
+    public Action Split = null;
 
     private void Update() {
-        if (Input.GetMouseButtonDown(0)) LeftClick();
-        if (Input.GetMouseButtonDown(1)) RightClick();
-        if (Input.GetMouseButtonDown(2));
+        if (Input.GetKeyDown(KeyCode.Q)) Drop();
+        if (Input.GetMouseButtonDown(1)) Pickup();
+        if (Input.GetMouseButtonDown(2)) Split();
     }
 }

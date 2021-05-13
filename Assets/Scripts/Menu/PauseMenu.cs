@@ -4,25 +4,21 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour {
-    private bool activeState = false;
+    [HideInInspector]
+    public bool activeState = false;
     private bool needsUpdating = true;
 
     private ChunkSaveLoadManager chunkSaveLoadManager;
     private WorldDataHandler worldDataHandler;
+    private UI_Inventory inventory;
 
     private void Awake() {
         chunkSaveLoadManager = FindObjectOfType<ChunkSaveLoadManager>();
         worldDataHandler = FindObjectOfType<WorldDataHandler>();
+        inventory = FindObjectOfType<UI_Inventory>();
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            activeState = !activeState;
-            needsUpdating = true;
-        }
-
-
-
         if (needsUpdating) {
             foreach (Transform child in transform) {
                 child.gameObject.SetActive(activeState);
@@ -36,6 +32,11 @@ public class PauseMenu : MonoBehaviour {
         }
 
         needsUpdating = false;
+    }
+
+    public void Toggle() {
+        activeState = !activeState;
+        needsUpdating = true;
     }
 
     public void Deactivate() {
