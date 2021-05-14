@@ -17,15 +17,17 @@ public class UI_Inventory : MonoBehaviour {
     public bool isActive = false;
 
     private Item hoverItem = null;
-    private RectTransform activeItem;
+    private int hoverIndex = -1;
+    private RectTransform activeTransform;
+    private Item activeItem = null;
 
     private void Awake() {
         SetInventoryState(isActive);
     }
 
     private void Update() {
-        if (activeItem) {
-            activeItem.position = Input.mousePosition;
+        if (activeTransform) {
+            activeTransform.position = Input.mousePosition;
         }
     }
 
@@ -52,8 +54,12 @@ public class UI_Inventory : MonoBehaviour {
         }
 
         hoverItem = null;
+        hoverIndex = -1;
         for (var i = 0; i < inventory.size; i++) {
-            var itemSlotTransform = Instantiate(itemSlotPrefab, Vector3.zero, Quaternion.identity, slotContainer).GetComponent<RectTransform>();
+            var itemSlot = Instantiate(itemSlotPrefab, Vector3.zero, Quaternion.identity, slotContainer);
+            itemSlot.GetComponent<ItemSlot>().index = i;
+
+            var itemSlotTransform = itemSlot.GetComponent<RectTransform>();
             itemSlotTransform.gameObject.SetActive(true);
             var slot = itemSlotTransform.GetComponent<ItemSlot>();
             var slotImage = itemSlotTransform.Find("Image").GetComponent<Image>();
@@ -65,26 +71,47 @@ public class UI_Inventory : MonoBehaviour {
                 //hover item
                 slot.Hover = () => {
                     hoverItem = item;
+                    hoverIndex = slot.GetComponent<ItemSlot>().index;
                 };
 
                 //pickup item
                 slot.Pickup = () => {
-                    // inventory.PickupItem(hoverItem);
-                    Debug.Log("Pickup");
-                    inventory.RemoveItem(hoverItem);
-                    activeItem = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity).GetComponent<RectTransform>();
+                    //pickup
+                    if (hoverItem != null && activeItem == null) {
+                        activeItem = hoverItem;
+                        hoverItem = null;
+                        hoverIndex = -1;
+
+                        activeTransform = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity, transform).GetComponent<RectTransform>();
+                        activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
+                        activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
+
+                        inventory.RemoveItem(activeItem, hoverIndex);
+                    }
+                    //put down
+                    else if (hoverItem == null && activeItem != null) {
+                        inventory.AddItemIndex(activeItem, hoverIndex);
+                        activeItem = null;
+                        hoverItem = null;
+                        hoverIndex = -1;
+                    }
                 };
 
                 //drop item
                 slot.Drop = () => {
-                    var tempItem = new Item { itemType = hoverItem.itemType, amount = 1 };
-                    inventory.RemoveItem(tempItem);
-                    WorldItem.DropItem(player.transform.position, tempItem);
+                    if (hoverItem != null) {
+                        var tempItem = new Item { itemType = hoverItem.itemType, amount = 1 };
+                        inventory.RemoveItem(tempItem, hoverIndex);
+
+                        WorldItem.DropItem(player.transform.position, tempItem);
+                    }
                 };
 
-                slotImage.sprite = item.GetSprite();
-                slotImage.color = Color.white;
-                text.SetText(item.amount > 1 ? item.amount.ToString() : "");
+                if (item != null) {
+                    slotImage.sprite = item.GetSprite();
+                    slotImage.color = Color.white;
+                    text.SetText(item.amount > 1 ? item.amount.ToString() : "");
+                }
             }
         }
     }

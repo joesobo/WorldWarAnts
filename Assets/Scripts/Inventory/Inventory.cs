@@ -19,7 +19,7 @@ public class Inventory {
     public void AddItem(Item item) {
         if (item.IsStackable()) {
             var itemAlreadyInInventory = false;
-            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem.itemType == item.itemType && inventoryItem.amount < Item.maxAmount)) {
+            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem != null && inventoryItem.itemType == item.itemType && inventoryItem.amount < Item.maxAmount)) {
                 int totalAmount = inventoryItem.amount + item.amount;
                 if (totalAmount <= Item.maxAmount) {
                     inventoryItem.amount += item.amount;
@@ -33,27 +33,54 @@ public class Inventory {
                 }
             }
             if (!itemAlreadyInInventory) {
-                itemList.Add(item);
+                FirstOpenSpot(itemList, item);
             }
         } else {
-            itemList.Add(item);
+            FirstOpenSpot(itemList, item);
         }
 
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void RemoveItem(Item item) {
-        if (item.IsStackable()) {
-            Item itemInInventory = null;
-            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem.itemType == item.itemType)) {
-                inventoryItem.amount -= item.amount;
-                itemInInventory = inventoryItem;
+    private void FirstOpenSpot(List<Item> list, Item item) {
+        //gap in list
+        for (int index = 0; index < list.Count; index++) {
+            var element = list[index];
+            if (element == null) {
+                list[index] = item;
+                return;
             }
+        }
+
+        //inventory full
+        if (list.Count == size) {
+            return;
+        }
+
+        //last empty spot
+        list.Add(item);
+        return;
+    }
+
+    public void AddItemIndex(Item item, int index) {
+        itemList[index] = item;
+        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void RemoveItem(Item item, int index) {
+        Item itemInInventory = null;
+        var inventoryItem = itemList[index];
+        if (inventoryItem != null && inventoryItem.itemType == item.itemType) {
+            inventoryItem.amount -= item.amount;
+            itemInInventory = inventoryItem;
+        }
+
+        if (item.IsStackable()) {
             if (itemInInventory != null && itemInInventory.amount <= 0) {
-                itemList.Remove(itemInInventory);
+                itemList[index] = null;
             }
         } else {
-            itemList.Remove(item);
+            itemList[index] = null;
         }
 
         OnItemListChanged?.Invoke(this, EventArgs.Empty);

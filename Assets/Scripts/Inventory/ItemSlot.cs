@@ -7,6 +7,8 @@ public class ItemSlot : MonoBehaviour {
     public Action Pickup = null;
     public Action Split = null;
 
+    public int index = 0;
+
     private RectTransform rectTransform;
 
     void Awake() {
