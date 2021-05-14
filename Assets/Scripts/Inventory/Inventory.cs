@@ -53,6 +53,7 @@ public class Inventory {
         }
 
         //inventory full
+        //TODO: fix how items get handled
         return;
     }
 

@@ -20,6 +20,7 @@ public class UI_Inventory : MonoBehaviour {
     private int hoverIndex = -1;
     private RectTransform activeTransform;
     private Item activeItem = null;
+    private int activeAmount = -1;
 
     private void Awake() {
         SetInventoryState(isActive);
@@ -77,18 +78,21 @@ public class UI_Inventory : MonoBehaviour {
                 //pickup
                 if (hoverItem != null && activeItem == null) {
                     activeItem = hoverItem;
+                    activeAmount = hoverItem.amount;
 
                     activeTransform = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity, transform).GetComponent<RectTransform>();
                     activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
                     activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
 
-                    inventory.RemoveItem(activeItem, hoverIndex);
+                    inventory.RemoveItem(hoverItem, hoverIndex);
                 }
                 //put down
                 else if (hoverItem == null && activeItem != null) {
+                    activeItem.amount = activeAmount;
                     inventory.AddItemIndex(activeItem, hoverIndex);
                     Destroy(activeTransform.gameObject);
                     activeItem = null;
+                    activeAmount = -1;
                 }
             };
 
