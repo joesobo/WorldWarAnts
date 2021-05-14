@@ -22,6 +22,7 @@ public class VoxelEditor : MonoBehaviour {
     private BoxCollider box;
     private Camera mainCamera;
     private TerrainMap terrainMap;
+    private UI_Inventory uI_Inventory;
 
     private Vector3 oldPoint, chunkPos;
     private Vector2Int diff;
@@ -34,6 +35,10 @@ public class VoxelEditor : MonoBehaviour {
         new VoxelStencil(),
         new VoxelStencilCircle()
     };
+
+    void Awake() {
+        uI_Inventory = FindObjectOfType<UI_Inventory>();
+    }
 
     public void Startup(VoxelMap map) {
         var blockCollection = BlockManager.ReadBlocks();
@@ -65,7 +70,7 @@ public class VoxelEditor : MonoBehaviour {
 
     private void Update() {
         if (Time.frameCount % UPDATE_INTERVAL != 0) return;
-        if (Input.GetMouseButton(0)) {
+        if (Input.GetMouseButton(0) && !uI_Inventory.isActive) {
             if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo)) {
                 if (hitInfo.collider.gameObject == gameObject && (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {
                     EditVoxels(hitInfo.point);
