@@ -21,7 +21,7 @@ public class WorldItem : MonoBehaviour {
 
     public static WorldItem DropItem(Vector3 position, Item item, bool direction) {
         Vector3 randomDir;
-        
+
         if (direction) {
             randomDir = new Vector3(Random.Range(0.25f, 1f), Random.Range(0.25f, 1f), 0);
         } else {
@@ -39,29 +39,33 @@ public class WorldItem : MonoBehaviour {
     }
 
     private void Update() {
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attractRadius);
-        float minDist = float.MaxValue;
-        Collider2D saveCollider = null;
+        if (item.amount < Item.maxAmount) {
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attractRadius);
+            float minDist = float.MaxValue;
+            Collider2D saveCollider = null;
 
-        foreach (var hitCollider in hitColliders) {
-            var distance = Vector2.Distance(transform.position, hitCollider.transform.position);
-            var worldItem = hitCollider.gameObject.GetComponent<WorldItem>();
+            foreach (var hitCollider in hitColliders) {
+                var distance = Vector2.Distance(transform.position, hitCollider.transform.position);
+                var worldItem = hitCollider.gameObject.GetComponent<WorldItem>();
 
-            if (distance < minDist && hitCollider != itemCollider) {
-                var type = hitCollider.GetType();
+                if (worldItem != null && worldItem.item.amount < Item.maxAmount) {
+                    if (distance < minDist && hitCollider != itemCollider) {
+                        var type = hitCollider.GetType();
 
-                minDist = distance;
-                if (typeof(BoxCollider2D) == type && item.itemType == worldItem.item.itemType) {
-                    saveCollider = hitCollider;
-                } else if (hitCollider.GetComponent<PlayerController>() != null) {
-                    saveCollider = hitCollider;
-                    break;
+                        minDist = distance;
+                        if (typeof(BoxCollider2D) == type && item.itemType == worldItem.item.itemType) {
+                            saveCollider = hitCollider;
+                        } else if (hitCollider.GetComponent<PlayerController>() != null) {
+                            saveCollider = hitCollider;
+                            break;
+                        }
+                    }
                 }
             }
-        }
 
-        if (saveCollider != null) {
-            transform.position = Vector2.MoveTowards(transform.position, saveCollider.transform.position, (1 / minDist) * attractSpeed * Time.deltaTime);
+            if (saveCollider != null) {
+                transform.position = Vector2.MoveTowards(transform.position, saveCollider.transform.position, (1 / minDist) * attractSpeed * Time.deltaTime);
+            }
         }
     }
 
