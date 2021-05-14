@@ -15,6 +15,8 @@ public class UI_Inventory : MonoBehaviour {
     [HideInInspector]
     public bool isActive = false;
 
+    private Item hoverItem = null;
+
     private void Awake() {
         SetInventoryState(isActive);
     }
@@ -41,6 +43,7 @@ public class UI_Inventory : MonoBehaviour {
             Destroy(child.gameObject);
         }
 
+        hoverItem = null;
         for (var i = 0; i < inventory.size; i++) {
             var itemSlotTransform = Instantiate(itemSlotPrefab, Vector3.zero, Quaternion.identity, slotContainer).GetComponent<RectTransform>();
             itemSlotTransform.gameObject.SetActive(true);
@@ -51,15 +54,20 @@ public class UI_Inventory : MonoBehaviour {
             if (i < itemList.Count) {
                 var item = itemList[i];
 
+                //hover item
+                slot.Hover = () => {
+                    hoverItem = item;
+                };
+
                 //pickup item
                 slot.Pickup = () => {
-                    Inventory.PickupItem(item);
+                    Inventory.PickupItem(hoverItem);
                 };
 
                 //drop item
                 slot.Drop = () => {
-                    var tempItem = new Item { itemType = item.itemType, amount = item.amount };
-                    inventory.RemoveItem(item);
+                    var tempItem = new Item { itemType = hoverItem.itemType, amount = 1 };
+                    inventory.RemoveItem(tempItem);
                     WorldItem.DropItem(player.transform.position, tempItem);
                 };
 
