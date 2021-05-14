@@ -82,10 +82,6 @@ public class Inventory {
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void PickupItem(Item item) {
-        //TODO: implement picking up
-    }
-
     public Item[] GetItems() {
         return itemList;
     }

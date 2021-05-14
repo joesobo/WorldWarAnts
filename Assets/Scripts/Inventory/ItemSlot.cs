@@ -4,6 +4,7 @@ using UnityEngine;
 public class ItemSlot : MonoBehaviour {
     public Action Hover = null;
     public Action Drop = null;
+    public Action DropStack = null;
     public Action Pickup = null;
     public Action Split = null;
 
@@ -17,6 +18,7 @@ public class ItemSlot : MonoBehaviour {
 
     private void Update() {
         if (IsHovering() && Hover != null) Hover();
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q) && DropStack != null) DropStack();
         if (Input.GetKeyDown(KeyCode.Q) && Drop != null) Drop();
         if (Input.GetMouseButtonDown(0) && Pickup != null) Pickup();
         if (Input.GetMouseButtonDown(1) && Split != null) Split();

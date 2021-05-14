@@ -120,6 +120,16 @@ public class UI_Inventory : MonoBehaviour {
                 }
             };
 
+            //drop stack
+            slot.DropStack = () => {
+                if (hoverItem != null) {
+                    var tempItem = new Item { itemType = hoverItem.itemType, amount = hoverItem.amount };
+                    inventory.RemoveItem(tempItem, hoverIndex, tempItem.amount);
+
+                    WorldItem.DropItem(player.transform.position, tempItem);
+                }
+            };
+
             if (item != null) {
                 slotImage.sprite = item.GetSprite();
                 slotImage.color = Color.white;
