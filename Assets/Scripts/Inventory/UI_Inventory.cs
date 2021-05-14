@@ -116,7 +116,7 @@ public class UI_Inventory : MonoBehaviour {
                     var tempItem = new Item { itemType = hoverItem.itemType, amount = 1 };
                     inventory.RemoveItem(tempItem, hoverIndex, tempItem.amount);
 
-                    WorldItem.DropItem(player.transform.position, tempItem);
+                    WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
                 }
             };
 
@@ -126,7 +126,7 @@ public class UI_Inventory : MonoBehaviour {
                     var tempItem = new Item { itemType = hoverItem.itemType, amount = hoverItem.amount };
                     inventory.RemoveItem(tempItem, hoverIndex, tempItem.amount);
 
-                    WorldItem.DropItem(player.transform.position, tempItem);
+                    WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
                 }
             };
 

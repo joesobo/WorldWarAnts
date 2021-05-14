@@ -19,8 +19,15 @@ public class WorldItem : MonoBehaviour {
         return worldItem;
     }
 
-    public static WorldItem DropItem(Vector3 position, Item item) {
-        var randomDir = new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0);
+    public static WorldItem DropItem(Vector3 position, Item item, bool direction) {
+        Vector3 randomDir;
+        
+        if (direction) {
+            randomDir = new Vector3(Random.Range(0.25f, 1f), Random.Range(0.25f, 1f), 0);
+        } else {
+            randomDir = new Vector3(Random.Range(-0.25f, -1f), Random.Range(0.25f, 1f), 0);
+        }
+
         var worldItem = SpawnWorldItem(position + (randomDir * dropSpeed), item);
         worldItem.GetComponent<Rigidbody2D>().AddForce(randomDir * dropSpeed, ForceMode2D.Impulse);
         return worldItem;

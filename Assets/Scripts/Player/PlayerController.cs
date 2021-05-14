@@ -17,6 +17,11 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     private Collider2D boxCollider;
     private Inventory inventory;
+    private Transform bodyController;
+    [HideInInspector]
+    public bool facingRight = true;
+    private bool facingNeedsUpdating = false;
+    private Vector3 leftFacing = new Vector3(-1, 1, 1);
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
@@ -24,6 +29,7 @@ public class PlayerController : MonoBehaviour {
         inventory = new Inventory(inventorySize);
         uiInventory.SetPlayer(this);
         uiInventory.SetInventory(inventory);
+        bodyController = transform.Find("BodyController");
     }
 
     private void Update() {
@@ -38,6 +44,15 @@ public class PlayerController : MonoBehaviour {
         if (velocity.y < 0) {
             velocity.y = 0;
         }
+
+        if (facingNeedsUpdating) {
+            if (facingRight) {
+                bodyController.localScale = Vector3.one;
+            } else {
+                bodyController.localScale = leftFacing;
+            }
+            facingNeedsUpdating = false;
+        }
     }
 
     public void AddToInventory(WorldItem worldItem) {
@@ -47,6 +62,21 @@ public class PlayerController : MonoBehaviour {
 
     private void FixedUpdate() {
         var xInput = Input.GetAxisRaw("Horizontal");
+
+        //moving right
+        if (xInput > 0) {
+            if (!facingRight) {
+                facingRight = true;
+                facingNeedsUpdating = true;
+            }
+        }
+        //moving left
+        else if (xInput < 0) {
+            if (facingRight) {
+                facingRight = false;
+                facingNeedsUpdating = true;
+            }
+        }
 
         velocity.x = Mathf.MoveTowards(velocity.x, (speed / 100) * xInput, walkAcceleration * Time.deltaTime);
 
