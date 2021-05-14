@@ -59,7 +59,7 @@ public class Inventory {
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public static void PickupItem(Item item) {
+    public void PickupItem(Item item) {
         //TODO: implement picking up
     }
 

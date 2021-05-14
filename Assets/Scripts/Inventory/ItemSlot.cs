@@ -16,7 +16,7 @@ public class ItemSlot : MonoBehaviour {
     private void Update() {
         if (IsHovering() && Hover != null) Hover();
         if (Input.GetKeyDown(KeyCode.Q) && Drop != null) Drop();
-        if (Input.GetMouseButtonDown(1) && Pickup != null) Pickup();
+        if (Input.GetMouseButtonDown(0) && Pickup != null) Pickup();
         if (Input.GetMouseButtonDown(2) && Split != null) Split();
     }
 

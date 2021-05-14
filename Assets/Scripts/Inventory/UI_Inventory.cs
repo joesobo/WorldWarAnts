@@ -12,13 +12,21 @@ public class UI_Inventory : MonoBehaviour {
     public GameObject inventoryController;
     public Transform slotContainer;
     public Transform itemSlotPrefab;
+    public Transform itemPrefab;
     [HideInInspector]
     public bool isActive = false;
 
     private Item hoverItem = null;
+    private RectTransform activeItem;
 
     private void Awake() {
         SetInventoryState(isActive);
+    }
+
+    private void Update() {
+        if (activeItem) {
+            activeItem.position = Input.mousePosition;
+        }
     }
 
     public void SetPlayer(PlayerController player) {
@@ -61,7 +69,10 @@ public class UI_Inventory : MonoBehaviour {
 
                 //pickup item
                 slot.Pickup = () => {
-                    Inventory.PickupItem(hoverItem);
+                    // inventory.PickupItem(hoverItem);
+                    Debug.Log("Pickup");
+                    inventory.RemoveItem(hoverItem);
+                    activeItem = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity).GetComponent<RectTransform>();
                 };
 
                 //drop item

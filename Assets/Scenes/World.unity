@@ -486,7 +486,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &265856442
 RectTransform:
   m_ObjectHideFlags: 0
@@ -505,7 +505,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -30}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &273483248
@@ -1537,7 +1537,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 980, y: 535}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &818409947
 MonoBehaviour:
@@ -1554,6 +1554,8 @@ MonoBehaviour:
   inventoryController: {fileID: 265856441}
   slotContainer: {fileID: 679385908}
   itemSlotPrefab: {fileID: 5072734119783537872, guid: 0a2a311120c02ec40b872288033f39c5,
+    type: 3}
+  itemPrefab: {fileID: 4902070338820168353, guid: d9ac6dd2107c5d44cbb0afcf6470bac1,
     type: 3}
   isActive: 0
 --- !u!1 &828033624
