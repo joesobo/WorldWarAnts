@@ -20,7 +20,6 @@ public class UI_Inventory : MonoBehaviour {
     private int hoverIndex = -1;
     private RectTransform activeTransform;
     private Item activeItem = null;
-    private int activeAmount = -1;
 
     private void Awake() {
         SetInventoryState(isActive);
@@ -67,18 +66,15 @@ public class UI_Inventory : MonoBehaviour {
             var slotImage = itemSlotTransform.Find("Image").GetComponent<Image>();
             var text = itemSlotTransform.Find("Amount").GetComponent<TextMeshProUGUI>();
 
-            //hover item
             slot.Hover = () => {
                 hoverItem = item;
                 hoverIndex = slot.GetComponent<ItemSlot>().index;
             };
 
-            //pickup item
             slot.Pickup = () => {
                 //pickup
                 if (hoverItem != null && activeItem == null) {
-                    activeItem = hoverItem;
-                    activeAmount = hoverItem.amount;
+                    activeItem = new Item { itemType = hoverItem.itemType, amount = hoverItem.amount };
 
                     activeTransform = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity, transform).GetComponent<RectTransform>();
                     activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
@@ -88,19 +84,15 @@ public class UI_Inventory : MonoBehaviour {
                 }
                 //put down
                 else if (hoverItem == null && activeItem != null) {
-                    activeItem.amount = activeAmount;
                     inventory.AddItemIndex(activeItem, hoverIndex);
                     Destroy(activeTransform.gameObject);
                     activeItem = null;
-                    activeAmount = -1;
                 }
             };
 
             slot.Split = () => {
-                //split
                 if (hoverItem != null && activeItem == null) {
                     activeItem = new Item { itemType = hoverItem.itemType, amount = hoverItem.amount / 2 };
-                    activeAmount = hoverItem.amount / 2;
 
                     activeTransform = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity, transform).GetComponent<RectTransform>();
                     activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
@@ -110,7 +102,6 @@ public class UI_Inventory : MonoBehaviour {
                 }
             };
 
-            //drop item
             slot.Drop = () => {
                 if (hoverItem != null) {
                     var tempItem = new Item { itemType = hoverItem.itemType, amount = 1 };
@@ -120,7 +111,6 @@ public class UI_Inventory : MonoBehaviour {
                 }
             };
 
-            //drop stack
             slot.DropStack = () => {
                 if (hoverItem != null) {
                     var tempItem = new Item { itemType = hoverItem.itemType, amount = hoverItem.amount };
@@ -140,6 +130,13 @@ public class UI_Inventory : MonoBehaviour {
 
     public void ToggleInventory() {
         isActive = !isActive;
+
+        if (!isActive && activeItem != null) {
+            WorldItem.DropItem(player.transform.position, activeItem, player.facingRight);
+            Destroy(activeTransform.gameObject);
+            activeItem = null;
+        }
+
         SetInventoryState(isActive);
     }
 
