@@ -8,11 +8,11 @@ public class Inventory {
 
     public event EventHandler OnItemListChanged;
 
-    private List<Item> itemList;
+    private Item[] itemList;
     public int size;
 
     public Inventory(int size) {
-        itemList = new List<Item>();
+        itemList = new Item[size];
         this.size = size;
     }
 
@@ -42,9 +42,9 @@ public class Inventory {
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private void FirstOpenSpot(List<Item> list, Item item) {
+    private void FirstOpenSpot(Item[] list, Item item) {
         //gap in list
-        for (int index = 0; index < list.Count; index++) {
+        for (int index = 0; index < list.Length; index++) {
             var element = list[index];
             if (element == null) {
                 list[index] = item;
@@ -53,12 +53,6 @@ public class Inventory {
         }
 
         //inventory full
-        if (list.Count == size) {
-            return;
-        }
-
-        //last empty spot
-        list.Add(item);
         return;
     }
 
@@ -90,7 +84,7 @@ public class Inventory {
         //TODO: implement picking up
     }
 
-    public List<Item> GetItems() {
+    public Item[] GetItems() {
         return itemList;
     }
 }
