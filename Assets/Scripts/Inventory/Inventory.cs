@@ -24,6 +24,7 @@ public class Inventory {
                 if (totalAmount <= Item.maxAmount) {
                     inventoryItem.amount += item.amount;
                     itemAlreadyInInventory = true;
+                    break;
                 } else {
                     inventoryItem.amount = Item.maxAmount;
                     item.amount = totalAmount - Item.maxAmount;
@@ -62,11 +63,11 @@ public class Inventory {
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void RemoveItem(Item item, int index) {
+    public void RemoveItem(Item item, int index, int amount) {
         Item itemInInventory = null;
         var inventoryItem = itemList[index];
         if (inventoryItem != null && inventoryItem.itemType == item.itemType) {
-            inventoryItem.amount -= item.amount;
+            inventoryItem.amount -= amount;
             itemInInventory = inventoryItem;
         }
 

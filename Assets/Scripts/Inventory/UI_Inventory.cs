@@ -84,7 +84,7 @@ public class UI_Inventory : MonoBehaviour {
                     activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
                     activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
 
-                    inventory.RemoveItem(hoverItem, hoverIndex);
+                    inventory.RemoveItem(hoverItem, hoverIndex, hoverItem.amount);
                 }
                 //put down
                 else if (hoverItem == null && activeItem != null) {
@@ -96,11 +96,25 @@ public class UI_Inventory : MonoBehaviour {
                 }
             };
 
+            slot.Split = () => {
+                //split
+                if (hoverItem != null && activeItem == null) {
+                    activeItem = new Item { itemType = hoverItem.itemType, amount = hoverItem.amount / 2 };
+                    activeAmount = hoverItem.amount / 2;
+
+                    activeTransform = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity, transform).GetComponent<RectTransform>();
+                    activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
+                    activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
+
+                    inventory.RemoveItem(hoverItem, hoverIndex, hoverItem.amount / 2);
+                }
+            };
+
             //drop item
             slot.Drop = () => {
                 if (hoverItem != null) {
                     var tempItem = new Item { itemType = hoverItem.itemType, amount = 1 };
-                    inventory.RemoveItem(tempItem, hoverIndex);
+                    inventory.RemoveItem(tempItem, hoverIndex, tempItem.amount);
 
                     WorldItem.DropItem(player.transform.position, tempItem);
                 }
