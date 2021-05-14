@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldItem : MonoBehaviour {
+    public static float dropSpeed = 5f;
+    public static float maxDropTime = 5;
+
     public float attractSpeed = 3f;
     public int attractRadius = 3;
-    public static float dropSpeed = 5f;
+
+    public float dropTime;
     private Item item;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D itemCollider;
@@ -39,33 +43,29 @@ public class WorldItem : MonoBehaviour {
     }
 
     private void Update() {
-        if (item.amount < Item.maxAmount) {
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attractRadius);
-            float minDist = float.MaxValue;
-            Collider2D saveCollider = null;
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attractRadius);
+        float minDist = float.MaxValue;
+        Collider2D saveCollider = null;
 
-            foreach (var hitCollider in hitColliders) {
-                var distance = Vector2.Distance(transform.position, hitCollider.transform.position);
-                var worldItem = hitCollider.gameObject.GetComponent<WorldItem>();
+        foreach (var hitCollider in hitColliders) {
+            var distance = Vector2.Distance(transform.position, hitCollider.transform.position);
+            var worldItem = hitCollider.gameObject.GetComponent<WorldItem>();
 
-                if (worldItem != null && worldItem.item.amount < Item.maxAmount) {
-                    if (distance < minDist && hitCollider != itemCollider) {
-                        var type = hitCollider.GetType();
-
-                        minDist = distance;
-                        if (typeof(BoxCollider2D) == type && item.itemType == worldItem.item.itemType) {
-                            saveCollider = hitCollider;
-                        } else if (hitCollider.GetComponent<PlayerController>() != null) {
-                            saveCollider = hitCollider;
-                            break;
-                        }
+            if (worldItem != null && typeof(BoxCollider2D) == hitCollider.GetType() && hitCollider != itemCollider) {
+                if (distance < minDist) {
+                    minDist = distance;
+                    if (worldItem.item.amount < Item.maxAmount && item.amount < Item.maxAmount && item.itemType == worldItem.item.itemType) {
+                        saveCollider = hitCollider;
                     }
                 }
+            } else if (hitCollider.GetComponent<PlayerController>() != null) {
+                saveCollider = hitCollider;
+                break;
             }
+        }
 
-            if (saveCollider != null) {
-                transform.position = Vector2.MoveTowards(transform.position, saveCollider.transform.position, (1 / minDist) * attractSpeed * Time.deltaTime);
-            }
+        if (saveCollider != null) {
+            transform.position = Vector2.MoveTowards(transform.position, saveCollider.transform.position, attractSpeed * Time.deltaTime);
         }
     }
 
