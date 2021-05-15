@@ -116,10 +116,24 @@ public class UI_Inventory : MonoBehaviour {
                     inventory.RemoveItem(hoverItem, hoverIndex, hoverItem.amount);
                 }
                 //put down
-                else if (hoverItem == null && activeItem != null) {
-                    inventory.AddItemIndex(activeItem, hoverIndex);
-                    Destroy(activeTransform.gameObject);
-                    activeItem = null;
+                else if (activeItem != null) {
+                    //place
+                    if (hoverItem == null) {
+                        inventory.AddItemIndex(activeItem, hoverIndex);
+                        Destroy(activeTransform.gameObject);
+                        activeItem = null;
+                    }
+                    //switch
+                    else {
+                        //grab current inventory item
+                        Item tempItem = inventory.GetItems()[hoverIndex];
+                        //set inventory to new item
+                        inventory.AddItemIndex(activeItem, hoverIndex);
+                        //set held item to grabbed
+                        activeItem = new Item { itemType = tempItem.itemType, amount = tempItem.amount };
+                        activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
+                        activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
+                    }
                 }
             };
 
