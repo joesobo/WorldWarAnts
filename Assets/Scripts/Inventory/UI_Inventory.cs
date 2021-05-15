@@ -6,7 +6,7 @@ using System;
 using TMPro;
 
 public class UI_Inventory : MonoBehaviour {
-    private Inventory inventory;
+    [HideInInspector] public Inventory inventory;
     private PlayerController player;
     private RectTransform rectTransform;
     private Vector2 localMousePosition;
@@ -14,17 +14,16 @@ public class UI_Inventory : MonoBehaviour {
     public GameObject inventoryController;
     public Transform slotContainer;
     public Transform itemSlotPrefab;
-    public Transform itemPrefab;
-    [HideInInspector]
-    public bool isActive = false;
+    [HideInInspector] public bool isActive = false;
 
-    private Item hoverItem = null;
-    private int hoverIndex = -1;
-    private RectTransform activeTransform;
-    private Item activeItem = null;
+    [HideInInspector] public Item hoverItem = null;
+    [HideInInspector] public int hoverIndex = -1;
+    [HideInInspector] public RectTransform activeTransform;
+    [HideInInspector] public Item activeItem = null;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
+        player = FindObjectOfType<PlayerController>();
         SetInventoryState(isActive);
     }
 
@@ -64,10 +63,6 @@ public class UI_Inventory : MonoBehaviour {
         }
     }
 
-    public void SetPlayer(PlayerController player) {
-        this.player = player;
-    }
-
     public void SetInventory(Inventory inventory) {
         this.inventory = inventory;
 
@@ -99,73 +94,7 @@ public class UI_Inventory : MonoBehaviour {
             var slotImage = itemSlotTransform.Find("Image").GetComponent<Image>();
             var text = itemSlotTransform.Find("Amount").GetComponent<TextMeshProUGUI>();
 
-            slot.Hover = () => {
-                hoverItem = item;
-                hoverIndex = slot.GetComponent<ItemSlot>().index;
-            };
-
-            slot.Pickup = () => {
-                //pickup
-                if (hoverItem != null && activeItem == null) {
-                    activeItem = new Item { itemType = hoverItem.itemType, amount = hoverItem.amount };
-
-                    activeTransform = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity, transform).GetComponent<RectTransform>();
-                    activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
-                    activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
-
-                    inventory.RemoveItem(hoverItem, hoverIndex, hoverItem.amount);
-                }
-                //put down
-                else if (activeItem != null) {
-                    //place
-                    if (hoverItem == null) {
-                        inventory.AddItemIndex(activeItem, hoverIndex);
-                        Destroy(activeTransform.gameObject);
-                        activeItem = null;
-                    }
-                    //switch
-                    else {
-                        //grab current inventory item
-                        Item tempItem = inventory.GetItems()[hoverIndex];
-                        //set inventory to new item
-                        inventory.AddItemIndex(activeItem, hoverIndex);
-                        //set held item to grabbed
-                        activeItem = new Item { itemType = tempItem.itemType, amount = tempItem.amount };
-                        activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
-                        activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
-                    }
-                }
-            };
-
-            slot.Split = () => {
-                if (hoverItem != null && activeItem == null) {
-                    activeItem = new Item { itemType = hoverItem.itemType, amount = hoverItem.amount / 2 };
-
-                    activeTransform = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity, transform).GetComponent<RectTransform>();
-                    activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
-                    activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
-
-                    inventory.RemoveItem(hoverItem, hoverIndex, hoverItem.amount / 2);
-                }
-            };
-
-            slot.Drop = () => {
-                if (hoverItem != null) {
-                    var tempItem = new Item { itemType = hoverItem.itemType, amount = 1 };
-                    inventory.RemoveItem(tempItem, hoverIndex, tempItem.amount);
-
-                    WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
-                }
-            };
-
-            slot.DropStack = () => {
-                if (hoverItem != null) {
-                    var tempItem = new Item { itemType = hoverItem.itemType, amount = hoverItem.amount };
-                    inventory.RemoveItem(tempItem, hoverIndex, tempItem.amount);
-
-                    WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
-                }
-            };
+            slot.StartUp(this, player, inventory, item);
 
             if (item != null) {
                 slotImage.sprite = item.GetSprite();
