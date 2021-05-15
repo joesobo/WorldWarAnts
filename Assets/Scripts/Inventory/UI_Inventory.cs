@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using System;
 using TMPro;
+using Sirenix.Utilities;
 
 public class UI_Inventory : MonoBehaviour {
     [HideInInspector] public Inventory inventory;
@@ -57,6 +58,57 @@ public class UI_Inventory : MonoBehaviour {
                     }
                 }
             }
+        }
+
+        //sort
+        if (Input.GetKey(KeyCode.R)) {
+            Item[] items = inventory.GetItems();
+
+            foreach (Item item in items) {
+                if (item != null && item.amount < Item.maxAmount && item.amount != -1) {
+                    foreach (Item testItem in items) {
+                        if (testItem != null && item != testItem && item.itemType == testItem.itemType && testItem.amount < Item.maxAmount && item.amount != -1) {
+                            var totalAmount = item.amount + testItem.amount;
+
+                            if (totalAmount < Item.maxAmount) {
+                                item.amount = totalAmount;
+                                testItem.amount = -1;
+                            } else {
+                                item.amount = Item.maxAmount;
+                                testItem.amount = totalAmount - Item.maxAmount;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < items.Length; i++) {
+                if (items[i] != null && items[i].amount == -1) {
+                    items[i] = null;
+                }
+            }
+
+            items.Sort(CompareItems);
+            RefreshInventoryItems();
+        }
+    }
+
+    private int CompareItems(Item a, Item b) {
+        if (a == null && b == null) {
+            return 0;
+        }
+        if (a != null && b == null) {
+            return -1;
+        }
+        if (a == null && b != null) {
+            return 1;
+        }
+
+        var res = a.itemType.CompareTo(b.itemType);
+        if (res == 0) {
+            return -a.amount.CompareTo(b.amount);
+        } else {
+            return res;
         }
     }
 
