@@ -8,6 +8,8 @@ using TMPro;
 public class UI_Inventory : MonoBehaviour {
     private Inventory inventory;
     private PlayerController player;
+    private RectTransform rectTransform;
+    private Vector2 localMousePosition;
 
     public GameObject inventoryController;
     public Transform slotContainer;
@@ -22,12 +24,43 @@ public class UI_Inventory : MonoBehaviour {
     private Item activeItem = null;
 
     private void Awake() {
+        rectTransform = GetComponent<RectTransform>();
         SetInventoryState(isActive);
     }
 
     private void Update() {
+        localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
+
         if (activeTransform) {
             activeTransform.position = Input.mousePosition;
+
+            if (isActive && !rectTransform.rect.Contains(localMousePosition)) {
+                hoverItem = null;
+                hoverIndex = -1;
+
+                if (Input.GetMouseButtonDown(0)) {
+                    //drop stack
+                    var tempItem = new Item { itemType = activeItem.itemType, amount = activeItem.amount };
+
+                    WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
+                    Destroy(activeTransform.gameObject);
+                    activeItem = null;
+                }
+                if (Input.GetMouseButtonDown(1)) {
+                    //drop 1
+                    var tempItem = new Item { itemType = activeItem.itemType, amount = 1 };
+
+                    WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
+                    activeItem.amount--;
+
+                    if (activeItem.amount <= 0) {
+                        Destroy(activeTransform.gameObject);
+                        activeItem = null;
+                    } else {
+                        activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
+                    }
+                }
+            }
         }
     }
 
@@ -131,7 +164,7 @@ public class UI_Inventory : MonoBehaviour {
     public void ToggleInventory() {
         isActive = !isActive;
 
-        if (!isActive && activeItem != null) {
+        if (!isActive && activeTransform != null) {
             WorldItem.DropItem(player.transform.position, activeItem, player.facingRight);
             Destroy(activeTransform.gameObject);
             activeItem = null;
