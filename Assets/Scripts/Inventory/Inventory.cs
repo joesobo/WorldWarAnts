@@ -59,8 +59,10 @@ public class Inventory {
     }
 
     public void AddItemIndex(Item item, int index) {
-        itemList[index] = item;
-        OnItemListChanged?.Invoke(this, EventArgs.Empty);
+        if (index != -1) {
+            itemList[index] = item;
+            OnItemListChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public void RemoveItem(Item item, int index, int amount) {

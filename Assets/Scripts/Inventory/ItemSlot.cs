@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,9 +8,11 @@ public class ItemSlot : MonoBehaviour {
 
     private RectTransform rectTransform;
     private UI_Inventory uI_Inventory;
+    private RectTransform uIRectTransform;
     private PlayerController player;
     private Inventory inventory;
     private Item item;
+    private Vector2 localMousePosition;
 
     void Awake() {
         rectTransform = GetComponent<RectTransform>();
@@ -19,17 +20,22 @@ public class ItemSlot : MonoBehaviour {
 
     public void StartUp(UI_Inventory uI_Inventory, PlayerController player, Inventory inventory, Item item) {
         this.uI_Inventory = uI_Inventory;
+        uIRectTransform = uI_Inventory.GetComponent<RectTransform>();
         this.player = player;
         this.inventory = inventory;
         this.item = item;
     }
 
     private void Update() {
-        if (IsHovering()) Hover();
-        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q)) DropStack();
-        if (Input.GetKeyDown(KeyCode.Q)) Drop();
-        if (Input.GetMouseButtonDown(0)) Pickup();
-        if (Input.GetMouseButtonDown(1)) Split();
+        localMousePosition = uIRectTransform.InverseTransformPoint(Input.mousePosition);
+
+        if (uIRectTransform.rect.Contains(localMousePosition)) {
+            if (IsHovering()) Hover();
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q)) DropStack();
+            if (Input.GetKeyDown(KeyCode.Q)) Drop();
+            if (Input.GetMouseButtonDown(0)) Pickup();
+            if (Input.GetMouseButtonDown(1)) Split();
+        }
     }
 
     private bool IsHovering() {
@@ -63,18 +69,34 @@ public class ItemSlot : MonoBehaviour {
             else {
                 //grab current inventory item
                 Item tempItem = inventory.GetItems()[uI_Inventory.hoverIndex];
-                //set inventory to new item
-                inventory.AddItemIndex(uI_Inventory.activeItem, uI_Inventory.hoverIndex);
-                //set held item to grabbed
-                uI_Inventory.activeItem = new Item { itemType = tempItem.itemType, amount = tempItem.amount };
-                uI_Inventory.activeTransform.GetComponent<Image>().sprite = uI_Inventory.activeItem.GetSprite();
-                uI_Inventory.activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = uI_Inventory.activeItem.amount.ToString();
+
+                if (tempItem.itemType == uI_Inventory.activeItem.itemType) {
+                    var totalAmount = tempItem.amount + uI_Inventory.activeItem.amount;
+
+                    //add stacks together
+                    if (totalAmount <= Item.maxAmount) {
+                        inventory.AddItemIndex(new Item { itemType = tempItem.itemType, amount = totalAmount }, uI_Inventory.hoverIndex);
+                        Destroy(uI_Inventory.activeTransform.gameObject);
+                        uI_Inventory.activeItem = null;
+                    } else {
+                        inventory.AddItemIndex(new Item { itemType = tempItem.itemType, amount = Item.maxAmount }, uI_Inventory.hoverIndex);
+                        uI_Inventory.activeItem = new Item { itemType = tempItem.itemType, amount = totalAmount - Item.maxAmount };
+                        uI_Inventory.activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = uI_Inventory.activeItem.amount.ToString();
+                    }
+                } else {
+                    //set inventory to new item
+                    inventory.AddItemIndex(uI_Inventory.activeItem, uI_Inventory.hoverIndex);
+                    //set held item to grabbed
+                    uI_Inventory.activeItem = new Item { itemType = tempItem.itemType, amount = tempItem.amount };
+                    uI_Inventory.activeTransform.GetComponent<Image>().sprite = uI_Inventory.activeItem.GetSprite();
+                    uI_Inventory.activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = uI_Inventory.activeItem.amount.ToString();
+                }
             }
         }
     }
 
     private void Split() {
-        if (uI_Inventory.hoverItem != null && uI_Inventory.activeItem == null) {
+        if (uI_Inventory.hoverItem != null && (uI_Inventory.activeItem == null || uI_Inventory.activeItem.itemType == ItemType.Empty)) {
             PickupLogic(uI_Inventory.hoverItem.amount / 2);
         }
     }
@@ -106,6 +128,6 @@ public class ItemSlot : MonoBehaviour {
         var tempItem = new Item { itemType = uI_Inventory.hoverItem.itemType, amount = count };
         inventory.RemoveItem(tempItem, uI_Inventory.hoverIndex, tempItem.amount);
 
-        WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
+        WorldItem.DropItem(player.transform.position, item, player.facingRight);
     }
 }

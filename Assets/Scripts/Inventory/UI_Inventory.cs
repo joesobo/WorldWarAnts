@@ -28,10 +28,9 @@ public class UI_Inventory : MonoBehaviour {
     }
 
     private void Update() {
-        localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
-
         if (activeTransform) {
             activeTransform.position = Input.mousePosition;
+            localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
 
             if (isActive && !rectTransform.rect.Contains(localMousePosition)) {
                 hoverItem = null;
@@ -40,7 +39,6 @@ public class UI_Inventory : MonoBehaviour {
                 if (Input.GetMouseButtonDown(0)) {
                     //drop stack
                     var tempItem = new Item { itemType = activeItem.itemType, amount = activeItem.amount };
-
                     WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
                     Destroy(activeTransform.gameObject);
                     activeItem = null;
@@ -48,7 +46,6 @@ public class UI_Inventory : MonoBehaviour {
                 if (Input.GetMouseButtonDown(1)) {
                     //drop 1
                     var tempItem = new Item { itemType = activeItem.itemType, amount = 1 };
-
                     WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
                     activeItem.amount--;
 
