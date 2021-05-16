@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.Utilities;
 using UnityEngine;
 
 public class Inventory {
@@ -86,5 +87,52 @@ public class Inventory {
 
     public Item[] GetItems() {
         return itemList;
+    }
+
+    public void SortInventory() {
+        foreach (var item in itemList) {
+            if (item != null && item.amount < Item.maxAmount && item.amount != -1) {
+                foreach (var testItem in itemList) {
+                    if (testItem != null && item != testItem && item.itemType == testItem.itemType && testItem.amount < Item.maxAmount && testItem.amount != -1) {
+                        var totalAmount = item.amount + testItem.amount;
+
+                        if (totalAmount <= Item.maxAmount) {
+                            item.amount = totalAmount;
+                            testItem.amount = -1;
+                        } else {
+                            item.amount = Item.maxAmount;
+                            testItem.amount = totalAmount - Item.maxAmount;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (var i = 0; i < itemList.Length; i++) {
+            if (itemList[i] != null && itemList[i].amount == -1) {
+                itemList[i] = null;
+            }
+        }
+
+        itemList.Sort(CompareItems);
+    }
+
+    private static int CompareItems(Item a, Item b) {
+        if (a == null && b == null) {
+            return 0;
+        }
+        if (a != null && b == null) {
+            return -1;
+        }
+        if (a == null && b != null) {
+            return 1;
+        }
+
+        var res = a.itemType.CompareTo(b.itemType);
+        if (res == 0) {
+            return -a.amount.CompareTo(b.amount);
+        } else {
+            return res;
+        }
     }
 }
