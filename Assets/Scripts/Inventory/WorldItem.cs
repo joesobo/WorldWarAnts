@@ -52,7 +52,7 @@ public class WorldItem : MonoBehaviour {
             var distance = Vector2.Distance(transform.position, hitCollider.transform.position);
             var worldItem = hitCollider.gameObject.GetComponent<WorldItem>();
 
-            if (worldItem != null && typeof(BoxCollider2D) == hitCollider.GetType() && hitCollider != itemCollider) {
+            if (item.IsStackable() && worldItem != null && typeof(BoxCollider2D) == hitCollider.GetType() && hitCollider != itemCollider) {
                 if (distance < minDist) {
                     minDist = distance;
                     if (worldItem.item.amount < Item.maxAmount && item.amount < Item.maxAmount && item.itemType == worldItem.item.itemType) {
@@ -78,7 +78,7 @@ public class WorldItem : MonoBehaviour {
 
         if (player != null && dropTime <= 0) {
             player.AddToInventory(this);
-        } else if (worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType && worldItem.item.amount < Item.maxAmount) {
+        } else if (item.IsStackable() && worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType && worldItem.item.amount < Item.maxAmount) {
             if (item.amount > worldItem.item.amount) {
                 worldItem.DestroySelf();
             } else {

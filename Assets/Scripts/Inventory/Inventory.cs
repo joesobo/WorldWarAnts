@@ -91,17 +91,19 @@ public class Inventory {
 
     public void SortInventory() {
         foreach (var item in itemList) {
-            if (item != null && item.amount < Item.maxAmount && item.amount != -1) {
-                foreach (var testItem in itemList) {
-                    if (testItem != null && item != testItem && item.itemType == testItem.itemType && testItem.amount < Item.maxAmount && testItem.amount != -1) {
-                        var totalAmount = item.amount + testItem.amount;
+            if (item != null && item.IsStackable()) {
+                if (item.amount < Item.maxAmount && item.amount != -1) {
+                    foreach (var testItem in itemList) {
+                        if (testItem != null && item != testItem && item.itemType == testItem.itemType && testItem.amount < Item.maxAmount && testItem.amount != -1) {
+                            var totalAmount = item.amount + testItem.amount;
 
-                        if (totalAmount <= Item.maxAmount) {
-                            item.amount = totalAmount;
-                            testItem.amount = -1;
-                        } else {
-                            item.amount = Item.maxAmount;
-                            testItem.amount = totalAmount - Item.maxAmount;
+                            if (totalAmount <= Item.maxAmount) {
+                                item.amount = totalAmount;
+                                testItem.amount = -1;
+                            } else {
+                                item.amount = Item.maxAmount;
+                                testItem.amount = totalAmount - Item.maxAmount;
+                            }
                         }
                     }
                 }
