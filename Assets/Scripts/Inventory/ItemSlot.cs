@@ -14,6 +14,8 @@ public class ItemSlot : MonoBehaviour {
     private Item item;
     private Vector2 localMousePosition;
 
+    public Color selectedColor;
+
     void Awake() {
         rectTransform = GetComponent<RectTransform>();
     }
@@ -133,5 +135,10 @@ public class ItemSlot : MonoBehaviour {
         inventory.RemoveItem(tempItem, uI_Inventory.hoverIndex, tempItem.amount);
 
         WorldItem.DropItem(player.transform.position, item, player.facingRight);
+    }
+
+    public void SetSelectedColor() {
+        var background = transform.GetChild(0).GetComponent<Image>();
+        background.color = selectedColor;
     }
 }
