@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldItem : MonoBehaviour {
-    public static float dropSpeed = 5f;
-    public static float maxDropTime = 5;
+    private static readonly float dropSpeed = 5f;
+    private static readonly float maxDropTime = 5;
 
     public float attractSpeed = 3f;
     public int attractRadius = 3;
 
-    public float dropTime = 0;
+    public float dropTime;
     private Item item;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D itemCollider;
@@ -23,7 +23,7 @@ public class WorldItem : MonoBehaviour {
         return worldItem;
     }
 
-    public static WorldItem DropItem(Vector3 position, Item item, bool direction) {
+    public static void DropItem(Vector3 position, Item item, bool direction) {
         Vector3 randomDir;
 
         if (direction) {
@@ -35,7 +35,6 @@ public class WorldItem : MonoBehaviour {
         var worldItem = SpawnWorldItem(position + (randomDir * dropSpeed), item);
         worldItem.dropTime = maxDropTime;
         worldItem.GetComponent<Rigidbody2D>().AddForce(randomDir * dropSpeed, ForceMode2D.Impulse);
-        return worldItem;
     }
 
     private void Awake() {
@@ -44,15 +43,16 @@ public class WorldItem : MonoBehaviour {
     }
 
     private void Update() {
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attractRadius);
-        float minDist = float.MaxValue;
+        var minDist = float.MaxValue;
         Collider2D saveCollider = null;
+        var results = new Collider2D[] { };
+        Physics2D.OverlapCircleNonAlloc(transform.position, attractRadius, results);
 
-        foreach (var hitCollider in hitColliders) {
+        foreach (var hitCollider in results) {
             var distance = Vector2.Distance(transform.position, hitCollider.transform.position);
             var worldItem = hitCollider.gameObject.GetComponent<WorldItem>();
 
-            if (item.IsStackable() && worldItem != null && typeof(BoxCollider2D) == hitCollider.GetType() && hitCollider != itemCollider) {
+            if (item.IsStackable() && worldItem != null && hitCollider is BoxCollider2D && hitCollider != itemCollider) {
                 if (distance < minDist) {
                     minDist = distance;
                     if (worldItem.item.amount < Item.maxAmount && item.amount < Item.maxAmount && item.itemType == worldItem.item.itemType) {
@@ -82,7 +82,7 @@ public class WorldItem : MonoBehaviour {
             if (item.amount > worldItem.item.amount) {
                 worldItem.DestroySelf();
             } else {
-                int totalAmount = worldItem.item.amount + item.amount;
+                var totalAmount = worldItem.item.amount + item.amount;
                 if (totalAmount <= Item.maxAmount) {
                     worldItem.item.amount += item.amount;
                     DestroySelf();

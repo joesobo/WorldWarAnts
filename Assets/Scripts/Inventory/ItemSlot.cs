@@ -16,7 +16,7 @@ public class ItemSlot : MonoBehaviour {
 
     public Color selectedColor;
 
-    void Awake() {
+    private void Awake() {
         rectTransform = GetComponent<RectTransform>();
     }
 
@@ -60,7 +60,7 @@ public class ItemSlot : MonoBehaviour {
             //switch
             else {
                 //grab current inventory item
-                Item tempItem = uI_Inventory.hoverSlot.item;
+                var tempItem = uI_Inventory.hoverSlot.item;
 
                 if (tempItem.itemType == uI_Inventory.activeItem.itemType) {
                     var totalAmount = tempItem.amount + uI_Inventory.activeItem.amount;

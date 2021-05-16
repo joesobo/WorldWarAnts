@@ -9,8 +9,8 @@ public class Inventory {
 
     public event EventHandler OnItemListChanged;
 
-    private Item[] itemList;
-    public int size;
+    private readonly Item[] itemList;
+    public readonly int size;
 
     public Inventory(int size) {
         itemList = new Item[size];
@@ -21,7 +21,7 @@ public class Inventory {
         if (item.IsStackable()) {
             var itemAlreadyInInventory = false;
             foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem != null && inventoryItem.itemType == item.itemType && inventoryItem.amount < Item.maxAmount)) {
-                int totalAmount = inventoryItem.amount + item.amount;
+                var totalAmount = inventoryItem.amount + item.amount;
                 if (totalAmount <= Item.maxAmount) {
                     inventoryItem.amount += item.amount;
                     itemAlreadyInInventory = true;
@@ -44,9 +44,9 @@ public class Inventory {
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private void FirstOpenSpot(Item[] list, Item item) {
+    private static void FirstOpenSpot(IList<Item> list, Item item) {
         //gap in list
-        for (int index = 0; index < list.Length; index++) {
+        for (var index = 0; index < list.Count; index++) {
             var element = list[index];
             if (element == null) {
                 list[index] = item;
@@ -91,19 +91,18 @@ public class Inventory {
 
     public void SortInventory() {
         foreach (var item in itemList) {
-            if (item != null && item.IsStackable()) {
-                if (item.amount < Item.maxAmount && item.amount != -1) {
-                    foreach (var testItem in itemList) {
-                        if (testItem != null && item != testItem && item.itemType == testItem.itemType && testItem.amount < Item.maxAmount && testItem.amount != -1) {
-                            var totalAmount = item.amount + testItem.amount;
+            if (item == null || !item.IsStackable()) continue;
+            if (item.amount < Item.maxAmount && item.amount != -1) {
+                foreach (var testItem in itemList) {
+                    if (testItem != null && item != testItem && item.itemType == testItem.itemType && testItem.amount < Item.maxAmount && testItem.amount != -1) {
+                        var totalAmount = item.amount + testItem.amount;
 
-                            if (totalAmount <= Item.maxAmount) {
-                                item.amount = totalAmount;
-                                testItem.amount = -1;
-                            } else {
-                                item.amount = Item.maxAmount;
-                                testItem.amount = totalAmount - Item.maxAmount;
-                            }
+                        if (totalAmount <= Item.maxAmount) {
+                            item.amount = totalAmount;
+                            testItem.amount = -1;
+                        } else {
+                            item.amount = Item.maxAmount;
+                            testItem.amount = totalAmount - Item.maxAmount;
                         }
                     }
                 }

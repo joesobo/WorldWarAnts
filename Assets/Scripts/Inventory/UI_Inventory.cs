@@ -3,9 +3,10 @@ using UnityEngine;
 using System;
 using TMPro;
 using System.Collections.Generic;
+using System.Linq;
 
 public class UI_Inventory : MonoBehaviour {
-    [HideInInspector] public Inventory inventory;
+    private Inventory inventory;
     private PlayerController player;
     private RectTransform rectTransform;
     private Vector2 localMousePosition;
@@ -17,17 +18,17 @@ public class UI_Inventory : MonoBehaviour {
     private Transform itemInfo;
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI amountText;
-    private Vector3 offset = new Vector3(100, 10);
-    [HideInInspector] public bool isActive = false;
+    private readonly Vector3 offset = new Vector3(100, 10);
+    [HideInInspector] public bool isActive;
 
-    private List<ItemSlot> slotList = new List<ItemSlot>();
+    private readonly List<ItemSlot> slotList = new List<ItemSlot>();
 
-    [HideInInspector] public ItemSlot hoverSlot = null;
-    [HideInInspector] public bool isHovering = false;
+    [HideInInspector] public ItemSlot hoverSlot;
+    [HideInInspector] public bool isHovering;
     [HideInInspector] public RectTransform activeTransform;
-    [HideInInspector] public Item activeItem = null;
+    [HideInInspector] public Item activeItem;
 
-    private List<int> slotIndexList = new List<int>();
+    private readonly List<int> slotIndexList = new List<int>();
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
@@ -101,13 +102,10 @@ public class UI_Inventory : MonoBehaviour {
 
         //hover logic
         isHovering = false;
-        foreach (var itemSlot in slotList) {
-            var mousePos = itemSlot.transform.InverseTransformPoint(Input.mousePosition);
-            if (itemSlot.rectTransform && itemSlot.rectTransform.rect.Contains(mousePos)) {
-                hoverSlot = itemSlot;
-                isHovering = true;
-                break;
-            }
+        foreach (var itemSlot in from itemSlot in slotList let mousePos = itemSlot.transform.InverseTransformPoint(Input.mousePosition) where itemSlot.rectTransform && itemSlot.rectTransform.rect.Contains(mousePos) select itemSlot) {
+            hoverSlot = itemSlot;
+            isHovering = true;
+            break;
         }
         if (!isHovering) {
             hoverSlot = null;
@@ -185,7 +183,7 @@ public class UI_Inventory : MonoBehaviour {
         inventoryController.SetActive(state);
     }
 
-    public void DisplayInfo() {
+    private void DisplayInfo() {
         if (!itemInfo) {
             itemInfo = Instantiate(itemInfoPrefab, Input.mousePosition + offset, Quaternion.identity, transform);
             nameText = itemInfo.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
