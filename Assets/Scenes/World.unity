@@ -849,6 +849,7 @@ MonoBehaviour:
     m_Bits: 8
   uiInventory: {fileID: 818409947}
   inventorySize: 32
+  facingRight: 1
 --- !u!1 &599920932
 GameObject:
   m_ObjectHideFlags: 0
@@ -1058,7 +1059,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1505,9 +1506,18 @@ MonoBehaviour:
   slotContainer: {fileID: 679385908}
   itemSlotPrefab: {fileID: 5072734119783537872, guid: 0a2a311120c02ec40b872288033f39c5,
     type: 3}
-  itemPrefab: {fileID: 4902070338820168353, guid: d9ac6dd2107c5d44cbb0afcf6470bac1,
+  itemInfoPrefab: {fileID: 2346883706062269663, guid: 5f6c92457b3c46246ad0b809fc933d42,
     type: 3}
   isActive: 0
+  hoverSlot: {fileID: 0}
+  hoverItem:
+    itemType: 0
+    amount: 0
+  hoverIndex: -1
+  activeTransform: {fileID: 0}
+  activeItem:
+    itemType: 0
+    amount: 0
 --- !u!1 &828033624
 GameObject:
   m_ObjectHideFlags: 0
