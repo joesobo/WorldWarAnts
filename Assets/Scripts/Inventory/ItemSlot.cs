@@ -33,8 +33,8 @@ public class ItemSlot : MonoBehaviour {
             if (IsHovering()) Hover();
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q)) DropStack();
             if (Input.GetKeyDown(KeyCode.Q)) Drop();
-            if (Input.GetMouseButtonDown(0)) Pickup();
-            if (Input.GetMouseButtonDown(1)) Split();
+            if (Input.GetMouseButtonUp(0)) Pickup();
+            if (Input.GetMouseButtonUp(1)) Split();
         }
     }
 
@@ -50,6 +50,7 @@ public class ItemSlot : MonoBehaviour {
     private void Hover() {
         uI_Inventory.hoverItem = item;
         uI_Inventory.hoverIndex = index;
+        uI_Inventory.hoverSlot = this;
     }
 
     private void Pickup() {
@@ -57,8 +58,11 @@ public class ItemSlot : MonoBehaviour {
         if (uI_Inventory.hoverItem != null && (uI_Inventory.activeItem == null || uI_Inventory.activeItem.itemType == ItemType.Empty)) {
             PickupLogic(uI_Inventory.hoverItem.amount);
         }
+    }
+
+    public void Place() {
         //put down
-        else if (uI_Inventory.activeItem != null) {
+        if (uI_Inventory.activeItem != null && uI_Inventory.activeItem.itemType != ItemType.Empty) {
             //place
             if (uI_Inventory.hoverItem == null) {
                 inventory.AddItemIndex(uI_Inventory.activeItem, uI_Inventory.hoverIndex);
