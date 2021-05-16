@@ -74,7 +74,7 @@ public class UI_Inventory : MonoBehaviour {
                 }
                 if (Input.GetMouseButtonUp(0)) {
                     //drag
-                    if (slotIndexList.Count > 0) {
+                    if (slotIndexList.Count > 1) {
                         var itemsPerSlot = activeItem.amount / slotIndexList.Count;
                         var itemsHeld = activeItem.amount % slotIndexList.Count;
 
@@ -89,6 +89,10 @@ public class UI_Inventory : MonoBehaviour {
                         } else {
                             activeItem.amount = itemsHeld;
                             activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
+                        }
+                    } else {
+                        if (isHovering) {
+                            hoverSlot.Place();
                         }
                     }
                 }
