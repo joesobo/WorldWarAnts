@@ -239,4 +239,17 @@ public class Inventory : MonoBehaviour {
             Putdown();
         }
     }
+
+    public bool HasRoom(Item item) {
+        foreach (var inventoryItem in itemList) {
+            if (inventoryItem == null) {
+                return true;
+            }
+            if (inventoryItem.itemType == item.itemType && inventoryItem.amount != Item.maxAmount) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour {
 
     private Rigidbody2D rb;
     private Collider2D boxCollider;
-    private Inventory inventory;
+    public Inventory inventory;
     private Transform bodyController;
     [HideInInspector]
     public bool facingRight = true;
