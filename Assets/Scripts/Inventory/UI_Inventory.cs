@@ -155,10 +155,16 @@ public class UI_Inventory : MonoBehaviour {
     }
 
     public void Split() {
+        int amount;
+
         if (inventory.hoverSlot.item.amount > 1 && inventory.hoverSlot.item.IsStackable()) {
-            inventory.Pickup(inventory.hoverSlot.item.amount / 2);
-            CreateActiveItem();
+            amount = inventory.hoverSlot.item.amount / 2;
+        } else {
+            amount = 1;
         }
+
+        inventory.Pickup(amount);
+        CreateActiveItem();
     }
 
     private void CreateActiveItem() {
