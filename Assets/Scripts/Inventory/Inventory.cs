@@ -213,7 +213,7 @@ public class Inventory : MonoBehaviour {
     }
 
     public void SelectSlot() {
-        if (activeItem != null && isHovering && !slotIndexList.Contains(hoverSlot.index) && hoverSlot.item == null && slotIndexList.Count < activeItem.amount) {
+        if (activeItem != null && isHovering && !slotIndexList.Contains(hoverSlot.index) && (hoverSlot.item == null || (activeItem.itemType == hoverSlot.item.itemType && hoverSlot.item.amount < Item.maxAmount)) && slotIndexList.Count < activeItem.amount) {
             slotIndexList.Add(hoverSlot.index);
             hoverSlot.SetSelectedColor();
         }
@@ -225,7 +225,17 @@ public class Inventory : MonoBehaviour {
             var itemsHeld = activeItem.amount % slotIndexList.Count;
 
             foreach (var index in slotIndexList) {
-                SetItem(new Item { itemType = activeItem.itemType, amount = itemsPerSlot }, index);
+                if (itemList[index] != null) {
+                    var totalAmount = itemList[index].amount + itemsPerSlot;
+                    if (totalAmount > Item.maxAmount) {
+                        SetItem(new Item { itemType = activeItem.itemType, amount = Item.maxAmount }, index);
+                        itemsHeld += totalAmount - Item.maxAmount;
+                    } else {
+                        SetItem(new Item { itemType = activeItem.itemType, amount = totalAmount }, index);
+                    }
+                } else {
+                    SetItem(new Item { itemType = activeItem.itemType, amount = itemsPerSlot }, index);
+                }
             }
 
             if (itemsHeld == 0) {
