@@ -6,6 +6,8 @@ using TMPro;
 public class UI_Inventory : MonoBehaviour {
     private Inventory inventory;
     private PlayerController player;
+    private VoxelEditor voxelEditor;
+    private WorldManager worldManager;
     private RectTransform rectTransform;
     private Vector2 localMousePosition;
 
@@ -23,7 +25,10 @@ public class UI_Inventory : MonoBehaviour {
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
         player = FindObjectOfType<PlayerController>();
+        voxelEditor = FindObjectOfType<VoxelEditor>();
+        worldManager = FindObjectOfType<WorldManager>();
         SetInventoryState(isActive);
+        RefreshInventoryItems();
     }
 
     private void Update() {
@@ -76,7 +81,6 @@ public class UI_Inventory : MonoBehaviour {
         this.inventory = inventory;
 
         inventory.OnItemListChanged += Inventory_OnListItemChanged;
-        RefreshInventoryItems();
     }
 
     private void Inventory_OnListItemChanged(object sender, EventArgs e) {
@@ -85,6 +89,18 @@ public class UI_Inventory : MonoBehaviour {
 
     private void RefreshInventoryItems() {
         var itemList = inventory.GetItems();
+
+        if (!worldManager.creativeMode) {
+            voxelEditor.fillTypeNames.Clear();
+            voxelEditor.fillTypeNames.Add(BlockType.Empty.ToString());
+            foreach (var item in itemList) {
+                if (item != null) {
+                    if (!voxelEditor.fillTypeNames.Contains(item.itemType.ToString())) {
+                        voxelEditor.fillTypeNames.Add(item.itemType.ToString());
+                    }
+                }
+            }
+        }
 
         inventory.slotList.Clear();
         foreach (Transform child in slotContainer) {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldManager : MonoBehaviour {
@@ -7,6 +5,7 @@ public class WorldManager : MonoBehaviour {
     public string worldName;
     public int seed;
     public string last_played;
+    public bool creativeMode = true;
 
     private WorldDataHandler worldDataHandler;
 

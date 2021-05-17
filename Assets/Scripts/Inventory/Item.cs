@@ -4,7 +4,7 @@ using UnityEngine;
 public enum ItemType {
     Empty,
     Dirt,
-    Rock,
+    Stone,
     Test
 };
 
@@ -19,7 +19,7 @@ public class Item {
             default:
             case ItemType.Empty: return null;
             case ItemType.Dirt: return ItemAssets.Instance.dirtSprite;
-            case ItemType.Rock: return ItemAssets.Instance.rockSprite;
+            case ItemType.Stone: return ItemAssets.Instance.stoneSprite;
             case ItemType.Test: return ItemAssets.Instance.testSprite;
         }
     }
@@ -29,7 +29,7 @@ public class Item {
             default:
             case ItemType.Empty: return false;
             case ItemType.Dirt: return true;
-            case ItemType.Rock: return true;
+            case ItemType.Stone: return true;
             case ItemType.Test: return false;
         }
     }

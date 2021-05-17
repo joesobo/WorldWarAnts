@@ -6,7 +6,7 @@ using UnityEngine;
 public class VoxelEditor : MonoBehaviour {
     private const int UPDATE_INTERVAL = 2;
 
-    private readonly List<string> fillTypeNames = new List<string>();
+    [HideInInspector] public List<string> fillTypeNames = new List<string>();
     private static readonly string[] RadiusNames = { "0", "1", "2", "3", "4", "5" };
     private static readonly string[] StencilNames = { "Square", "Circle" };
 
@@ -23,6 +23,7 @@ public class VoxelEditor : MonoBehaviour {
     private Camera mainCamera;
     private TerrainMap terrainMap;
     private UI_Inventory uI_Inventory;
+    private WorldManager worldManager;
 
     private Vector3 oldPoint, chunkPos;
     private Vector2Int diff;
@@ -36,14 +37,18 @@ public class VoxelEditor : MonoBehaviour {
         new VoxelStencilCircle()
     };
 
-    void Awake() {
-        uI_Inventory = FindObjectOfType<UI_Inventory>();
-    }
-
     public void Startup(VoxelMap map) {
+        uI_Inventory = FindObjectOfType<UI_Inventory>();
+        terrainMap = FindObjectOfType<TerrainMap>();
+        voxelMesh = FindObjectOfType<VoxelMesh>();
+        chunkCollider = FindObjectOfType<ChunkCollider>();
+        worldManager = FindObjectOfType<WorldManager>();
+
         var blockCollection = BlockManager.ReadBlocks();
-        foreach (var block in blockCollection.blocks) {
-            fillTypeNames.Add(block.blockType.ToString());
+        if (worldManager.creativeMode) {
+            foreach (var block in blockCollection.blocks) {
+                fillTypeNames.Add(block.blockType.ToString());
+            }
         }
 
         voxelResolution = map.voxelResolution;
@@ -52,10 +57,6 @@ public class VoxelEditor : MonoBehaviour {
         existingChunks = map.existingChunks;
         voxelMap = map;
         mainCamera = Camera.main;
-        terrainMap = FindObjectOfType<TerrainMap>();
-
-        voxelMesh = FindObjectOfType<VoxelMesh>();
-        chunkCollider = FindObjectOfType<ChunkCollider>();
 
         box = gameObject.GetComponent<BoxCollider>();
         if (box != null) {
@@ -108,7 +109,17 @@ public class VoxelEditor : MonoBehaviour {
         }
 
         activeStencil = stencils[stencilIndex];
-        activeStencil.Initialize(fillTypeIndex, radiusIndex);
+        int index = 0;
+        var fillType = 0;
+        foreach (Block block in BlockManager.ReadBlocks().blocks) {
+            if (block.itemType.ToString() == fillTypeNames[fillTypeIndex]) {
+                fillType = index;
+                break;
+            }
+            index++;
+        }
+
+        activeStencil.Initialize(fillType, radiusIndex);
 
         var voxelYOffset = yEnd * voxelResolution;
         Vector2Int checkChunk;
@@ -191,13 +202,16 @@ public class VoxelEditor : MonoBehaviour {
         GUILayout.BeginArea(new Rect(4f, Screen.height - 250f, 150f, 1000f));
         GUILayout.Label("Fill Type");
         fillTypeIndex = GUILayout.SelectionGrid(fillTypeIndex, fillTypeNames.ToArray(), 2);
-        GUILayout.Label("Radius");
-        radiusIndex = GUILayout.SelectionGrid(radiusIndex, RadiusNames, 6);
-        GUILayout.Label("Stencil");
-        stencilIndex = GUILayout.SelectionGrid(stencilIndex, StencilNames, 2);
-        GUILayout.Label("Regenerate");
-        if (GUI.Button(new Rect(0, 225, 150f, 20f), "Generate")) {
-            voxelMap.FreshGeneration();
+
+        if (worldManager.creativeMode) {
+            GUILayout.Label("Radius");
+            radiusIndex = GUILayout.SelectionGrid(radiusIndex, RadiusNames, 6);
+            GUILayout.Label("Stencil");
+            stencilIndex = GUILayout.SelectionGrid(stencilIndex, StencilNames, 2);
+            GUILayout.Label("Regenerate");
+            if (GUI.Button(new Rect(0, 225, 150f, 20f), "Generate")) {
+                voxelMap.FreshGeneration();
+            }
         }
 
         GUILayout.EndArea();

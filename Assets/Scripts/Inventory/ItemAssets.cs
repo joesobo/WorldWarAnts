@@ -12,6 +12,6 @@ public class ItemAssets : MonoBehaviour {
     public Transform worldItemPrefab;
 
     public Sprite dirtSprite;
-    public Sprite rockSprite;
+    public Sprite stoneSprite;
     public Sprite testSprite;
 }
