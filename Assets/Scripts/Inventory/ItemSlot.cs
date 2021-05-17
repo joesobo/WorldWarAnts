@@ -7,8 +7,6 @@ public class ItemSlot : MonoBehaviour {
     public RectTransform rectTransform;
     private UI_Inventory uI_Inventory;
     private RectTransform uIRectTransform;
-    private PlayerController player;
-    private Inventory inventory;
     [HideInInspector] public Item item;
     private Vector2 localMousePosition;
 
@@ -18,11 +16,9 @@ public class ItemSlot : MonoBehaviour {
         rectTransform = GetComponent<RectTransform>();
     }
 
-    public void StartUp(UI_Inventory uI_Inventory, PlayerController player, Inventory inventory, Item item) {
+    public void StartUp(UI_Inventory uI_Inventory, Item item) {
         this.uI_Inventory = uI_Inventory;
         uIRectTransform = uI_Inventory.GetComponent<RectTransform>();
-        this.player = player;
-        this.inventory = inventory;
         this.item = item;
     }
 

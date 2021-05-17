@@ -103,7 +103,7 @@ public class UI_Inventory : MonoBehaviour {
             var slotImage = itemSlotTransform.Find("Image").GetComponent<Image>();
             var text = itemSlotTransform.Find("Amount").GetComponent<TextMeshProUGUI>();
 
-            slot.StartUp(this, player, inventory, item);
+            slot.StartUp(this, item);
 
             if (item != null) {
                 slotImage.sprite = item.GetSprite();
@@ -136,7 +136,7 @@ public class UI_Inventory : MonoBehaviour {
             amountText = itemInfo.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
         } else {
             itemInfo.position = Input.mousePosition + offset;
-            nameText.text = "Name: " + inventory.hoverSlot.item.itemType.ToString();
+            nameText.text = "Name: " + inventory.hoverSlot.item.itemType;
             amountText.text = "Amount: " + inventory.hoverSlot.item.amount + "/" + Item.maxAmount;
         }
     }
@@ -178,7 +178,7 @@ public class UI_Inventory : MonoBehaviour {
         inventory.Drop(count);
     }
 
-    public void DropActive(int count) {
+    private void DropActive(int count) {
         var tempItem = new Item { itemType = inventory.activeItem.itemType, amount = count };
         inventory.Drop(tempItem);
 

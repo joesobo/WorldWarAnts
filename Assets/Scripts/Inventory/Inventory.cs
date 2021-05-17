@@ -13,7 +13,7 @@ public class Inventory : MonoBehaviour {
     public List<ItemSlot> slotList = new List<ItemSlot>();
     public readonly List<int> slotIndexList = new List<int>();
     public readonly int size;
-    private PlayerController player;
+    private readonly PlayerController player;
 
     public ItemSlot hoverSlot;
     public bool isHovering = false;
@@ -74,12 +74,12 @@ public class Inventory : MonoBehaviour {
         return false;
     }
 
-    public void SetItem(Item item, int index) {
+    private void SetItem(Item item, int index) {
         itemList[index] = item;
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void RemoveItem(int index, int count) {
+    private void RemoveItem(int index, int count) {
         var inventoryItem = itemList[index];
 
         if (!inventoryItem.IsStackable()) {
@@ -145,7 +145,8 @@ public class Inventory : MonoBehaviour {
     public void CheckHovering() {
         hoverSlot = null;
         isHovering = false;
-        foreach (var itemSlot in from itemSlot in slotList let mousePos = itemSlot.transform.InverseTransformPoint(Input.mousePosition) where itemSlot.rectTransform && itemSlot.rectTransform.rect.Contains(mousePos) select itemSlot) {
+        foreach (var itemSlot in from itemSlot in slotList let mousePos = itemSlot.transform.InverseTransformPoint(Input.mousePosition) 
+            where itemSlot.rectTransform && itemSlot.rectTransform.rect.Contains(mousePos) select itemSlot) {
             hoverSlot = itemSlot;
             isHovering = true;
             break;
@@ -164,7 +165,7 @@ public class Inventory : MonoBehaviour {
         }
     }
 
-    public void Putdown() {
+    private void Putdown() {
         if (isHovering && activeItem != null) {
             // place
             if (hoverSlot.item == null) {
@@ -213,7 +214,8 @@ public class Inventory : MonoBehaviour {
     }
 
     public void SelectSlot() {
-        if (activeItem != null && isHovering && !slotIndexList.Contains(hoverSlot.index) && (hoverSlot.item == null || (activeItem.itemType == hoverSlot.item.itemType && hoverSlot.item.amount < Item.maxAmount)) && slotIndexList.Count < activeItem.amount) {
+        if (activeItem != null && isHovering && !slotIndexList.Contains(hoverSlot.index) && 
+            (hoverSlot.item == null || (activeItem.itemType == hoverSlot.item.itemType && hoverSlot.item.amount < Item.maxAmount)) && slotIndexList.Count < activeItem.amount) {
             slotIndexList.Add(hoverSlot.index);
             hoverSlot.SetSelectedColor();
         }
