@@ -45,10 +45,8 @@ public class WorldItem : MonoBehaviour {
     private void Update() {
         var minDist = float.MaxValue;
         Collider2D saveCollider = null;
-        var results = new Collider2D[] { };
-        Physics2D.OverlapCircleNonAlloc(transform.position, attractRadius, results);
 
-        foreach (var hitCollider in results) {
+        foreach (var hitCollider in Physics2D.OverlapCircleAll(transform.position, attractRadius)) {
             var distance = Vector2.Distance(transform.position, hitCollider.transform.position);
             var worldItem = hitCollider.gameObject.GetComponent<WorldItem>();
 

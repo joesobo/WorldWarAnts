@@ -188,7 +188,7 @@ public class VoxelEditor : MonoBehaviour {
     }
 
     private void OnGUI() {
-        GUILayout.BeginArea(new Rect(4f, 4f, 150f, 1000f));
+        GUILayout.BeginArea(new Rect(4f, Screen.height - 250f, 150f, 1000f));
         GUILayout.Label("Fill Type");
         fillTypeIndex = GUILayout.SelectionGrid(fillTypeIndex, fillTypeNames.ToArray(), 2);
         GUILayout.Label("Radius");

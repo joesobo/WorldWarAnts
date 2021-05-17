@@ -68,7 +68,7 @@ public class UI_Inventory : MonoBehaviour {
                     slotIndexList.Clear();
                 }
                 if (Input.GetMouseButton(0)) {
-                    if (isHovering && !slotIndexList.Contains(hoverSlot.index) && (hoverSlot.item == null || hoverSlot.item.itemType == ItemType.Empty) && slotIndexList.Count < activeItem.amount) {
+                    if (isHovering && !slotIndexList.Contains(hoverSlot.index) && hoverSlot.item == null && slotIndexList.Count < activeItem.amount) {
                         slotIndexList.Add(hoverSlot.index);
                         hoverSlot.SetSelectedColor();
                     }
