@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<Collider2D>();
-        inventory = new Inventory(inventorySize);
+        inventory = new Inventory(inventorySize, this);
         uiInventory.SetInventory(inventory);
         bodyController = transform.Find("BodyController");
     }

@@ -76,7 +76,7 @@ public class WorldItem : MonoBehaviour {
 
         if (player != null && dropTime <= 0) {
             player.AddToInventory(this);
-        } else if (item.IsStackable() && worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType && worldItem.item.amount < Item.maxAmount) {
+        } else if (item.IsStackable() && worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType && item.amount < Item.maxAmount && worldItem.item.amount < Item.maxAmount) {
             if (item.amount > worldItem.item.amount) {
                 worldItem.DestroySelf();
             } else {

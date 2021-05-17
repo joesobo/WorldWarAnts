@@ -2,8 +2,6 @@ using UnityEngine.UI;
 using UnityEngine;
 using System;
 using TMPro;
-using System.Collections.Generic;
-using System.Linq;
 
 public class UI_Inventory : MonoBehaviour {
     private Inventory inventory;
@@ -15,20 +13,12 @@ public class UI_Inventory : MonoBehaviour {
     public Transform slotContainer;
     public Transform itemSlotPrefab;
     public Transform itemInfoPrefab;
+    public Transform itemPrefab;
     private Transform itemInfo;
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI amountText;
     private readonly Vector3 offset = new Vector3(100, 10);
     [HideInInspector] public bool isActive;
-
-    private readonly List<ItemSlot> slotList = new List<ItemSlot>();
-
-    [HideInInspector] public ItemSlot hoverSlot;
-    [HideInInspector] public bool isHovering;
-    [HideInInspector] public RectTransform activeTransform;
-    [HideInInspector] public Item activeItem;
-
-    private readonly List<int> slotIndexList = new List<int>();
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
@@ -37,92 +27,48 @@ public class UI_Inventory : MonoBehaviour {
     }
 
     private void Update() {
-        localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
+        if (isActive) {
+            inventory.CheckHovering();
+            localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
 
-        if (activeTransform && isActive) {
-            activeTransform.position = Input.mousePosition;
-            if (!rectTransform.rect.Contains(localMousePosition)) {
+            if (rectTransform.rect.Contains(localMousePosition)) {
+                //click logic
                 if (Input.GetMouseButtonDown(0)) {
-                    //drop stack
-                    var tempItem = new Item { itemType = activeItem.itemType, amount = activeItem.amount };
-                    WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
-                    Destroy(activeTransform.gameObject);
-                    activeItem = null;
-                }
-                if (Input.GetMouseButtonDown(1)) {
-                    //drop 1
-                    var tempItem = new Item { itemType = activeItem.itemType, amount = 1 };
-                    WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
-                    activeItem.amount--;
-
-                    if (activeItem.amount <= 0) {
-                        Destroy(activeTransform.gameObject);
-                        activeItem = null;
-                    } else {
-                        activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
-                    }
-                }
-            } else {
-                //clicking logic
-                if (Input.GetMouseButtonDown(0)) {
-                    slotIndexList.Clear();
+                    inventory.slotIndexList.Clear();
                 }
                 if (Input.GetMouseButton(0)) {
-                    if (isHovering && !slotIndexList.Contains(hoverSlot.index) && hoverSlot.item == null && slotIndexList.Count < activeItem.amount) {
-                        slotIndexList.Add(hoverSlot.index);
-                        hoverSlot.SetSelectedColor();
-                    }
+                    inventory.SelectSlot();
                 }
                 if (Input.GetMouseButtonUp(0)) {
-                    //drag
-                    if (slotIndexList.Count > 1) {
-                        var itemsPerSlot = activeItem.amount / slotIndexList.Count;
-                        var itemsHeld = activeItem.amount % slotIndexList.Count;
+                    InventoryClick();
+                }
 
-                        foreach (var index in slotIndexList) {
-                            //set texture
-                            inventory.AddItemIndex(new Item { itemType = activeItem.itemType, amount = itemsPerSlot }, index);
-                        }
-
-                        if (itemsHeld == 0) {
-                            Destroy(activeTransform.gameObject);
-                            activeItem = null;
-                        } else {
-                            activeItem.amount = itemsHeld;
-                            activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
-                        }
-                    } else {
-                        if (isHovering) {
-                            hoverSlot.Place();
-                        }
+                //hover info logic
+                if (Input.GetKey(KeyCode.LeftControl) && inventory.hoverSlot && inventory.hoverSlot.item != null) {
+                    DisplayInfo();
+                } else {
+                    if (itemInfo) {
+                        Destroy(itemInfo.gameObject);
                     }
                 }
+            } else if (inventory.activeItem != null) {
+                if (Input.GetMouseButtonDown(0)) {
+                    DropActive(inventory.activeItem.amount);
+                }
+                if (Input.GetMouseButtonDown(1)) {
+                    DropActive(1);
+                }
             }
-        }
 
-        //hover logic
-        isHovering = false;
-        foreach (var itemSlot in from itemSlot in slotList let mousePos = itemSlot.transform.InverseTransformPoint(Input.mousePosition) where itemSlot.rectTransform && itemSlot.rectTransform.rect.Contains(mousePos) select itemSlot) {
-            hoverSlot = itemSlot;
-            isHovering = true;
-            break;
-        }
-        if (!isHovering) {
-            hoverSlot = null;
-        }
-
-        if (Input.GetKey(KeyCode.LeftControl) && rectTransform.rect.Contains(localMousePosition) && hoverSlot && hoverSlot.item != null) {
-            DisplayInfo();
-        } else {
-            if (itemInfo) {
-                Destroy(itemInfo.gameObject);
+            //sort
+            if (Input.GetKey(KeyCode.R)) {
+                inventory.SortInventory();
+                RefreshInventoryItems();
             }
-        }
 
-        //sort
-        if (Input.GetKey(KeyCode.R)) {
-            inventory.SortInventory();
-            RefreshInventoryItems();
+            if (inventory.activeTransform != null) {
+                inventory.activeTransform.position = Input.mousePosition;
+            }
         }
     }
 
@@ -140,7 +86,7 @@ public class UI_Inventory : MonoBehaviour {
     private void RefreshInventoryItems() {
         var itemList = inventory.GetItems();
 
-        slotList.Clear();
+        inventory.slotList.Clear();
         foreach (Transform child in slotContainer) {
             Destroy(child.gameObject);
         }
@@ -148,7 +94,7 @@ public class UI_Inventory : MonoBehaviour {
         for (var i = 0; i < inventory.size; i++) {
             var item = itemList[i];
             var itemSlot = Instantiate(itemSlotPrefab, Vector3.zero, Quaternion.identity, slotContainer);
-            slotList.Add(itemSlot.GetComponent<ItemSlot>());
+            inventory.slotList.Add(itemSlot.GetComponent<ItemSlot>());
             itemSlot.GetComponent<ItemSlot>().index = i;
 
             var itemSlotTransform = itemSlot.GetComponent<RectTransform>();
@@ -170,10 +116,10 @@ public class UI_Inventory : MonoBehaviour {
     public void ToggleInventory() {
         isActive = !isActive;
 
-        if (!isActive && activeTransform != null) {
-            WorldItem.DropItem(player.transform.position, activeItem, player.facingRight);
-            Destroy(activeTransform.gameObject);
-            activeItem = null;
+        if (!isActive && inventory.activeTransform != null) {
+            WorldItem.DropItem(player.transform.position, inventory.activeItem, player.facingRight);
+            Destroy(inventory.activeTransform.gameObject);
+            inventory.activeItem = null;
         }
 
         SetInventoryState(isActive);
@@ -190,8 +136,58 @@ public class UI_Inventory : MonoBehaviour {
             amountText = itemInfo.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
         } else {
             itemInfo.position = Input.mousePosition + offset;
-            nameText.text = "Name: " + hoverSlot.item.itemType.ToString();
-            amountText.text = "Amount: " + hoverSlot.item.amount + "/" + Item.maxAmount;
+            nameText.text = "Name: " + inventory.hoverSlot.item.itemType.ToString();
+            amountText.text = "Amount: " + inventory.hoverSlot.item.amount + "/" + Item.maxAmount;
+        }
+    }
+
+
+
+    public void InventoryClick() {
+        if (inventory.activeItem == null) {
+            if (inventory.hoverSlot != null && inventory.hoverSlot.item != null) {
+                inventory.Pickup(inventory.hoverSlot.item.amount);
+                CreateActiveItem();
+            }
+        } else {
+            inventory.Drag();
+        }
+    }
+
+    public void Split() {
+        if (inventory.hoverSlot.item.amount > 1 && inventory.hoverSlot.item.IsStackable()) {
+            inventory.Pickup(inventory.hoverSlot.item.amount / 2);
+            CreateActiveItem();
+        }
+    }
+
+    private void CreateActiveItem() {
+        var tempTransform = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity, transform).GetComponent<RectTransform>();
+        tempTransform.GetComponent<Image>().sprite = inventory.activeItem.GetSprite();
+        tempTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = inventory.activeItem.amount.ToString();
+        inventory.activeTransform = tempTransform;
+    }
+
+    public void Drop(int count) {
+        inventory.Drop(count);
+    }
+
+    public void DropActive(int count) {
+        var tempItem = new Item { itemType = inventory.activeItem.itemType, amount = count };
+        inventory.Drop(tempItem);
+
+        if (inventory.activeItem.amount == count) {
+            Destroy(inventory.activeTransform.gameObject);
+            inventory.activeItem = null;
+        } else {
+            inventory.activeItem.amount--;
+
+            if (inventory.activeItem.amount <= 0) {
+                Destroy(inventory.activeTransform.gameObject);
+                inventory.activeItem = null;
+            } else {
+                inventory.activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = inventory.activeItem.amount.ToString();
+            }
         }
     }
 }
