@@ -28,4 +28,16 @@ public class PlayerInventoryController : MonoBehaviour {
             mainInventory.RemoveItem(index, 1);
         }
     }
+
+    public bool HasRoom(Item item) {
+        return hotBarInventory.HasRoom(item) || mainInventory.HasRoom(item);
+    }
+
+    public void AddItem(Item item) {
+        if (hotBarInventory.HasRoom(item)) {
+            hotBarInventory.AddItem(item);
+        } else {
+            mainInventory.AddItem(item);
+        }
+    }
 }

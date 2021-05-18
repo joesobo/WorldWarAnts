@@ -62,6 +62,11 @@ public abstract class UI_Inventory : MonoBehaviour {
                     Destroy(itemInfo.gameObject);
                 }
             }
+
+            //sort
+            if (Input.GetKey(KeyCode.R)) {
+                inventory.SortItems();
+            }
         } else if (activeItem != null) {
             if (Input.GetMouseButtonDown(0)) {
                 DropActive(activeItem.amount);
@@ -69,11 +74,6 @@ public abstract class UI_Inventory : MonoBehaviour {
             if (Input.GetMouseButtonDown(1)) {
                 DropActive(1);
             }
-        }
-
-        //sort
-        if (Input.GetKey(KeyCode.R)) {
-            inventory.SortItems();
         }
 
         if (activeTransform != null) {
