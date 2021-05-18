@@ -25,10 +25,13 @@ public class VoxelChunk : MonoBehaviour {
     public Dictionary<Vector2, List<Triangle>> triangleDictionary;
     private static readonly int Resolution = Shader.PropertyToID("Resolution");
     private BlockCollection blockCollection;
+    private UI_Inventory uI_Inventory;
 
     public void Initialize(bool useVoxelPoints, int resolution) {
         this.useVoxelPoints = useVoxelPoints;
         this.resolution = resolution;
+
+        uI_Inventory = FindObjectOfType<UI_Inventory>();
 
         Startup();
 
@@ -127,7 +130,12 @@ public class VoxelChunk : MonoBehaviour {
                     }
                     // Placing
                     if (stencil.fillType != 0 && voxels[i].state == 0) {
+                        var placingItemType = BlockManager.ReadBlocks().blocks[stencil.fillType].itemType;
                         voxels[i].state = stencil.Apply(x, y, voxels[i].state);
+
+                        // remove from inventory
+                        uI_Inventory.RemoveFirstItem(placingItemType);
+
                         didUpdate = true;
                     }
                 }

@@ -560,7 +560,7 @@ MonoBehaviour:
   worldItemPrefab: {fileID: 2414343842689261247, guid: 028d614107618ec4796c9780a2c1dc54,
     type: 3}
   dirtSprite: {fileID: 21300000, guid: 1c6b6c7ee790fe24d9b3ddc5cd1243cc, type: 3}
-  rockSprite: {fileID: 21300000, guid: a86d50e6bf789984e83392e19034bb8a, type: 3}
+  stoneSprite: {fileID: 21300000, guid: a86d50e6bf789984e83392e19034bb8a, type: 3}
   testSprite: {fileID: 21300000, guid: d6291a4c19cdba64d9425f35f5f2fdb1, type: 3}
 --- !u!4 &273483250
 Transform:
@@ -609,7 +609,7 @@ MonoBehaviour:
   worldName: 
   seed: 0
   last_played: 
-  creativeMode: 0
+  creativeMode: 1
 --- !u!4 &478286947
 Transform:
   m_ObjectHideFlags: 0

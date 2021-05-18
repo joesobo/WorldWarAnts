@@ -212,4 +212,11 @@ public class UI_Inventory : MonoBehaviour {
             }
         }
     }
+
+    public void RemoveFirstItem(ItemType type) {
+        int index = inventory.IndexOfFirstLocationFound(type);
+        if (index != -1) {
+            inventory.RemoveItem(index, 1);
+        }
+    }
 }

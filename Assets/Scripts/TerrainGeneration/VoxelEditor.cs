@@ -13,7 +13,8 @@ public class VoxelEditor : MonoBehaviour {
     private int voxelResolution, chunkResolution;
     private float viewDistance;
 
-    private int fillTypeIndex, radiusIndex, stencilIndex;
+    [HideInInspector] public int fillTypeIndex;
+    private int radiusIndex, stencilIndex;
 
     private VoxelMesh voxelMesh;
     private ChunkCollider chunkCollider;
@@ -81,6 +82,10 @@ public class VoxelEditor : MonoBehaviour {
                 }
             }
         }
+
+        if (fillTypeIndex >= fillTypeNames.Count) {
+            fillTypeIndex = fillTypeNames.Count - 1;
+        }
     }
 
     private void EditVoxels(Vector3 point) {
@@ -108,18 +113,7 @@ public class VoxelEditor : MonoBehaviour {
             yEnd = chunkResolution - 1;
         }
 
-        activeStencil = stencils[stencilIndex];
-        int index = 0;
-        var fillType = 0;
-        foreach (Block block in BlockManager.ReadBlocks().blocks) {
-            if (block.itemType.ToString() == fillTypeNames[fillTypeIndex]) {
-                fillType = index;
-                break;
-            }
-            index++;
-        }
-
-        activeStencil.Initialize(fillType, radiusIndex);
+        SetupStencil();
 
         var voxelYOffset = yEnd * voxelResolution;
         Vector2Int checkChunk;
@@ -156,6 +150,27 @@ public class VoxelEditor : MonoBehaviour {
                 voxelMesh.TriangulateChunkMesh(chunk);
                 chunkCollider.Generate2DCollider(chunk, chunkResolution);
             }
+        }
+    }
+
+    private void SetupStencil() {
+        activeStencil = stencils[stencilIndex];
+
+        if (worldManager.creativeMode) {
+            activeStencil.Initialize(fillTypeIndex, radiusIndex);
+        } else {
+            activeStencil = stencils[stencilIndex];
+            var fillType = 0;
+            var blocks = BlockManager.ReadBlocks().blocks;
+
+            for (int i = 0; i < blocks.Count; i++) {
+                if ((int)blocks[i].blockType == fillTypeIndex) {
+                    fillType = i;
+                    break;
+                }
+            }
+
+            activeStencil.Initialize(fillType, radiusIndex);
         }
     }
 

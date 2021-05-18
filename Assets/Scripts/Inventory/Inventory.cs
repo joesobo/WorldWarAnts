@@ -79,7 +79,7 @@ public class Inventory : MonoBehaviour {
         OnItemListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private void RemoveItem(int index, int count) {
+    public void RemoveItem(int index, int count) {
         var inventoryItem = itemList[index];
 
         if (!inventoryItem.IsStackable()) {
@@ -145,8 +145,10 @@ public class Inventory : MonoBehaviour {
     public void CheckHovering() {
         hoverSlot = null;
         isHovering = false;
-        foreach (var itemSlot in from itemSlot in slotList let mousePos = itemSlot.transform.InverseTransformPoint(Input.mousePosition) 
-            where itemSlot.rectTransform && itemSlot.rectTransform.rect.Contains(mousePos) select itemSlot) {
+        foreach (var itemSlot in from itemSlot in slotList
+                                 let mousePos = itemSlot.transform.InverseTransformPoint(Input.mousePosition)
+                                 where itemSlot.rectTransform && itemSlot.rectTransform.rect.Contains(mousePos)
+                                 select itemSlot) {
             hoverSlot = itemSlot;
             isHovering = true;
             break;
@@ -214,7 +216,7 @@ public class Inventory : MonoBehaviour {
     }
 
     public void SelectSlot() {
-        if (activeItem != null && isHovering && !slotIndexList.Contains(hoverSlot.index) && 
+        if (activeItem != null && isHovering && !slotIndexList.Contains(hoverSlot.index) &&
             (hoverSlot.item == null || (activeItem.itemType == hoverSlot.item.itemType && hoverSlot.item.amount < Item.maxAmount)) && slotIndexList.Count < activeItem.amount) {
             slotIndexList.Add(hoverSlot.index);
             hoverSlot.SetSelectedColor();
@@ -263,5 +265,16 @@ public class Inventory : MonoBehaviour {
         }
 
         return false;
+    }
+
+    public int IndexOfFirstLocationFound(ItemType type) {
+        int index = 0;
+        foreach (Item item in itemList) {
+            if (item != null && item.itemType == type) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
     }
 }
