@@ -11,23 +11,20 @@ public class PlayerController : MonoBehaviour {
     public float groundedRayLength = 0.1f;
     public LayerMask layerMaskForGrounded;
 
-    [SerializeField] public UI_Inventory uiInventory;
-    public int inventorySize = 32;
-
     private Rigidbody2D rb;
     private Collider2D boxCollider;
-    public Inventory inventory;
     private Transform bodyController;
     [HideInInspector]
     public bool facingRight = true;
     private bool facingNeedsUpdating = false;
     private Vector3 leftFacing = new Vector3(-1, 1, 1);
 
+    [HideInInspector] public PlayerInventoryController inventoryController;
+
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<Collider2D>();
-        inventory = new Inventory(inventorySize, this);
-        uiInventory.SetInventory(inventory);
+        inventoryController = FindObjectOfType<PlayerInventoryController>();
         bodyController = transform.Find("BodyController");
     }
 
@@ -52,11 +49,6 @@ public class PlayerController : MonoBehaviour {
             }
             facingNeedsUpdating = false;
         }
-    }
-
-    public void AddToInventory(WorldItem worldItem) {
-        inventory.AddItem(worldItem.GetItem());
-        worldItem.DestroySelf();
     }
 
     private void FixedUpdate() {

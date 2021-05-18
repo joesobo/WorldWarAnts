@@ -1,108 +1,104 @@
-using UnityEngine.UI;
-using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class UI_Inventory : MonoBehaviour {
+public abstract class UI_Inventory : MonoBehaviour {
     private Inventory inventory;
-    private PlayerController player;
-    private VoxelEditor voxelEditor;
-    private WorldManager worldManager;
+    private List<ItemSlot> slotList;
+    private List<int> slotIndexList;
     private RectTransform rectTransform;
-    private Vector2 localMousePosition;
 
-    public GameObject inventoryController;
-    public Transform slotContainer;
     public Transform itemSlotPrefab;
-    public Transform itemInfoPrefab;
+    public Transform slotContainer;
     public Transform itemPrefab;
+    public Transform itemInfoPrefab;
+
+    private readonly Vector3 offset = new Vector3(100, 10);
     private Transform itemInfo;
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI amountText;
-    private readonly Vector3 offset = new Vector3(100, 10);
-    [HideInInspector] public bool isActive;
+    private Vector2 localMousePosition;
+    private ItemSlot hoverSlot;
+    private bool isHovering = false;
+    private Item activeItem;
+    private Transform activeTransform;
 
-    private void Awake() {
-        rectTransform = GetComponent<RectTransform>();
-        player = FindObjectOfType<PlayerController>();
-        voxelEditor = FindObjectOfType<VoxelEditor>();
-        worldManager = FindObjectOfType<WorldManager>();
-        SetInventoryState(isActive);
-        RefreshInventoryItems();
-    }
-
-    private void Update() {
-        if (isActive) {
-            inventory.CheckHovering();
-            localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
-
-            if (rectTransform.rect.Contains(localMousePosition)) {
-                //click logic
-                if (Input.GetMouseButtonDown(0)) {
-                    inventory.slotIndexList.Clear();
-                }
-                if (Input.GetMouseButton(0)) {
-                    inventory.SelectSlot();
-                }
-                if (Input.GetMouseButtonUp(0)) {
-                    InventoryClick();
-                }
-
-                //hover info logic
-                if (Input.GetKey(KeyCode.LeftControl) && inventory.hoverSlot && inventory.hoverSlot.item != null) {
-                    DisplayInfo();
-                } else {
-                    if (itemInfo) {
-                        Destroy(itemInfo.gameObject);
-                    }
-                }
-            } else if (inventory.activeItem != null) {
-                if (Input.GetMouseButtonDown(0)) {
-                    DropActive(inventory.activeItem.amount);
-                }
-                if (Input.GetMouseButtonDown(1)) {
-                    DropActive(1);
-                }
-            }
-
-            //sort
-            if (Input.GetKey(KeyCode.R)) {
-                inventory.SortInventory();
-                RefreshInventoryItems();
-            }
-
-            if (inventory.activeTransform != null) {
-                inventory.activeTransform.position = Input.mousePosition;
-            }
-        }
-    }
-
-    public void SetInventory(Inventory inventory) {
+    public void SetupInventory(Inventory inventory) {
         this.inventory = inventory;
+        slotList = new List<ItemSlot>();
+        slotIndexList = new List<int>();
+        rectTransform = GetComponent<RectTransform>();
+
+        RefreshInventory();
 
         inventory.OnItemListChanged += Inventory_OnListItemChanged;
     }
 
-    private void Inventory_OnListItemChanged(object sender, EventArgs e) {
-        RefreshInventoryItems();
-    }
+    private void Update() {
+        Hover();
 
-    private void RefreshInventoryItems() {
-        var itemList = inventory.GetItems();
+        localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
 
-        if (!worldManager.creativeMode) {
-            voxelEditor.fillTypeNames.Clear();
-            voxelEditor.fillTypeNames.Add(BlockType.Empty.ToString());
-            foreach (var item in itemList) {
-                if (item != null) {
-                    if (!voxelEditor.fillTypeNames.Contains(item.itemType.ToString())) {
-                        voxelEditor.fillTypeNames.Add(item.itemType.ToString());
-                    }
+        if (rectTransform.rect.Contains(localMousePosition)) {
+            //click logic
+            if (Input.GetMouseButtonDown(0)) {
+                slotIndexList.Clear();
+            }
+            if (Input.GetMouseButton(0)) {
+                SelectSlot();
+            }
+            if (Input.GetMouseButtonUp(0)) {
+                InventoryClick();
+            }
+
+            //hover info logic
+            if (Input.GetKey(KeyCode.LeftControl) && hoverSlot && hoverSlot.item != null) {
+                DisplayInfo();
+            } else {
+                if (itemInfo) {
+                    Destroy(itemInfo.gameObject);
                 }
+            }
+        } else if (activeItem != null) {
+            if (Input.GetMouseButtonDown(0)) {
+                DropActive(activeItem.amount);
+            }
+            if (Input.GetMouseButtonDown(1)) {
+                DropActive(1);
             }
         }
 
-        inventory.slotList.Clear();
+        //sort
+        if (Input.GetKey(KeyCode.R)) {
+            inventory.SortItems();
+        }
+
+        if (activeTransform != null) {
+            activeTransform.position = Input.mousePosition;
+        }
+
+        InventorySpecificControls();
+    }
+
+    public void InventoryClick() {
+        if (activeItem == null && hoverSlot != null && hoverSlot.item != null) {
+            Pickup(hoverSlot.item.amount);
+        } else {
+            Drag();
+        }
+    }
+
+    private void Inventory_OnListItemChanged(object sender, EventArgs e) {
+        RefreshInventory();
+    }
+
+    private void RefreshInventory() {
+        var itemList = inventory.itemList;
+
+        slotList.Clear();
         foreach (Transform child in slotContainer) {
             Destroy(child.gameObject);
         }
@@ -110,7 +106,7 @@ public class UI_Inventory : MonoBehaviour {
         for (var i = 0; i < inventory.size; i++) {
             var item = itemList[i];
             var itemSlot = Instantiate(itemSlotPrefab, Vector3.zero, Quaternion.identity, slotContainer);
-            inventory.slotList.Add(itemSlot.GetComponent<ItemSlot>());
+            slotList.Add(itemSlot.GetComponent<ItemSlot>());
             itemSlot.GetComponent<ItemSlot>().index = i;
 
             var itemSlotTransform = itemSlot.GetComponent<RectTransform>();
@@ -129,20 +125,81 @@ public class UI_Inventory : MonoBehaviour {
         }
     }
 
-    public void ToggleInventory() {
-        isActive = !isActive;
-
-        if (!isActive && inventory.activeTransform != null) {
-            WorldItem.DropItem(player.transform.position, inventory.activeItem, player.facingRight);
-            Destroy(inventory.activeTransform.gameObject);
-            inventory.activeItem = null;
+    public void Pickup(int count) {
+        if (isHovering && activeItem == null) {
+            if (hoverSlot.item != null) {
+                activeItem = new Item { itemType = hoverSlot.item.itemType, amount = count };
+                inventory.RemoveItem(hoverSlot.index, count);
+                CreateActiveItem();
+            }
         }
-
-        SetInventoryState(isActive);
     }
 
-    private void SetInventoryState(bool state) {
-        inventoryController.SetActive(state);
+    private void PutDown() {
+        if (isHovering && activeItem != null) {
+            // place
+            if (hoverSlot.item == null) {
+                inventory.SetItem(activeItem, hoverSlot.index);
+                Destroy(activeTransform.gameObject);
+                activeItem = null;
+            } else {
+                var tempItem = hoverSlot.item;
+
+                // combine
+                if (tempItem.itemType == activeItem.itemType) {
+                    var totalAmount = tempItem.amount + activeItem.amount;
+
+                    if (totalAmount <= Item.maxAmount) {
+                        inventory.SetItem(new Item { itemType = tempItem.itemType, amount = totalAmount }, hoverSlot.index);
+                        Destroy(activeTransform.gameObject);
+                        activeItem = null;
+                    } else {
+                        inventory.SetItem(new Item { itemType = tempItem.itemType, amount = Item.maxAmount }, hoverSlot.index);
+                        activeItem = new Item { itemType = tempItem.itemType, amount = totalAmount - Item.maxAmount };
+                        activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
+                    }
+                }
+                // switch
+                else {
+                    inventory.SetItem(activeItem, hoverSlot.index);
+                    activeItem = new Item { itemType = tempItem.itemType, amount = tempItem.amount };
+                    activeTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
+                    activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
+                }
+            }
+        }
+    }
+
+    public void Drop(int count) {
+        if (isHovering && hoverSlot.item != null) {
+            var tempItem = new Item { itemType = hoverSlot.item.itemType, amount = count };
+
+            inventory.DropItem(tempItem);
+            inventory.RemoveItem(hoverSlot.index, count);
+        }
+    }
+
+    private void DropActive(int count) {
+        var tempItem = new Item { itemType = activeItem.itemType, amount = count };
+        inventory.DropItem(tempItem);
+
+        if (activeItem.amount == count) {
+            Destroy(activeTransform.gameObject);
+            activeItem = null;
+        } else {
+            activeItem.amount--;
+
+            if (activeItem.amount <= 0) {
+                Destroy(activeTransform.gameObject);
+                activeItem = null;
+            } else {
+                activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
+            }
+        }
+    }
+
+    private void Sort() {
+        inventory.SortItems();
     }
 
     private void DisplayInfo() {
@@ -152,71 +209,87 @@ public class UI_Inventory : MonoBehaviour {
             amountText = itemInfo.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
         } else {
             itemInfo.position = Input.mousePosition + offset;
-            nameText.text = "Name: " + inventory.hoverSlot.item.itemType;
-            amountText.text = "Amount: " + inventory.hoverSlot.item.amount + "/" + Item.maxAmount;
-        }
-    }
-
-
-
-    public void InventoryClick() {
-        if (inventory.activeItem == null) {
-            if (inventory.hoverSlot != null && inventory.hoverSlot.item != null) {
-                inventory.Pickup(inventory.hoverSlot.item.amount);
-                CreateActiveItem();
-            }
-        } else {
-            inventory.Drag();
+            nameText.text = "Name: " + hoverSlot.item.itemType;
+            amountText.text = "Amount: " + hoverSlot.item.amount + "/" + Item.maxAmount;
         }
     }
 
     public void Split() {
-        int amount;
+        if (isHovering && hoverSlot.item != null) {
+            int amount;
 
-        if (inventory.hoverSlot.item.amount > 1 && inventory.hoverSlot.item.IsStackable()) {
-            amount = inventory.hoverSlot.item.amount / 2;
-        } else {
-            amount = 1;
+            if (hoverSlot.item.amount > 1 && hoverSlot.item.IsStackable()) {
+                amount = hoverSlot.item.amount / 2;
+            } else {
+                amount = 1;
+            }
+
+            Pickup(amount);
         }
-
-        inventory.Pickup(amount);
-        CreateActiveItem();
     }
 
     private void CreateActiveItem() {
         var tempTransform = Instantiate(itemPrefab, Input.mousePosition, Quaternion.identity, transform).GetComponent<RectTransform>();
-        tempTransform.GetComponent<Image>().sprite = inventory.activeItem.GetSprite();
-        tempTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = inventory.activeItem.amount.ToString();
-        inventory.activeTransform = tempTransform;
+        tempTransform.GetComponent<Image>().sprite = activeItem.GetSprite();
+        tempTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
+        activeTransform = tempTransform;
     }
 
-    public void Drop(int count) {
-        inventory.Drop(count);
+    public void Hover() {
+        hoverSlot = null;
+        isHovering = false;
+        foreach (var itemSlot in from itemSlot in slotList
+                                 let mousePos = itemSlot.transform.InverseTransformPoint(Input.mousePosition)
+                                 where itemSlot.rectTransform && itemSlot.rectTransform.rect.Contains(mousePos)
+                                 select itemSlot) {
+            hoverSlot = itemSlot;
+            isHovering = true;
+            break;
+        }
+        if (!isHovering) {
+            hoverSlot = null;
+        }
     }
 
-    private void DropActive(int count) {
-        var tempItem = new Item { itemType = inventory.activeItem.itemType, amount = count };
-        inventory.Drop(tempItem);
+    private void Drag() {
+        if (slotIndexList.Count > 1) {
+            var itemsPerSlot = activeItem.amount / slotIndexList.Count;
+            var itemsHeld = activeItem.amount % slotIndexList.Count;
 
-        if (inventory.activeItem.amount == count) {
-            Destroy(inventory.activeTransform.gameObject);
-            inventory.activeItem = null;
-        } else {
-            inventory.activeItem.amount--;
+            foreach (var index in slotIndexList) {
+                if (inventory.itemList[index] != null) {
+                    var totalAmount = inventory.itemList[index].amount + itemsPerSlot;
+                    if (totalAmount > Item.maxAmount) {
+                        inventory.SetItem(new Item { itemType = activeItem.itemType, amount = Item.maxAmount }, index);
+                        itemsHeld += totalAmount - Item.maxAmount;
+                    } else {
+                        inventory.SetItem(new Item { itemType = activeItem.itemType, amount = totalAmount }, index);
+                    }
+                } else {
+                    inventory.SetItem(new Item { itemType = activeItem.itemType, amount = itemsPerSlot }, index);
+                }
+            }
 
-            if (inventory.activeItem.amount <= 0) {
-                Destroy(inventory.activeTransform.gameObject);
-                inventory.activeItem = null;
+            if (itemsHeld == 0) {
+                Destroy(activeTransform.gameObject);
+                activeItem = null;
             } else {
-                inventory.activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = inventory.activeItem.amount.ToString();
+                activeItem.amount = itemsHeld;
+                activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = activeItem.amount.ToString();
+            }
+        } else {
+            PutDown();
+        }
+    }
+
+    private void SelectSlot() {
+        if (activeItem != null && isHovering && !slotIndexList.Contains(hoverSlot.index)) {
+            if ((hoverSlot.item == null || (activeItem.itemType == hoverSlot.item.itemType && hoverSlot.item.amount < Item.maxAmount)) && slotIndexList.Count < activeItem.amount) {
+                slotIndexList.Add(hoverSlot.index);
+                hoverSlot.SetSelectedColor();
             }
         }
     }
 
-    public void RemoveFirstItem(ItemType type) {
-        int index = inventory.IndexOfFirstLocationFound(type);
-        if (index != -1) {
-            inventory.RemoveItem(index, 1);
-        }
-    }
+    public abstract void InventorySpecificControls();
 }

@@ -59,7 +59,7 @@ public class WorldItem : MonoBehaviour {
                     }
                 }
             } else if ((player = hitCollider.GetComponent<PlayerController>()) != null && dropTime <= 0) {
-                if (player.inventory.HasRoom(item)) {
+                if (player.inventoryController.mainInventory.HasRoom(item)) {
                     saveCollider = hitCollider;
                     break;
                 }
@@ -77,8 +77,9 @@ public class WorldItem : MonoBehaviour {
         var player = collisionInfo.gameObject.GetComponent<PlayerController>();
         var worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
 
-        if (player != null && player.inventory.HasRoom(item) && dropTime <= 0) {
-            player.AddToInventory(this);
+        if (player != null && player.inventoryController.mainInventory.HasRoom(item) && dropTime <= 0) {
+            player.inventoryController.mainInventory.AddItem(this.GetItem());
+            this.DestroySelf();
         } else if (item.IsStackable() && worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType && item.amount < Item.maxAmount && worldItem.item.amount < Item.maxAmount) {
             if (item.amount > worldItem.item.amount) {
                 worldItem.DestroySelf();
