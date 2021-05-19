@@ -76,29 +76,16 @@ public class VoxelEditor : MonoBehaviour {
         if (Time.frameCount % UPDATE_INTERVAL != 0) return;
 
         if (!playerInventoryController.uiMainInventory.isActive) {
-            //Break
-            if (Input.GetMouseButton(0)) {
+            if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
                 if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo)) {
                     if (hitInfo.collider.gameObject == gameObject && (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {
-                        EditVoxels(hitInfo.point, true);
+                        EditVoxels(hitInfo.point, Input.GetMouseButton(0));
                         oldPoint = hitInfo.point;
                         oldTypeIndex = fillTypeIndex;
                         terrainMap.RecalculateMap();
                     }
                 }
             }
-            //Place
-            if (Input.GetMouseButton(1)) {
-                if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo)) {
-                    if (hitInfo.collider.gameObject == gameObject && (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {
-                        EditVoxels(hitInfo.point, false);
-                        oldPoint = hitInfo.point;
-                        oldTypeIndex = fillTypeIndex;
-                        terrainMap.RecalculateMap();
-                    }
-                }
-            }
-
         }
         if (fillTypeIndex >= fillTypeNames.Count) {
             fillTypeIndex = fillTypeNames.Count - 1;

@@ -27,6 +27,9 @@ public class UI_HotBar : UI_Inventory {
             }
         }
 
+        if (currentItem != inventory.itemList[currentIndex]) {
+            currentItem = inventory.itemList[currentIndex];
+        }
         Equip(currentIndex);
     }
 
