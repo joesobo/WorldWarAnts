@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour {
-    [HideInInspector] public int index = 0;
+    [HideInInspector] public int index;
 
     public RectTransform rectTransform;
     [HideInInspector] public UI_Inventory ui;

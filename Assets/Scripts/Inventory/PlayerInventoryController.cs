@@ -33,13 +33,6 @@ public class PlayerInventoryController : MonoBehaviour {
         inventoriesController.activeUIs.Add(uiMainInventory);
     }
 
-    public void RemoveFirstItem(ItemType type) {
-        var index = hotBarInventory.IndexOfFirstLocationFound(type);
-        if (index != -1) {
-            hotBarInventory.RemoveItem(index, 1);
-        }
-    }
-
     public bool HasRoom(Item item) {
         return hotBarInventory.HasRoom(item) || mainInventory.HasRoom(item);
     }

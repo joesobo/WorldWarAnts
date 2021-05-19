@@ -26,7 +26,7 @@ public abstract class UI_Inventory : MonoBehaviour {
         RefreshInventory();
     }
 
-    public void RefreshInventory() {
+    protected void RefreshInventory() {
         var itemList = inventory.itemList;
 
         slotList.Clear();
