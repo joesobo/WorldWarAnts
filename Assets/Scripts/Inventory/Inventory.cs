@@ -1,13 +1,12 @@
 using System;
 using System.Linq;
 using Sirenix.Utilities;
-using UnityEngine;
 
-public class Inventory : MonoBehaviour {
+public class Inventory {
     public event EventHandler OnItemListChanged;
     public Item[] itemList;
     public readonly int size;
-    private PlayerController player;
+    private readonly PlayerController player;
 
     public Inventory(int size, PlayerController player) {
         itemList = new Item[size];
@@ -18,15 +17,15 @@ public class Inventory : MonoBehaviour {
     public void AddItem(Item item) {
         if (item.IsStackable()) {
             var itemAlreadyInInventory = false;
-            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem != null && inventoryItem.itemType == item.itemType && inventoryItem.amount < Item.maxAmount)) {
+            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem != null && inventoryItem.itemType == item.itemType && inventoryItem.amount < Item.MAXAmount)) {
                 var totalAmount = inventoryItem.amount + item.amount;
-                if (totalAmount <= Item.maxAmount) {
+                if (totalAmount <= Item.MAXAmount) {
                     inventoryItem.amount += item.amount;
                     itemAlreadyInInventory = true;
                     break;
                 } else {
-                    inventoryItem.amount = Item.maxAmount;
-                    item.amount = totalAmount - Item.maxAmount;
+                    inventoryItem.amount = Item.MAXAmount;
+                    item.amount = totalAmount - Item.MAXAmount;
                     itemAlreadyInInventory = true;
                     AddItem(item);
                     break;
@@ -72,17 +71,17 @@ public class Inventory : MonoBehaviour {
         //combine all possible stacks
         foreach (var item in itemList) {
             if (item == null || !item.IsStackable()) continue;
-            if (item.amount < Item.maxAmount && item.amount != -1) {
+            if (item.amount < Item.MAXAmount && item.amount != -1) {
                 foreach (var testItem in itemList) {
-                    if (testItem != null && item != testItem && item.itemType == testItem.itemType && testItem.amount < Item.maxAmount && testItem.amount != -1) {
+                    if (testItem != null && item != testItem && item.itemType == testItem.itemType && testItem.amount < Item.MAXAmount && testItem.amount != -1) {
                         var totalAmount = item.amount + testItem.amount;
 
-                        if (totalAmount <= Item.maxAmount) {
+                        if (totalAmount <= Item.MAXAmount) {
                             item.amount = totalAmount;
                             testItem.amount = -1;
                         } else {
-                            item.amount = Item.maxAmount;
-                            testItem.amount = totalAmount - Item.maxAmount;
+                            item.amount = Item.MAXAmount;
+                            testItem.amount = totalAmount - Item.MAXAmount;
                         }
                     }
                 }
@@ -137,7 +136,7 @@ public class Inventory : MonoBehaviour {
             if (inventoryItem == null) {
                 return true;
             }
-            if (inventoryItem.itemType == item.itemType && inventoryItem.amount != Item.maxAmount) {
+            if (inventoryItem.itemType == item.itemType && inventoryItem.amount != Item.MAXAmount) {
                 return true;
             }
         }
@@ -146,8 +145,8 @@ public class Inventory : MonoBehaviour {
     }
 
     public int IndexOfFirstLocationFound(ItemType type) {
-        int index = 0;
-        foreach (Item item in itemList) {
+        var index = 0;
+        foreach (var item in itemList) {
             if (item != null && item.itemType == type) {
                 return index;
             }

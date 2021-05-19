@@ -5,31 +5,34 @@ public class ItemSlot : MonoBehaviour {
     [HideInInspector] public int index = 0;
 
     public RectTransform rectTransform;
-    private UI_Inventory uI_Inventory;
+    [HideInInspector] public UI_Inventory ui;
     private RectTransform uIRectTransform;
     [HideInInspector] public Item item;
     private Vector2 localMousePosition;
+
+    private InventoriesController inventoriesController;
 
     public Color selectedColor;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
+        inventoriesController = FindObjectOfType<InventoriesController>();
     }
 
     public void StartUp(UI_Inventory uI_Inventory, Item item) {
-        this.uI_Inventory = uI_Inventory;
-        uIRectTransform = uI_Inventory.GetComponent<RectTransform>();
+        ui = uI_Inventory;
         this.item = item;
+
+        uIRectTransform = uI_Inventory.GetComponent<RectTransform>();
     }
 
     private void Update() {
         localMousePosition = uIRectTransform.InverseTransformPoint(Input.mousePosition);
 
         if (uIRectTransform.rect.Contains(localMousePosition)) {
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q)) uI_Inventory.Drop(Item.maxAmount);
-            else if (Input.GetKeyDown(KeyCode.Q)) uI_Inventory.Drop(1);
-            if (Input.GetMouseButtonUp(0)) uI_Inventory.InventoryClick();
-            if (Input.GetMouseButtonUp(1)) uI_Inventory.Split();
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q)) InventoryActions.Drop(ui, Item.MAXAmount);
+            else if (Input.GetKeyDown(KeyCode.Q)) InventoryActions.Drop(ui, 1);
+            if (Input.GetMouseButtonUp(1)) InventoryActions.Split(ui, inventoriesController);
         }
     }
 

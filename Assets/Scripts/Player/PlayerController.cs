@@ -16,15 +16,15 @@ public class PlayerController : MonoBehaviour {
     private Transform bodyController;
     [HideInInspector]
     public bool facingRight = true;
-    private bool facingNeedsUpdating = false;
-    private Vector3 leftFacing = new Vector3(-1, 1, 1);
+    private bool facingNeedsUpdating;
+    private readonly Vector3 leftFacing = new Vector3(-1, 1, 1);
 
-    [HideInInspector] public PlayerInventoryController inventoryController;
+    [HideInInspector] public PlayerInventoryController playerInventoryController;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<Collider2D>();
-        inventoryController = FindObjectOfType<PlayerInventoryController>();
+        playerInventoryController = FindObjectOfType<PlayerInventoryController>();
         bodyController = transform.Find("BodyController");
     }
 
@@ -41,12 +41,9 @@ public class PlayerController : MonoBehaviour {
             velocity.y = 0;
         }
 
-        if (facingNeedsUpdating) {
-            if (facingRight) {
-                bodyController.localScale = Vector3.one;
-            } else {
-                bodyController.localScale = leftFacing;
-            }
+        if (facingNeedsUpdating)
+        {
+            bodyController.localScale = facingRight ? Vector3.one : leftFacing;
             facingNeedsUpdating = false;
         }
     }

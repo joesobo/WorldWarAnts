@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class UI_PlayerInventory : UI_Inventory {
     private PauseMenu pauseMenu;
-    [HideInInspector] public bool isActive = false;
+    [HideInInspector] public bool isActive;
 
     public GameObject inventoryController;
+    private InventoriesController inventoriesController;
 
     private void Awake() {
         pauseMenu = FindObjectOfType<PauseMenu>();
+        inventoriesController = FindObjectOfType<InventoriesController>();
+        
         inventoryController.SetActive(isActive);
     }
 
@@ -33,5 +36,13 @@ public class UI_PlayerInventory : UI_Inventory {
         isActive = !isActive;
 
         inventoryController.SetActive(isActive);
+
+        if (isActive) {
+            inventoriesController.activeInventories.Add(inventory);
+        } else {
+            if (inventoriesController.activeInventories.Contains(inventory)) {
+                inventoriesController.activeInventories.Remove(inventory);
+            }
+        }
     }
 }

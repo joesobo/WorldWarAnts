@@ -24,13 +24,7 @@ public class WorldItem : MonoBehaviour {
     }
 
     public static void DropItem(Vector3 position, Item item, bool direction) {
-        Vector3 randomDir;
-
-        if (direction) {
-            randomDir = new Vector3(Random.Range(0.25f, 1f), Random.Range(0.25f, 1f), 0);
-        } else {
-            randomDir = new Vector3(Random.Range(-0.25f, -1f), Random.Range(0.25f, 1f), 0);
-        }
+        var randomDir = direction ? new Vector3(Random.Range(0.25f, 1f), Random.Range(0.25f, 1f), 0) : new Vector3(Random.Range(-0.25f, -1f), Random.Range(0.25f, 1f), 0);
 
         var worldItem = SpawnWorldItem(position + (randomDir * dropSpeed), item);
         worldItem.dropTime = maxDropTime;
@@ -54,12 +48,12 @@ public class WorldItem : MonoBehaviour {
             if (item.IsStackable() && worldItem != null && hitCollider is BoxCollider2D && hitCollider != itemCollider) {
                 if (distance < minDist) {
                     minDist = distance;
-                    if (worldItem.item.amount < Item.maxAmount && item.amount < Item.maxAmount && item.itemType == worldItem.item.itemType) {
+                    if (worldItem.item.amount < Item.MAXAmount && item.amount < Item.MAXAmount && item.itemType == worldItem.item.itemType) {
                         saveCollider = hitCollider;
                     }
                 }
             } else if ((player = hitCollider.GetComponent<PlayerController>()) != null && dropTime <= 0) {
-                if (player.inventoryController.HasRoom(item)) {
+                if (player.playerInventoryController.HasRoom(item)) {
                     saveCollider = hitCollider;
                     break;
                 }
@@ -77,20 +71,20 @@ public class WorldItem : MonoBehaviour {
         var player = collisionInfo.gameObject.GetComponent<PlayerController>();
         var worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
 
-        if (player != null && player.inventoryController.HasRoom(item) && dropTime <= 0) {
-            player.inventoryController.AddItem(this.GetItem());
-            this.DestroySelf();
-        } else if (item.IsStackable() && worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType && item.amount < Item.maxAmount && worldItem.item.amount < Item.maxAmount) {
+        if (player != null && player.playerInventoryController.HasRoom(item) && dropTime <= 0) {
+            player.playerInventoryController.AddItem(item);
+            DestroySelf();
+        } else if (item.IsStackable() && worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType && item.amount < Item.MAXAmount && worldItem.item.amount < Item.MAXAmount) {
             if (item.amount > worldItem.item.amount) {
                 worldItem.DestroySelf();
             } else {
                 var totalAmount = worldItem.item.amount + item.amount;
-                if (totalAmount <= Item.maxAmount) {
+                if (totalAmount <= Item.MAXAmount) {
                     worldItem.item.amount += item.amount;
                     DestroySelf();
                 } else {
-                    worldItem.item.amount = Item.maxAmount;
-                    item.amount = totalAmount - Item.maxAmount;
+                    worldItem.item.amount = Item.MAXAmount;
+                    item.amount = totalAmount - Item.MAXAmount;
                 }
                 worldItem.dropTime = dropTime;
             }
@@ -102,11 +96,7 @@ public class WorldItem : MonoBehaviour {
         spriteRenderer.sprite = newItem.GetSprite();
     }
 
-    public Item GetItem() {
-        return item;
-    }
-
-    public void DestroySelf() {
+    private void DestroySelf() {
         Destroy(gameObject);
     }
 }

@@ -12,7 +12,7 @@ public enum ItemType {
 public class Item {
     public ItemType itemType;
     public int amount;
-    public static int maxAmount = 64;
+    public static int MAXAmount = 64;
 
     public Sprite GetSprite() {
         switch (itemType) {

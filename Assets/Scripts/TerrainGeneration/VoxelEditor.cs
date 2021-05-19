@@ -23,7 +23,7 @@ public class VoxelEditor : MonoBehaviour {
     private BoxCollider box;
     private Camera mainCamera;
     private TerrainMap terrainMap;
-    private PlayerInventoryController inventoryController;
+    private PlayerInventoryController playerInventoryController;
     private WorldManager worldManager;
 
     private Vector3 oldPoint, chunkPos;
@@ -39,7 +39,7 @@ public class VoxelEditor : MonoBehaviour {
     };
 
     public void Startup(VoxelMap map) {
-        inventoryController = FindObjectOfType<PlayerInventoryController>();
+        playerInventoryController = FindObjectOfType<PlayerInventoryController>();
         terrainMap = FindObjectOfType<TerrainMap>();
         voxelMesh = FindObjectOfType<VoxelMesh>();
         chunkCollider = FindObjectOfType<ChunkCollider>();
@@ -72,7 +72,7 @@ public class VoxelEditor : MonoBehaviour {
 
     private void Update() {
         if (Time.frameCount % UPDATE_INTERVAL != 0) return;
-        if (Input.GetMouseButton(0) && !inventoryController.uimainInventory.isActive) {
+        if (Input.GetMouseButton(0) && !playerInventoryController.uiMainInventory.isActive) {
             if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo)) {
                 if (hitInfo.collider.gameObject == gameObject && (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {
                     EditVoxels(hitInfo.point);
