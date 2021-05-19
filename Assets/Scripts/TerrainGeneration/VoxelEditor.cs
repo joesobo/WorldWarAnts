@@ -25,6 +25,7 @@ public class VoxelEditor : MonoBehaviour {
     private TerrainMap terrainMap;
     private PlayerInventoryController playerInventoryController;
     private WorldManager worldManager;
+    private UI_HotBar uiHotBar;
 
     private Vector3 oldPoint, chunkPos;
     private Vector2Int diff;
@@ -44,6 +45,7 @@ public class VoxelEditor : MonoBehaviour {
         voxelMesh = FindObjectOfType<VoxelMesh>();
         chunkCollider = FindObjectOfType<ChunkCollider>();
         worldManager = FindObjectOfType<WorldManager>();
+        uiHotBar = FindObjectOfType<UI_HotBar>();
 
         var blockCollection = BlockManager.ReadBlocks();
         if (worldManager.creativeMode) {
@@ -72,23 +74,38 @@ public class VoxelEditor : MonoBehaviour {
 
     private void Update() {
         if (Time.frameCount % UPDATE_INTERVAL != 0) return;
-        if (Input.GetMouseButton(0) && !playerInventoryController.uiMainInventory.isActive) {
-            if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo)) {
-                if (hitInfo.collider.gameObject == gameObject && (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {
-                    EditVoxels(hitInfo.point);
-                    oldPoint = hitInfo.point;
-                    oldTypeIndex = fillTypeIndex;
-                    terrainMap.RecalculateMap();
+
+        if (!playerInventoryController.uiMainInventory.isActive) {
+            //Break
+            if (Input.GetMouseButton(0)) {
+                if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo)) {
+                    if (hitInfo.collider.gameObject == gameObject && (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {
+                        EditVoxels(hitInfo.point, true);
+                        oldPoint = hitInfo.point;
+                        oldTypeIndex = fillTypeIndex;
+                        terrainMap.RecalculateMap();
+                    }
                 }
             }
-        }
+            //Place
+            if (Input.GetMouseButton(1)) {
+                if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo)) {
+                    if (hitInfo.collider.gameObject == gameObject && (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {
+                        EditVoxels(hitInfo.point, false);
+                        oldPoint = hitInfo.point;
+                        oldTypeIndex = fillTypeIndex;
+                        terrainMap.RecalculateMap();
+                    }
+                }
+            }
 
+        }
         if (fillTypeIndex >= fillTypeNames.Count) {
             fillTypeIndex = fillTypeNames.Count - 1;
         }
     }
 
-    private void EditVoxels(Vector3 point) {
+    private void EditVoxels(Vector3 point, bool isBreaking) {
         chunkPos = new Vector3(Mathf.Floor(point.x / voxelResolution), Mathf.Floor(point.y / voxelResolution));
         diff = new Vector2Int((int)Mathf.Abs(point.x - (chunkPos * voxelResolution).x),
             (int)Mathf.Abs(point.y - (chunkPos * voxelResolution).y));
@@ -113,7 +130,7 @@ public class VoxelEditor : MonoBehaviour {
             yEnd = chunkResolution - 1;
         }
 
-        SetupStencil();
+        SetupStencil(isBreaking);
 
         var voxelYOffset = yEnd * voxelResolution;
         Vector2Int checkChunk;
@@ -121,23 +138,25 @@ public class VoxelEditor : MonoBehaviour {
 
         var result = false;
 
-        for (var y = yStart - 1; y < yEnd + 1; y++) {
-            var voxelXOffset = xEnd * voxelResolution;
-            for (var x = xStart - 1; x < xEnd + 1; x++) {
-                activeStencil.SetCenter(diff.x - voxelXOffset, diff.y - voxelYOffset);
+        if ((isBreaking && activeStencil.fillType == 0) || (!isBreaking && activeStencil.fillType != 0)) {
+            for (var y = yStart - 1; y < yEnd + 1; y++) {
+                var voxelXOffset = xEnd * voxelResolution;
+                for (var x = xStart - 1; x < xEnd + 1; x++) {
+                    activeStencil.SetCenter(diff.x - voxelXOffset, diff.y - voxelYOffset);
 
-                checkChunk = new Vector2Int((int)Mathf.Floor((point.x + voxelXOffset) / voxelResolution), (int)Mathf.Floor((point.y + voxelYOffset) / voxelResolution));
+                    checkChunk = new Vector2Int((int)Mathf.Floor((point.x + voxelXOffset) / voxelResolution), (int)Mathf.Floor((point.y + voxelYOffset) / voxelResolution));
 
-                if (existingChunks.ContainsKey(checkChunk)) {
-                    var currentChunk = existingChunks[checkChunk];
-                    var tempRes = currentChunk.Apply(activeStencil);
-                    if (!result && tempRes) {
-                        result = true;
+                    if (existingChunks.ContainsKey(checkChunk)) {
+                        var currentChunk = existingChunks[checkChunk];
+                        var tempRes = currentChunk.Apply(activeStencil);
+                        if (!result && tempRes) {
+                            result = true;
+                        }
                     }
+                    voxelXOffset -= voxelResolution;
                 }
-                voxelXOffset -= voxelResolution;
+                voxelYOffset -= voxelResolution;
             }
-            voxelYOffset -= voxelResolution;
         }
 
         if (result) {
@@ -153,18 +172,21 @@ public class VoxelEditor : MonoBehaviour {
         }
     }
 
-    private void SetupStencil() {
+    private void SetupStencil(bool isBreaking) {
         activeStencil = stencils[stencilIndex];
 
         if (worldManager.creativeMode) {
             activeStencil.Initialize(fillTypeIndex, radiusIndex);
         } else {
-            activeStencil = stencils[stencilIndex];
             var fillType = 0;
             var blocks = BlockManager.ReadBlocks().blocks;
 
             for (int i = 0; i < blocks.Count; i++) {
-                if ((int)blocks[i].blockType == fillTypeIndex) {
+                if (isBreaking) {
+                    fillType = 0;
+                    break;
+                }
+                if (uiHotBar.currentItem != null && blocks[i].blockType.ToString() == uiHotBar.currentItem.itemType.ToString()) {
                     fillType = i;
                     break;
                 }
@@ -214,11 +236,10 @@ public class VoxelEditor : MonoBehaviour {
     }
 
     private void OnGUI() {
-        GUILayout.BeginArea(new Rect(4f, Screen.height - 250f, 150f, 1000f));
-        GUILayout.Label("Fill Type");
-        fillTypeIndex = GUILayout.SelectionGrid(fillTypeIndex, fillTypeNames.ToArray(), 2);
-
         if (worldManager.creativeMode) {
+            GUILayout.BeginArea(new Rect(4f, Screen.height - 250f, 150f, 1000f));
+            GUILayout.Label("Fill Type");
+            fillTypeIndex = GUILayout.SelectionGrid(fillTypeIndex, fillTypeNames.ToArray(), 2);
             GUILayout.Label("Radius");
             radiusIndex = GUILayout.SelectionGrid(radiusIndex, RadiusNames, 6);
             GUILayout.Label("Stencil");
@@ -227,8 +248,7 @@ public class VoxelEditor : MonoBehaviour {
             if (GUI.Button(new Rect(0, 225, 150f, 20f), "Generate")) {
                 voxelMap.FreshGeneration();
             }
+            GUILayout.EndArea();
         }
-
-        GUILayout.EndArea();
     }
 }

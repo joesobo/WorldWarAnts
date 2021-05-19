@@ -398,8 +398,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ea2a6a533d77f9489dc2f84e5de5fdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 0}
-  uI_Inventory: {fileID: 0}
 --- !u!4 &176457907
 Transform:
   m_ObjectHideFlags: 0
@@ -627,14 +625,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 16
-    m_Right: 16
-    m_Top: 16
-    m_Bottom: 16
+    m_Left: 12
+    m_Right: 12
+    m_Top: 12
+    m_Bottom: 12
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 51.5, y: 51.5}
+  m_CellSize: {x: 40, y: 40}
   m_Spacing: {x: 8, y: 8}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -671,7 +669,7 @@ MonoBehaviour:
   worldName: 
   seed: 0
   last_played: 
-  creativeMode: 1
+  creativeMode: 0
 --- !u!4 &478286947
 Transform:
   m_ObjectHideFlags: 0
@@ -829,9 +827,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df519701464d1a345886d392e37baefd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uimainInventory: {fileID: 0}
-  hotBarSize: 8
-  inventorySize: 32
+  uiMainInventory: {fileID: 0}
+  hotBarSize: 10
+  inventorySize: 40
 --- !u!4 &547865868
 Transform:
   m_ObjectHideFlags: 0
@@ -1239,14 +1237,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 16
-    m_Right: 16
+    m_Left: 12
+    m_Right: 12
     m_Top: 0
-    m_Bottom: 16
+    m_Bottom: 12
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 51.5, y: 51.5}
+  m_CellSize: {x: 40, y: 40}
   m_Spacing: {x: 8, y: 8}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -1510,8 +1508,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -83.5}
-  m_SizeDelta: {x: 500, y: 246}
+  m_AnchoredPosition: {x: 0, y: -64.5}
+  m_SizeDelta: {x: 500, y: 200}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &818409947
 MonoBehaviour:
@@ -1525,7 +1523,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4924951a2fd43a9449f3664bf5742cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 0}
   slotList: []
   itemSlotPrefab: {fileID: 5072734119783537872, guid: 0a2a311120c02ec40b872288033f39c5,
     type: 3}
@@ -1644,7 +1641,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 83.5}
+  m_SizeDelta: {x: 500, y: 64.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &871561730
 MonoBehaviour:
@@ -2470,7 +2467,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 83.5}
+  m_SizeDelta: {x: 500, y: 64.5}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1566719912
 MonoBehaviour:
@@ -2484,7 +2481,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31c06c99610d3c5469f395f4eb63a116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 0}
   slotList: []
   itemSlotPrefab: {fileID: 5072734119783537872, guid: 0a2a311120c02ec40b872288033f39c5,
     type: 3}
@@ -2893,9 +2889,8 @@ MonoBehaviour:
     type: 3}
   itemInfoPrefab: {fileID: 2346883706062269663, guid: 5f6c92457b3c46246ad0b809fc933d42,
     type: 3}
-  activeInventories: []
   activeUIs: []
-  slotIndexList: 
+  slotList: []
   activeItem:
     itemType: 0
     amount: 0

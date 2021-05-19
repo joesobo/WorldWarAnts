@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 13.25, y: -18.114}
-  m_SizeDelta: {x: 25, y: 15}
+  m_AnchoredPosition: {x: 10.125, y: -14.1374}
+  m_SizeDelta: {x: 20.25, y: 12.2253}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5161047401123479362
 CanvasRenderer:
@@ -169,7 +169,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 51.5, y: 51.5}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5072734119650180553
 CanvasRenderer:
@@ -261,9 +261,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  itemPrefab: {fileID: 4902070338820168353, guid: d9ac6dd2107c5d44cbb0afcf6470bac1,
-    type: 3}
   rectTransform: {fileID: 0}
+  ui: {fileID: 0}
   item:
     itemType: 0
     amount: 0
@@ -303,7 +302,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 51.5, y: 51.5}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5072734120886227446
 CanvasRenderer:
