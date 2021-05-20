@@ -23,27 +23,32 @@ public class UI_HotBar : UI_Inventory {
             if (Input.GetKeyDown(keyCodes[i])) {
                 currentIndex = i;
                 currentItem = inventory.itemList[i];
+                RefreshInventory();
                 break;
             }
         }
 
         if (currentItem != inventory.itemList[currentIndex]) {
             currentItem = inventory.itemList[currentIndex];
+            RefreshInventory();
         }
         Equip(currentIndex);
     }
 
     private void Equip(int index) {
-        RefreshInventory();
         slotList[index].SetSelectedColor();
     }
 
-    public void Place()
-    {
+    public void Place() {
+        var saveType = currentItem.itemType;
+
         if (currentItem == null) return;
         inventory.RemoveItem(currentIndex, 1);
         if (currentItem.amount <= 0) {
             currentItem = null;
+
+            // check for another stack in inventory to replace with
+            playerInventoryController.ReplaceEmpty(currentIndex, saveType);
         }
     }
 }

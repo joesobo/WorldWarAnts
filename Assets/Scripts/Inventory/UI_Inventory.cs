@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public abstract class UI_Inventory : MonoBehaviour {
     public Inventory inventory;
     [HideInInspector] public List<ItemSlot> slotList;
+    protected PlayerInventoryController playerInventoryController;
+    protected InventoriesController inventoriesController;
 
     public Transform itemSlotPrefab;
     public Transform slotContainer;
@@ -16,6 +18,8 @@ public abstract class UI_Inventory : MonoBehaviour {
     public void SetupInventory(Inventory inventory) {
         this.inventory = inventory;
         slotList = new List<ItemSlot>();
+        inventoriesController = FindObjectOfType<InventoriesController>();
+        playerInventoryController = FindObjectOfType<PlayerInventoryController>();
 
         RefreshInventory();
 
@@ -26,7 +30,7 @@ public abstract class UI_Inventory : MonoBehaviour {
         RefreshInventory();
     }
 
-    protected void RefreshInventory() {
+    public void RefreshInventory() {
         var itemList = inventory.itemList;
 
         slotList.Clear();

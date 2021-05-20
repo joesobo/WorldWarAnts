@@ -27,12 +27,12 @@ public class ItemSlot : MonoBehaviour {
     }
 
     private void Update() {
-        localMousePosition = uIRectTransform.InverseTransformPoint(Input.mousePosition);
+        localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
 
-        if (uIRectTransform.rect.Contains(localMousePosition)) {
+        if (rectTransform.rect.Contains(localMousePosition)) {
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q)) InventoryActions.Drop(ui, Item.MAXAmount);
             else if (Input.GetKeyDown(KeyCode.Q)) InventoryActions.Drop(ui, 1);
-            if (Input.GetMouseButtonUp(1)) InventoryActions.Split(ui, inventoriesController);
+            if (Input.GetMouseButtonDown(1)) InventoryActions.Split(ui, inventoriesController);
         }
     }
 

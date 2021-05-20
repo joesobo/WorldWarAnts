@@ -103,8 +103,7 @@ public class InventoriesController : MonoBehaviour {
         activeItem = null;
     }
 
-    private bool MouseOverUI()
-    {
+    private bool MouseOverUI() {
         return activeUIs.Select(ui => ui.GetComponent<RectTransform>()).Any(rectTransform => rectTransform.rect.Contains(rectTransform.InverseTransformPoint(Input.mousePosition)));
     }
 }

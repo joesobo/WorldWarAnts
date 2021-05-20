@@ -7,11 +7,9 @@ public class UI_PlayerInventory : UI_Inventory {
     [HideInInspector] public bool isActive;
 
     public GameObject inventoryController;
-    private InventoriesController inventoriesController;
 
     private void Awake() {
         pauseMenu = FindObjectOfType<PauseMenu>();
-        inventoriesController = FindObjectOfType<InventoriesController>();
         
         inventoryController.SetActive(isActive);
     }

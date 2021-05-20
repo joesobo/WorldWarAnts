@@ -24,12 +24,19 @@ public static class InventoryActions {
         }
     }
 
-    public static void SelectSlot(UI_Inventory ui, InventoriesController invController)
-    {
-        if (invController.activeItem == null || !ui.isHovering || invController.slotList.Contains(ui.hoverSlot)) return;
-        if ((ui.hoverSlot.item == null || (invController.activeItem.itemType == ui.hoverSlot.item.itemType && ui.hoverSlot.item.amount < Item.MAXAmount)) && invController.slotList.Count < invController.activeItem.amount) {
-            invController.slotList.Add(ui.hoverSlot);
-            ui.hoverSlot.SetSelectedColor();
+    public static void SelectSlot(UI_Inventory ui, InventoriesController invController) {
+        if (invController.activeItem != null && ui.isHovering && !invController.slotList.Contains(ui.hoverSlot)) {
+            foreach (var slot in invController.slotList) {
+                if (slot.index == ui.hoverSlot.index) {
+                    return;
+                }
+            }
+
+            if ((ui.hoverSlot.item == null || ((invController.activeItem != null || invController.activeItem.itemType != ItemType.Empty) && invController.activeItem.itemType == ui.hoverSlot.item.itemType && ui.hoverSlot.item.amount < Item.MAXAmount)) &&
+                invController.slotList.Count < invController.activeItem.amount) {
+                invController.slotList.Add(ui.hoverSlot);
+                ui.hoverSlot.SetSelectedColor();
+            }
         }
     }
 
@@ -41,8 +48,7 @@ public static class InventoryActions {
         }
     }
 
-    private static void Pickup(UI_Inventory ui, InventoriesController invController, int count)
-    {
+    private static void Pickup(UI_Inventory ui, InventoriesController invController, int count) {
         if (!ui.isHovering ||
             (invController.activeItem != null && invController.activeItem.itemType != ItemType.Empty)) return;
         if (ui.hoverSlot.item != null) {
@@ -147,7 +153,6 @@ public static class InventoryActions {
     public static void DropActive(PlayerController player, InventoriesController invController, int count) {
         var tempItem = new Item { itemType = invController.activeItem.itemType, amount = count };
         WorldItem.DropItem(player.transform.position, tempItem, player.facingRight);
-        // ui.inventory.DropItem(tempItem);
 
         if (invController.activeItem.amount == count) {
             invController.DestroyActive();

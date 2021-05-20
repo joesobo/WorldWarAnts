@@ -37,6 +37,26 @@ public class PlayerInventoryController : MonoBehaviour {
         return hotBarInventory.HasRoom(item) || mainInventory.HasRoom(item);
     }
 
+    public void ReplaceEmpty(int index, ItemType type) {
+        int hotBarIndex = hotBarInventory.IndexOfFirstLocationFound(type);
+
+        if (hotBarIndex == -1) {
+            int mainIndex = mainInventory.IndexOfFirstLocationFound(type);
+
+            if (mainIndex == -1) {
+                return;
+            }
+
+            hotBarInventory.itemList[index] = mainInventory.itemList[mainIndex];
+            mainInventory.itemList[mainIndex] = null;
+            uiMainInventory.RefreshInventory();
+            return;
+        }
+
+        hotBarInventory.itemList[index] = hotBarInventory.itemList[hotBarIndex];
+        hotBarInventory.itemList[hotBarIndex] = null;
+    }
+
     public void AddItem(Item item) {
         if (hotBarInventory.HasRoom(item)) {
             hotBarInventory.AddItem(item);
