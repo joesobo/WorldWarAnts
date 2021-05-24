@@ -159,7 +159,7 @@ public class BlockMap : EditorWindow {
         var t = textures[1];
         textureArray = new Texture2DArray(t.width, t.height, textures.Count, t.format, t.mipmapCount > 1) {
             anisoLevel = t.anisoLevel,
-            filterMode = t.filterMode,
+            filterMode = FilterMode.Point,
             wrapMode = t.wrapMode
         };
 
