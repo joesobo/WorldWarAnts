@@ -94,8 +94,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4db6b19f44744b0180ca4a9d72dc99a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resolution: 0
+  resolution: 16
   useVoxelPoints: 1
+  shouldUpdateMesh: 0
+  shouldUpdateCollider: 0
   voxelPointPrefab: {fileID: 8390095622439126479, guid: b583654fb55a71c40ac0228bb8dbd6fd,
     type: 3}
   xNeighbor: {fileID: 0}

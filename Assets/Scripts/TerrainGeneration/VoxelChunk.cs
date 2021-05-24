@@ -4,7 +4,7 @@ using System;
 
 [SelectionBase]
 public class VoxelChunk : MonoBehaviour {
-    public int resolution;
+    [HideInInspector] public int resolution;
     public bool useVoxelPoints;
     public bool shouldUpdateMesh;
     public bool shouldUpdateCollider;
