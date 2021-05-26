@@ -9,7 +9,7 @@ public class UI_TogglableInventory : UI_Inventory {
 
     public GameObject inventoryController;
 
-    protected virtual void Awake() {
+    protected virtual void Start() {
         pauseMenu = FindObjectOfType<PauseMenu>();
         uIController = FindObjectOfType<UIController>();
 

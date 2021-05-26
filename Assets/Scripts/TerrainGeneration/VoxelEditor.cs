@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class VoxelEditor : MonoBehaviour {
     private const int UPDATE_INTERVAL = 2;
@@ -23,7 +24,6 @@ public class VoxelEditor : MonoBehaviour {
     private BoxCollider box;
     private Camera mainCamera;
     private TerrainMap terrainMap;
-    private PlayerInventoryController playerInventoryController;
     private WorldManager worldManager;
     private UI_HotBar uiHotBar;
 
@@ -40,7 +40,6 @@ public class VoxelEditor : MonoBehaviour {
     };
 
     public void Startup(VoxelMap map) {
-        playerInventoryController = FindObjectOfType<PlayerInventoryController>();
         terrainMap = FindObjectOfType<TerrainMap>();
         voxelMesh = FindObjectOfType<VoxelMesh>();
         chunkCollider = FindObjectOfType<ChunkCollider>();
@@ -75,7 +74,7 @@ public class VoxelEditor : MonoBehaviour {
     private void Update() {
         if (Time.frameCount % UPDATE_INTERVAL != 0) return;
 
-        if (!playerInventoryController.uiMainInventory.isActive) {
+        if (!EventSystem.current.IsPointerOverGameObject()) {
             if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
                 if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo)) {
                     if (hitInfo.collider.gameObject == gameObject && (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {

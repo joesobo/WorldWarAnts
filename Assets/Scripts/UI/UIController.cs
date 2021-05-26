@@ -35,10 +35,10 @@ public class UIController : MonoBehaviour {
 
             if (isActiveUI) {
                 foreach (UI_TogglableInventory togglableUI in togglableUIs) {
-                if (togglableUI.isActive) {
-                    togglableUI.Toggle();
+                    if (togglableUI.isActive) {
+                        togglableUI.Toggle();
+                    }
                 }
-            }
             } else {
                 pauseMenu.Toggle();
             }
