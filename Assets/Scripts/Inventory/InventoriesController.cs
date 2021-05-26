@@ -9,7 +9,6 @@ public class InventoriesController : MonoBehaviour {
     public Transform itemInfoPrefab;
 
     [HideInInspector] public List<Inventory> activeInventories;
-    [HideInInspector] public List<UI_Inventory> activeUIs;
     [HideInInspector] public List<ItemSlot> slotList;
 
     private Vector2 localMousePosition;
@@ -19,19 +18,20 @@ public class InventoriesController : MonoBehaviour {
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI amountText;
     private PlayerController player;
+    private UIController uIController;
 
     private void Awake() {
         activeInventories = new List<Inventory>();
-        activeUIs = new List<UI_Inventory>();
         slotList = new List<ItemSlot>();
 
         player = FindObjectOfType<PlayerController>();
+        uIController = FindObjectOfType<UIController>();
     }
 
     private void Update() {
-        for (var i = 0; i < activeUIs.Count; i++) {
+        for (var i = 0; i < uIController.inventoryUIs.Count; i++) {
             var inventory = i < activeInventories.Count ? activeInventories[i] : null;
-            var ui = activeUIs[i];
+            var ui = uIController.inventoryUIs[i];
             var uiRectTransform = ui.GetComponent<RectTransform>();
             localMousePosition = uiRectTransform.InverseTransformPoint(Input.mousePosition);
 
@@ -104,6 +104,6 @@ public class InventoriesController : MonoBehaviour {
     }
 
     private bool MouseOverUI() {
-        return activeUIs.Select(ui => ui.GetComponent<RectTransform>()).Any(rectTransform => rectTransform.rect.Contains(rectTransform.InverseTransformPoint(Input.mousePosition)));
+        return uIController.inventoryUIs.Select(ui => ui.GetComponent<RectTransform>()).Any(rectTransform => rectTransform.rect.Contains(rectTransform.InverseTransformPoint(Input.mousePosition)));
     }
 }

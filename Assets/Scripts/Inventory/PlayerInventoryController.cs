@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerInventoryController : MonoBehaviour {
     private PlayerController playerController;
     private InventoriesController inventoriesController;
+    private UIController uIController;
 
     private UI_HotBar uiHotBar;
     [HideInInspector] public UI_PlayerInventory uiMainInventory;
@@ -16,21 +17,24 @@ public class PlayerInventoryController : MonoBehaviour {
     private void Awake() {
         playerController = FindObjectOfType<PlayerController>();
         inventoriesController = FindObjectOfType<InventoriesController>();
+        uIController = FindObjectOfType<UIController>();
 
         hotBarInventory = new Inventory(hotBarSize, playerController);
         mainInventory = new Inventory(inventorySize, playerController);
 
+
+    }
+
+    private void Start() {
         uiHotBar = FindObjectOfType<UI_HotBar>();
         uiMainInventory = FindObjectOfType<UI_PlayerInventory>();
 
         uiHotBar.SetupInventory(hotBarInventory);
         uiMainInventory.SetupInventory(mainInventory);
-    }
 
-    private void Start() {
         inventoriesController.activeInventories.Add(hotBarInventory);
-        inventoriesController.activeUIs.Add(uiHotBar);
-        inventoriesController.activeUIs.Add(uiMainInventory);
+
+        uIController.AddUI(uiHotBar);
     }
 
     public bool HasRoom(Item item) {

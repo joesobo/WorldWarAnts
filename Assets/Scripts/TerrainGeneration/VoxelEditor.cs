@@ -120,10 +120,10 @@ public class VoxelEditor : MonoBehaviour {
         SetupStencil(isBreaking);
 
         var voxelYOffset = yEnd * voxelResolution;
-        Vector2Int checkChunk;
+        Vector2Int checkChunkPos;
         updateChunkPositions.Clear();
 
-        var result = false;
+        var isEditing = false;
 
         if ((isBreaking && activeStencil.fillType == 0) || (!isBreaking && activeStencil.fillType != 0)) {
             for (var y = yStart - 1; y < yEnd + 1; y++) {
@@ -131,13 +131,13 @@ public class VoxelEditor : MonoBehaviour {
                 for (var x = xStart - 1; x < xEnd + 1; x++) {
                     activeStencil.SetCenter(diff.x - voxelXOffset, diff.y - voxelYOffset);
 
-                    checkChunk = new Vector2Int((int)Mathf.Floor((point.x + voxelXOffset) / voxelResolution), (int)Mathf.Floor((point.y + voxelYOffset) / voxelResolution));
+                    checkChunkPos = new Vector2Int((int)Mathf.Floor((point.x + voxelXOffset) / voxelResolution), (int)Mathf.Floor((point.y + voxelYOffset) / voxelResolution));
 
-                    if (existingChunks.ContainsKey(checkChunk)) {
-                        var currentChunk = existingChunks[checkChunk];
+                    if (existingChunks.ContainsKey(checkChunkPos)) {
+                        var currentChunk = existingChunks[checkChunkPos];
                         var tempRes = currentChunk.Apply(activeStencil);
-                        if (!result && tempRes) {
-                            result = true;
+                        if (!isEditing && tempRes) {
+                            isEditing = true;
                         }
                     }
                     voxelXOffset -= voxelResolution;
@@ -146,12 +146,19 @@ public class VoxelEditor : MonoBehaviour {
             }
         }
 
-        if (result) {
-            checkChunk = new Vector2Int((int)Mathf.Floor((point.x) / voxelResolution), (int)Mathf.Floor((point.y) / voxelResolution));
+        if (isEditing) {
+            checkChunkPos = new Vector2Int((int)Mathf.Floor((point.x) / voxelResolution), (int)Mathf.Floor((point.y) / voxelResolution));
 
-            EditChunkAndNeighbors(checkChunk, new Vector3(Mathf.Floor(point.x), Mathf.Floor(point.y)));
+            EditChunkAndNeighbors(checkChunkPos, new Vector3(Mathf.Floor(point.x), Mathf.Floor(point.y)));
 
             updateChunkPositions.Sort(SortByPosition);
+
+            //TODO: update so it only checks the relevant one
+            foreach (var item in updateChunkPositions) {
+                Debug.Log(item);
+            }
+
+
             foreach (var chunk in from pos in updateChunkPositions where existingChunks.ContainsKey(pos) select existingChunks[pos]) {
                 voxelMesh.TriangulateChunkMesh(chunk);
                 chunkCollider.Generate2DCollider(chunk, chunkResolution);
