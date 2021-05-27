@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -19,6 +20,7 @@ public class UI_Crafting : MonoBehaviour {
     public Transform displayRequirementsGrid;
     public GameObject displayRequirementPrefab;
 
+    private UIController uIController;
     private RecipeAssets recipeAssets;
     private PauseMenu pauseMenu;
     private CategoryType currentCategory;
@@ -29,9 +31,12 @@ public class UI_Crafting : MonoBehaviour {
     [HideInInspector] public bool shouldUpdateRecipe = false;
 
     private void Start() {
+        uIController = FindObjectOfType<UIController>();
         recipeAssets = FindObjectOfType<RecipeAssets>();
         pauseMenu = FindObjectOfType<PauseMenu>();
         currentCategory = CategoryType.Test1;
+
+        uIController.togglableUIs.Add(gameObject);
 
         if (isActive) {
             foreach (Recipe recipe in recipeAssets.recipes) {
