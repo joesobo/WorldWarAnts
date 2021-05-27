@@ -38,7 +38,63 @@ public class UI_Crafting : MonoBehaviour {
 
         uIController.togglableUIs.Add(gameObject);
 
+        UpdateUI();
+    }
+
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.C)) {
+            if (!pauseMenu.activeState) {
+                Toggle();
+            }
+        }
+
+        if (shouldUpdateRecipe) {
+            shouldUpdateRecipe = false;
+            if (currentRecipeIndex != -1) {
+                var recipe = currentRecipes[currentRecipeIndex];
+
+                //set current recipe
+                var img = displayImage.GetComponent<Image>();
+                var displayItem = recipe.outputList[0];
+                img.sprite = displayItem.GetSprite();
+                img.color = Color.white;
+
+                //clear old requirements
+                foreach (Transform child in displayRequirementsGrid) {
+                    Destroy(child.gameObject);
+                }
+
+                //display requirements
+                foreach (Item requirement in recipe.inputList) {
+                    var displayRequirement = Instantiate(displayRequirementPrefab, Vector3.zero, Quaternion.identity, displayRequirementsGrid);
+                    displayRequirement.transform.GetChild(0).GetComponent<Image>().sprite = requirement.GetSprite();
+                    displayRequirement.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = requirement.itemType + " x" + requirement.amount;
+                }
+            } else {
+                var img = displayImage.GetComponent<Image>();
+                img.sprite = null;
+                img.color = new Color32(46, 46, 46, 255);
+            }
+        }
+    }
+
+    public void Toggle() {
+        isActive = !isActive;
+
+        inventoryController.SetActive(isActive);
+        UpdateUI();
+    }
+
+    private void UpdateUI() {
         if (isActive) {
+            shouldUpdateRecipe = true;
+            currentRecipeIndex = -1;
+
+            foreach (Transform child in displayRequirementsGrid) {
+                Destroy(child.gameObject);
+            }
+
+            currentRecipes.Clear();
             foreach (Recipe recipe in recipeAssets.recipes) {
                 if (recipe.category == currentCategory) {
                     currentRecipes.Add(recipe);
@@ -75,25 +131,7 @@ public class UI_Crafting : MonoBehaviour {
         }
     }
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.C)) {
-            if (!pauseMenu.activeState) {
-                Toggle();
-            }
-        }
+    public void Craft() {
 
-        if (currentRecipeIndex != -1 && shouldUpdateRecipe) {
-            shouldUpdateRecipe = false;
-            var img = displayImage.GetComponent<Image>();
-            var displayItem = currentRecipes[currentRecipeIndex].outputList[0];
-            img.sprite = displayItem.GetSprite();
-            img.color = Color.white;
-        }
-    }
-
-    public void Toggle() {
-        isActive = !isActive;
-
-        inventoryController.SetActive(isActive);
     }
 }

@@ -19,6 +19,7 @@ public class RecipeAssets : MonoBehaviour {
         //Test 2
         Recipe testRecipe2 = new Recipe();
         testRecipe2.inputList.Add(new Item { itemType = ItemType.Stone, amount = 1 });
+        testRecipe2.inputList.Add(new Item { itemType = ItemType.Dirt, amount = 3 });
         testRecipe2.outputList.Add(new Item { itemType = ItemType.Test, amount = 1 });
         testRecipe2.category = CategoryType.Test1;
         testRecipe2.craftingTime = 1;
