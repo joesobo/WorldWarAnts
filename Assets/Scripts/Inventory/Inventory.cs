@@ -154,4 +154,20 @@ public class Inventory {
         }
         return -1;
     }
+
+    public bool HasItem(Item searchItem) {
+        foreach (var item in itemList) {
+            if (item != null && item.itemType == searchItem.itemType && item.amount >= searchItem.amount) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void RemoveFirstFoundItem(Item searchItem) {
+        int index = IndexOfFirstLocationFound(searchItem.itemType);
+
+        RemoveItem(index, searchItem.amount);
+    }
 }

@@ -153,9 +153,9 @@ public class VoxelEditor : MonoBehaviour {
             updateChunkPositions.Sort(SortByPosition);
 
             //TODO: update so it only checks the relevant one
-            foreach (var item in updateChunkPositions) {
-                Debug.Log(item);
-            }
+            // foreach (var item in updateChunkPositions) {
+            //     Debug.Log(item);
+            // }
 
 
             foreach (var chunk in from pos in updateChunkPositions where existingChunks.ContainsKey(pos) select existingChunks[pos]) {

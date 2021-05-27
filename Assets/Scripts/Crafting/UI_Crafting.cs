@@ -24,6 +24,8 @@ public class UI_Crafting : MonoBehaviour {
     private RecipeAssets recipeAssets;
     private PauseMenu pauseMenu;
     private CategoryType currentCategory;
+    private UI_PlayerInventory playerInventory;
+    private UI_HotBar hotbarInventory;
 
     private List<Recipe> currentRecipes = new List<Recipe>();
     private List<CraftingSlot> slotList = new List<CraftingSlot>();
@@ -35,6 +37,8 @@ public class UI_Crafting : MonoBehaviour {
         recipeAssets = FindObjectOfType<RecipeAssets>();
         pauseMenu = FindObjectOfType<PauseMenu>();
         currentCategory = CategoryType.Test1;
+        playerInventory = FindObjectOfType<UI_PlayerInventory>();
+        hotbarInventory = FindObjectOfType<UI_HotBar>();
 
         uIController.togglableUIs.Add(gameObject);
 
@@ -65,7 +69,7 @@ public class UI_Crafting : MonoBehaviour {
                 }
 
                 //display requirements
-                foreach (Item requirement in recipe.inputList) {
+                foreach (var requirement in recipe.inputList) {
                     var displayRequirement = Instantiate(displayRequirementPrefab, Vector3.zero, Quaternion.identity, displayRequirementsGrid);
                     displayRequirement.transform.GetChild(0).GetComponent<Image>().sprite = requirement.GetSprite();
                     displayRequirement.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = requirement.itemType + " x" + requirement.amount;
@@ -132,6 +136,45 @@ public class UI_Crafting : MonoBehaviour {
     }
 
     public void Craft() {
+        var recipe = currentRecipes[currentRecipeIndex];
+        var removeInventory = new List<Inventory>();
+        var inventories = new List<Inventory>();
+        inventories.Add(playerInventory.inventory);
+        inventories.Add(hotbarInventory.inventory);
 
+        //check for requirements in inventory
+        bool hasAllRequirements = true;
+        foreach (var requirement in recipe.inputList) {
+            bool hasRequirement = false;
+            foreach (var inventory in inventories) {
+                if (inventory.HasItem(requirement)) {
+                    hasRequirement = true;
+                    removeInventory.Add(inventory);
+                    break;
+                }
+            }
+            if (!hasRequirement) {
+                hasAllRequirements = false;
+                break;
+            }
+        }
+
+        //remove requirements
+        if (hasAllRequirements) {
+            for (int i = 0; i < recipe.inputList.Count; i++) {
+                var requirement = recipe.inputList[i];
+                var inv = removeInventory[i];
+                inv.RemoveFirstFoundItem(requirement);
+            }
+
+            //add new item
+            foreach (var craftedItem in recipe.outputList) {
+                foreach (var inventory in inventories) {
+                    if (inventory.HasRoom(craftedItem)) {
+                        inventory.AddItem(craftedItem);
+                    }
+                }
+            }
+        }
     }
 }

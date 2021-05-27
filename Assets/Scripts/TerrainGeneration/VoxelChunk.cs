@@ -124,6 +124,7 @@ public class VoxelChunk : MonoBehaviour {
                             var amount = deletingBlock.amount;
                             var item = new Item { itemType = itemType, amount = amount };
 
+                            //TODO: fix where items spawn
                             WorldItem.SpawnWorldItem((new Vector3(voxels[i].position.x, voxels[i].position.y, 0) * 8) + (transform.position), item);
                             didUpdate = true;
                         }
