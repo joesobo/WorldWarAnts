@@ -128,7 +128,7 @@ public class TerrainNoise : MonoBehaviour {
         return y > noiseHeight ? 0 : 1;
     }
 
-    private float Noise1D(float x) {
+    public float Noise1D(float x) {
         var scaledXHeight = x / 1f / voxelResolution;
         var freq = frequency;
         var amp = amplitude;

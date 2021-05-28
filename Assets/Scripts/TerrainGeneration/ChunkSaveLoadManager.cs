@@ -74,7 +74,7 @@ public class ChunkSaveLoadManager : MonoBehaviour {
         return new RegionData(new List<VoxelChunk>());
     }
 
-    private Vector2 RegionPosFromChunkPos(Vector2 chunkPos) {
+    public Vector2 RegionPosFromChunkPos(Vector2 chunkPos) {
         var xVal = chunkPos.x / halfRes;
         var yVal = chunkPos.y / halfRes;
         var regionX = xVal < 0f ? (int)Mathf.Ceil(xVal) : (int)Mathf.Floor(xVal);

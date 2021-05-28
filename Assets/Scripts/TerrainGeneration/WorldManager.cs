@@ -5,7 +5,7 @@ public class WorldManager : MonoBehaviour {
     public string worldName;
     public int seed;
     public string last_played;
-    public bool creativeMode = true;
+    public bool creativeMode = false;
 
     private WorldDataHandler worldDataHandler;
 
@@ -18,6 +18,7 @@ public class WorldManager : MonoBehaviour {
             worldName = worldData.name;
             seed = worldData.seed;
             last_played = worldData.last_played;
+            creativeMode = worldData.isCreative;
         } else {
             Debug.Log("WARNING: No world saving");
             seed = FindObjectOfType<TerrainNoise>().seed;

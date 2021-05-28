@@ -157,7 +157,6 @@ public class VoxelEditor : MonoBehaviour {
             //     Debug.Log(item);
             // }
 
-
             foreach (var chunk in from pos in updateChunkPositions where existingChunks.ContainsKey(pos) select existingChunks[pos]) {
                 voxelMesh.TriangulateChunkMesh(chunk);
                 chunkCollider.Generate2DCollider(chunk, chunkResolution);

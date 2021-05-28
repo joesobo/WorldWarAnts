@@ -119,13 +119,13 @@ public class VoxelChunk : MonoBehaviour {
 
                         if (tempState == stencil.fillType) {
                             voxels[i].state = tempState;
-                            
+
                             var itemType = deletingBlock.itemType;
                             var amount = deletingBlock.amount;
                             var item = new Item { itemType = itemType, amount = amount };
 
-                            //TODO: fix where items spawn
-                            WorldItem.SpawnWorldItem((new Vector3(voxels[i].position.x, voxels[i].position.y, 0) * 8) + (transform.position), item);
+                            var worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                            WorldItem.SpawnWorldItem(new Vector2(worldMousePos.x, worldMousePos.y), item);
                             didUpdate = true;
                         }
                     }

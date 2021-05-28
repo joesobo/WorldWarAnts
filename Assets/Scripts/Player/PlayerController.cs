@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     private Collider2D boxCollider;
     private Transform bodyController;
+    private TerrainNoise terrainNoise;
     [HideInInspector]
     public bool facingRight = true;
     private bool facingNeedsUpdating;
@@ -26,6 +27,14 @@ public class PlayerController : MonoBehaviour {
         boxCollider = GetComponent<Collider2D>();
         playerInventoryController = FindObjectOfType<PlayerInventoryController>();
         bodyController = transform.Find("BodyController");
+        terrainNoise = FindObjectOfType<TerrainNoise>();
+    }
+
+    private void Start() {
+        //spawn player on surface
+        var x = transform.position.x;
+        var result = terrainNoise.Noise1D(x);
+        transform.position = new Vector3(x, result + 1.5f, 0);
     }
 
     private void Update() {
@@ -41,8 +50,7 @@ public class PlayerController : MonoBehaviour {
             velocity.y = 0;
         }
 
-        if (facingNeedsUpdating)
-        {
+        if (facingNeedsUpdating) {
             bodyController.localScale = facingRight ? Vector3.one : leftFacing;
             facingNeedsUpdating = false;
         }
