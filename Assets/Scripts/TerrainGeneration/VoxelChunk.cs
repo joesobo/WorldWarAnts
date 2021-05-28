@@ -109,7 +109,7 @@ public class VoxelChunk : MonoBehaviour {
 
         var didUpdate = false;
         for (var y = yStart; y <= yEnd; y++) {
-            var i = y * resolution + xStart;
+            var i = VoxelIndexFromLocalPos(xStart, y);
             for (var x = xStart; x <= xEnd; x++, i++) {
                 if (voxels[i].state != stencil.fillType) {
                     // Deleting
@@ -164,6 +164,10 @@ public class VoxelChunk : MonoBehaviour {
         xyNeighbor = null;
         transform.position = chunkPos;
         shouldUpdateMesh = true;
+    }
+
+    public int VoxelIndexFromLocalPos(float x, float y) {
+        return (int)(y * resolution + x);
     }
 
     private void OnDrawGizmos() {

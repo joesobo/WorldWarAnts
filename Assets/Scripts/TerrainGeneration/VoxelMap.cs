@@ -4,6 +4,7 @@ using UnityEngine;
 public partial class VoxelMap : MonoBehaviour {
     public int regionResolution = 8;
     [Range(8, 56)] public int voxelResolution = 8;
+    private static int res;
     [HideInInspector] public int chunkResolution;
     [Range(1, 16)] public int viewDistance = 3;
     public float colliderRadius = 1;
@@ -30,6 +31,7 @@ public partial class VoxelMap : MonoBehaviour {
         player = FindObjectOfType<PlayerController>().transform;
 
         chunkResolution = 16;
+        res = voxelResolution;
 
         recycleableChunks = new Queue<VoxelChunk>();
 
@@ -65,6 +67,10 @@ public partial class VoxelMap : MonoBehaviour {
         chunkSaveLoadManager.Startup(infiniteGeneration, worldScriptableObject, regionResolution);
 
         GenerateTerrain();
+    }
+
+    public static Vector2 ChunkPosFromWorldPos(Vector2 worldPos) {
+        return new Vector2(Mathf.Floor(worldPos.x / res), Mathf.Floor(worldPos.y / res));
     }
 
     private void OnDrawGizmosSelected() {

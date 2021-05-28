@@ -12,4 +12,5 @@ public class ItemAssets : MonoBehaviour {
     public Sprite dirtSprite;
     public Sprite stoneSprite;
     public Sprite testSprite;
+    public Sprite grassBladeSprite;
 }

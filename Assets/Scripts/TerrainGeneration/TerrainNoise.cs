@@ -197,7 +197,7 @@ public class TerrainNoise : MonoBehaviour {
         return BlockManager.BlockIndexDictionary[type];
     }
 
-    private static bool InRange(float input, float value, float range) {
+    public static bool InRange(float input, float value, float range) {
         return input + range > value && input - range < value;
     }
 }

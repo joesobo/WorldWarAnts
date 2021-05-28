@@ -5,7 +5,8 @@ public enum ItemType {
     Empty,
     Dirt,
     Stone,
-    Test
+    Test,
+    GrassBlade,
 };
 
 [Serializable]
@@ -21,6 +22,7 @@ public class Item {
             case ItemType.Dirt: return ItemAssets.Instance.dirtSprite;
             case ItemType.Stone: return ItemAssets.Instance.stoneSprite;
             case ItemType.Test: return ItemAssets.Instance.testSprite;
+            case ItemType.GrassBlade: return ItemAssets.Instance.grassBladeSprite;
         }
     }
 
@@ -31,6 +33,7 @@ public class Item {
             case ItemType.Dirt: return true;
             case ItemType.Stone: return true;
             case ItemType.Test: return false;
+            case ItemType.GrassBlade: return true;
         }
     }
 }

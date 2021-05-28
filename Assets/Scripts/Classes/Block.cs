@@ -8,7 +8,8 @@ public enum BlockType {
     Dirt,
     Rock,
     Grass,
-    White
+    White,
+    GrassBlade,
 };
 
 [Serializable]

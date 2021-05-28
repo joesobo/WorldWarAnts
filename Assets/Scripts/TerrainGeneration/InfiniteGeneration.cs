@@ -22,6 +22,7 @@ public class InfiniteGeneration : MonoBehaviour {
     private float colliderRadius;
     private bool useColliders;
     private ChunkCollider chunkCollider;
+    private ChunkObjectSpawner chunkObjectSpawner;
     private WorldScriptableObject worldScriptableObject;
     private Rigidbody2D playerRb;
 
@@ -30,6 +31,7 @@ public class InfiniteGeneration : MonoBehaviour {
         terrainNoise = FindObjectOfType<TerrainNoise>();
         terrainMap = FindObjectOfType<TerrainMap>();
         chunkCollider = FindObjectOfType<ChunkCollider>();
+        chunkObjectSpawner = FindObjectOfType<ChunkObjectSpawner>();
 
         recycleableChunks = map.recycleableChunks;
         regionResolution = map.regionResolution;
@@ -129,6 +131,7 @@ public class InfiniteGeneration : MonoBehaviour {
                         currentChunk.SetNewChunk(coord);
                     } else {
                         terrainNoise.GenerateNoiseValues(currentChunk);
+                        chunkObjectSpawner.SpawnObject(currentChunk);
                     }
 
                     currentChunk.transform.parent = chunkSaveLoadManager.GetRegionTransformForChunk(coord);

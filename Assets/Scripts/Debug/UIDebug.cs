@@ -30,7 +30,7 @@ public class UIDebug : MonoBehaviour {
         terrainNoise = FindObjectOfType<TerrainNoise>();
         worldDataHandler = FindObjectOfType<WorldDataHandler>();
 
-        isActive = true;
+        isActive = false;
 
         debugInfo = transform.GetChild(0);
         worldNameText = debugInfo.GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -62,7 +62,7 @@ public class UIDebug : MonoBehaviour {
             gameModeText.text = "Game Mode: " + mode;
 
             playerPosText.text = "Player Position: " + new Vector2(player.position.x, player.position.y);
-            var chunkPos = new Vector2(Mathf.Floor(player.position.x / voxelMap.voxelResolution), Mathf.Floor(player.position.y / voxelMap.voxelResolution));
+            var chunkPos = VoxelMap.ChunkPosFromWorldPos(player.position);
             chunkPosText.text = "Chunk Position: " + chunkPos;
             var regionPos = chunkSaveLoadManager.RegionPosFromChunkPos(chunkPos);
             regionPosText.text = "Region Position: " + regionPos;
