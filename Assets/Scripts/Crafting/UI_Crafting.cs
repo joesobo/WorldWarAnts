@@ -11,7 +11,7 @@ public enum CategoryType {
 };
 
 public class UI_Crafting : MonoBehaviour {
-    public bool isActive;
+    public bool isActive = false;
     public GameObject inventoryController;
     public GameObject slotPrefab;
     public Transform slotContainer;
@@ -39,6 +39,8 @@ public class UI_Crafting : MonoBehaviour {
         currentCategory = CategoryType.Test1;
         playerInventory = FindObjectOfType<UI_PlayerInventory>();
         hotbarInventory = FindObjectOfType<UI_HotBar>();
+
+        isActive = false;
 
         uIController.togglableUIs.Add(gameObject);
 
