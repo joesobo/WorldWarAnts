@@ -34,6 +34,8 @@ public class VoxelEditor : MonoBehaviour {
     private VoxelStencil activeStencil;
     private readonly List<Vector2Int> updateChunkPositions = new List<Vector2Int>();
 
+    public GameObject playerCanvas;
+
     private readonly VoxelStencil[] stencils = {
         new VoxelStencil(),
         new VoxelStencilCircle()
@@ -66,7 +68,6 @@ public class VoxelEditor : MonoBehaviour {
         }
 
         box = gameObject.AddComponent<BoxCollider>();
-        box.center = Vector3.one * (voxelResolution / 2f);
         box.size = new Vector3((chunkResolution - viewDistance) * voxelResolution,
             (chunkResolution - viewDistance) * voxelResolution);
     }
@@ -74,7 +75,7 @@ public class VoxelEditor : MonoBehaviour {
     private void Update() {
         if (Time.frameCount % UPDATE_INTERVAL != 0) return;
 
-        if (!EventSystem.current.IsPointerOverGameObject()) {
+        if (!EventSystem.current.IsPointerOverGameObject() || EventSystem.current.currentSelectedGameObject == playerCanvas) {
             if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
                 if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo)) {
                     if (hitInfo.collider.gameObject == gameObject && (oldPoint != hitInfo.point || oldTypeIndex != fillTypeIndex)) {
