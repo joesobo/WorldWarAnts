@@ -20,7 +20,7 @@ public class VoxelMesh : MonoBehaviour {
 
     private ComputeBuffer verticeBuffer, triangleBuffer, triCountBuffer, stateBuffer;
 
-    public void Startup(int voxelResolution, int chunkResolution, float viewDistance,
+    public void StartUp(int voxelResolution, int chunkResolution, float viewDistance,
         bool useColliders, float colliderRadius) {
         this.voxelResolution = voxelResolution;
         this.chunkResolution = chunkResolution;

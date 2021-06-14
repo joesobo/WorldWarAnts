@@ -5,53 +5,36 @@ using UnityEngine;
 public class InfiniteGeneration : MonoBehaviour {
     public VoxelChunk voxelChunkPrefab;
 
+    private VoxelMap voxelMap;
     private VoxelMesh voxelMesh;
-    private Transform player;
     private TerrainNoise terrainNoise;
     private TerrainMap terrainMap;
     private ChunkSaveLoadManager chunkSaveLoadManager;
 
-    private Vector2 p, playerOffset, offset;
-    private Vector2Int playerCoord, testChunkPos, coord;
-    private float sqrViewDist, sqrDst;
-    private Queue<VoxelChunk> recycleableChunks;
-    private int chunkResolution, voxelResolution, viewDistance, regionResolution;
-    private List<VoxelChunk> chunks;
-    private Dictionary<Vector2Int, VoxelChunk> existingChunks;
-    private bool useVoxelReferences;
-    private float colliderRadius;
-    private bool useColliders;
+    private Vector2 voxelPlayerPos, playerOffset;
+    private Vector2Int playerCoord, newChunkCoord;
+    private float sqrViewDist;
+    public bool useVoxelReferences = false;
+    public float colliderRadius = 2;
+    public bool useColliders = true;
     private ChunkCollider chunkCollider;
     private ChunkObjectSpawner chunkObjectSpawner;
-    private WorldScriptableObject worldScriptableObject;
     private Rigidbody2D playerRb;
 
-    public void StartUp(VoxelMap map, WorldScriptableObject worldObject) {
+    public void StartUp(VoxelMap map) {
         voxelMesh = FindObjectOfType<VoxelMesh>();
         terrainNoise = FindObjectOfType<TerrainNoise>();
         terrainMap = FindObjectOfType<TerrainMap>();
         chunkCollider = FindObjectOfType<ChunkCollider>();
         chunkObjectSpawner = FindObjectOfType<ChunkObjectSpawner>();
+        chunkSaveLoadManager = FindObjectOfType<ChunkSaveLoadManager>();
+        playerRb = FindObjectOfType<PlayerController>().GetComponent<Rigidbody2D>();
 
-        recycleableChunks = map.recycleableChunks;
-        regionResolution = map.regionResolution;
-        chunkResolution = map.chunkResolution;
-        voxelResolution = map.voxelResolution;
-        viewDistance = map.viewDistance;
-        chunks = map.chunks;
-        existingChunks = map.existingChunks;
-        useVoxelReferences = map.useVoxelReferences;
-        colliderRadius = map.colliderRadius;
-        useColliders = map.useColliders;
-        player = map.player;
-        chunkSaveLoadManager = map.chunkSaveLoadManager;
-        worldScriptableObject = worldObject;
+        voxelMap = map;
 
-        playerRb = player.GetComponent<Rigidbody2D>();
-
-        terrainNoise.seed = worldScriptableObject.seed;
-        terrainNoise.Startup(voxelResolution, chunkResolution);
-        voxelMesh.Startup(voxelResolution, chunkResolution, viewDistance, useColliders, colliderRadius);
+        terrainNoise.seed = voxelMap.worldScriptableObject.seed;
+        terrainNoise.StartUp(voxelMap.voxelResolution, voxelMap.chunkResolution);
+        voxelMesh.StartUp(voxelMap.voxelResolution, voxelMap.chunkResolution, voxelMap.viewDistance, useColliders, colliderRadius);
 
         InvokeRepeating(nameof(UpdateMap), 0.0f, terrainMap.updateInterval);
     }
@@ -64,8 +47,8 @@ public class InfiniteGeneration : MonoBehaviour {
 
     public void UpdateAroundPlayer() {
         if (playerRb.velocity.magnitude > 0) {
-            p = player.position / voxelResolution;
-            playerCoord = new Vector2Int(Mathf.RoundToInt(p.x), Mathf.RoundToInt(p.y));
+            voxelPlayerPos = voxelMap.player.position / voxelMap.voxelResolution;
+            playerCoord = new Vector2Int(Mathf.RoundToInt(voxelPlayerPos.x), Mathf.RoundToInt(voxelPlayerPos.y));
 
             voxelMesh.CreateBuffers();
 
@@ -80,23 +63,23 @@ public class InfiniteGeneration : MonoBehaviour {
     }
 
     private void RemoveOutOfBoundsChunks() {
-        sqrViewDist = viewDistance * viewDistance;
+        sqrViewDist = voxelMap.viewDistance * voxelMap.viewDistance;
 
-        for (var i = chunks.Count - 1; i >= 0; i--) {
-            var testChunk = chunks[i];
+        for (var i = voxelMap.currentChunks.Count - 1; i >= 0; i--) {
+            var testChunk = voxelMap.currentChunks[i];
             if (!ReferenceEquals(testChunk, null)) {
                 var position = testChunk.transform.position;
-                testChunkPos = new Vector2Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y));
+                var testChunkPos = new Vector2Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y));
                 playerOffset = playerCoord - testChunkPos;
-                offset = new Vector2(Mathf.Abs(playerOffset.x), Mathf.Abs(playerOffset.y)) -
-                         (Vector2.one * viewDistance) / 2;
-                sqrDst = new Vector2(Mathf.Max(offset.x, 0), Mathf.Max(offset.y, 0)).sqrMagnitude;
+                var offset = new Vector2(Mathf.Abs(playerOffset.x), Mathf.Abs(playerOffset.y)) -
+                         (Vector2.one * voxelMap.viewDistance) / 2;
+                var sqrDst = new Vector2(Mathf.Max(offset.x, 0), Mathf.Max(offset.y, 0)).sqrMagnitude;
 
                 if (sqrDst > sqrViewDist) {
                     chunkSaveLoadManager.SaveChunk(testChunk.transform.position, testChunk);
-                    existingChunks.Remove(testChunkPos);
-                    recycleableChunks.Enqueue(testChunk);
-                    chunks.RemoveAt(i);
+                    voxelMap.existingChunks.Remove(testChunkPos);
+                    voxelMap.recycleableChunks.Enqueue(testChunk);
+                    voxelMap.currentChunks.RemoveAt(i);
                 }
             }
         }
@@ -105,40 +88,40 @@ public class InfiniteGeneration : MonoBehaviour {
     }
 
     private void CreateNewChunksInRange() {
-        for (var y = -chunkResolution / 2; y < chunkResolution / 2; y++) {
-            for (var x = -chunkResolution / 2; x < chunkResolution / 2; x++) {
-                coord = new Vector2Int(x, y) + playerCoord;
+        for (var y = -voxelMap.chunkResolution / 2; y < voxelMap.chunkResolution / 2; y++) {
+            for (var x = -voxelMap.chunkResolution / 2; x < voxelMap.chunkResolution / 2; x++) {
+                newChunkCoord = new Vector2Int(x, y) + playerCoord;
 
-                if (existingChunks.ContainsKey(coord)) continue;
-                playerOffset = p - coord;
-                offset = new Vector2(Mathf.Abs(playerOffset.x), Mathf.Abs(playerOffset.y)) -
-                         (Vector2.one * viewDistance) / 2;
-                sqrDst = offset.sqrMagnitude;
+                if (voxelMap.existingChunks.ContainsKey(newChunkCoord)) continue;
+                playerOffset = voxelPlayerPos - newChunkCoord;
+                var offset = new Vector2(Mathf.Abs(playerOffset.x), Mathf.Abs(playerOffset.y)) -
+                         (Vector2.one * voxelMap.viewDistance) / 2;
+                var sqrDst = offset.sqrMagnitude;
 
                 if (sqrDst <= sqrViewDist - 4) {
                     VoxelChunk currentChunk;
-                    if (recycleableChunks.Count > 0) {
-                        currentChunk = recycleableChunks.Dequeue();
-                        currentChunk.Startup();
+                    if (voxelMap.recycleableChunks.Count > 0) {
+                        currentChunk = voxelMap.recycleableChunks.Dequeue();
+                        currentChunk.StartUp();
                     } else {
                         currentChunk = CreateChunk();
                     }
 
-                    currentChunk.SetNewChunk(coord);
-                    var resultChunk = chunkSaveLoadManager.LoadChunk(coord, currentChunk);
+                    currentChunk.SetNewChunk(newChunkCoord);
+                    var resultChunk = chunkSaveLoadManager.LoadChunk(newChunkCoord, currentChunk);
                     if (!ReferenceEquals(resultChunk, null)) {
                         currentChunk = resultChunk;
-                        currentChunk.SetNewChunk(coord);
+                        currentChunk.SetNewChunk(newChunkCoord);
                     } else {
                         terrainNoise.GenerateNoiseValues(currentChunk);
                         chunkObjectSpawner.SpawnObject(currentChunk);
                     }
 
-                    currentChunk.transform.parent = chunkSaveLoadManager.GetRegionTransformForChunk(coord);
+                    currentChunk.transform.parent = chunkSaveLoadManager.GetRegionTransformForChunk(newChunkCoord);
 
-                    existingChunks.Add(coord, currentChunk);
+                    voxelMap.existingChunks.Add(newChunkCoord, currentChunk);
                     currentChunk.shouldUpdateCollider = true;
-                    chunks.Add(currentChunk);
+                    voxelMap.currentChunks.Add(currentChunk);
                 }
             }
         }
@@ -146,18 +129,18 @@ public class InfiniteGeneration : MonoBehaviour {
 
     private VoxelChunk CreateChunk() {
         var chunk = Instantiate(voxelChunkPrefab, null, true);
-        chunk.Initialize(useVoxelReferences, voxelResolution);
+        chunk.Initialize(useVoxelReferences, voxelMap.voxelResolution);
         chunk.gameObject.layer = 3;
 
         return chunk;
     }
 
     private void UpdateNewChunks() {
-        foreach (var chunk in chunks.Where(chunk => chunk.shouldUpdateMesh)) {
+        foreach (var chunk in voxelMap.currentChunks.Where(chunk => chunk.shouldUpdateMesh)) {
             var position = chunk.transform.position;
-            coord = new Vector2Int(Mathf.RoundToInt(position.x),
+            newChunkCoord = new Vector2Int(Mathf.RoundToInt(position.x),
                 Mathf.RoundToInt(position.y));
-            SetupChunkNeighbors(coord, chunk);
+            SetupChunkNeighbors(newChunkCoord, chunk);
         }
     }
 
@@ -170,51 +153,51 @@ public class InfiniteGeneration : MonoBehaviour {
         var bxycoord = new Vector2Int(setupCoord.x + 1, setupCoord.y + 1);
         VoxelChunk tempChunk;
 
-        if (!existingChunks.ContainsKey(setupCoord)) return;
-        if (existingChunks.ContainsKey(axcoord)) {
-            tempChunk = existingChunks[axcoord];
+        if (!voxelMap.existingChunks.ContainsKey(setupCoord)) return;
+        if (voxelMap.existingChunks.ContainsKey(axcoord)) {
+            tempChunk = voxelMap.existingChunks[axcoord];
             tempChunk.shouldUpdateMesh = true;
             tempChunk.xNeighbor = chunk;
         }
 
-        if (existingChunks.ContainsKey(aycoord)) {
-            tempChunk = existingChunks[aycoord];
+        if (voxelMap.existingChunks.ContainsKey(aycoord)) {
+            tempChunk = voxelMap.existingChunks[aycoord];
             tempChunk.shouldUpdateMesh = true;
             tempChunk.yNeighbor = chunk;
         }
 
-        if (existingChunks.ContainsKey(axycoord)) {
-            tempChunk = existingChunks[axycoord];
+        if (voxelMap.existingChunks.ContainsKey(axycoord)) {
+            tempChunk = voxelMap.existingChunks[axycoord];
             tempChunk.shouldUpdateMesh = true;
             tempChunk.xyNeighbor = chunk;
         }
 
-        if (existingChunks.ContainsKey(bxcoord)) {
-            tempChunk = existingChunks[bxcoord];
+        if (voxelMap.existingChunks.ContainsKey(bxcoord)) {
+            tempChunk = voxelMap.existingChunks[bxcoord];
             chunk.xNeighbor = tempChunk;
         }
 
-        if (existingChunks.ContainsKey(bycoord)) {
-            tempChunk = existingChunks[bycoord];
+        if (voxelMap.existingChunks.ContainsKey(bycoord)) {
+            tempChunk = voxelMap.existingChunks[bycoord];
             chunk.yNeighbor = tempChunk;
         }
 
-        if (existingChunks.ContainsKey(bxycoord)) {
-            tempChunk = existingChunks[bxycoord];
+        if (voxelMap.existingChunks.ContainsKey(bxycoord)) {
+            tempChunk = voxelMap.existingChunks[bxycoord];
             chunk.xyNeighbor = tempChunk;
         }
     }
 
     private void RecreateUpdatedChunkMeshes() {
-        foreach (var chunk in chunks) {
+        foreach (var chunk in voxelMap.currentChunks) {
             if (chunk.shouldUpdateMesh) {
                 voxelMesh.TriangulateChunkMesh(chunk);
                 chunk.shouldUpdateMesh = false;
             }
 
             if (!useColliders || !chunk.shouldUpdateCollider) continue;
-            if (Vector3.Distance(p, chunk.transform.position) < colliderRadius) {
-                chunkCollider.Generate2DCollider(chunk, chunkResolution);
+            if (Vector3.Distance(voxelPlayerPos, chunk.transform.position) < colliderRadius) {
+                chunkCollider.Generate2DCollider(chunk, voxelMap.chunkResolution);
                 chunk.shouldUpdateCollider = false;
             }
         }

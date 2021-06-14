@@ -14,17 +14,18 @@ public class InventoriesController : MonoBehaviour {
     private Vector2 localMousePosition;
     [HideInInspector] public Item activeItem = null;
     [HideInInspector] public Transform activeTransform;
-    private Transform itemInfo;
+    private Transform itemInfoTransform;
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI amountText;
-    private PlayerController player;
+
+    private PlayerController playerController;
     private UIController uIController;
 
     private void Awake() {
         activeInventories = new List<Inventory>();
         slotList = new List<ItemSlot>();
 
-        player = FindObjectOfType<PlayerController>();
+        playerController = FindObjectOfType<PlayerController>();
         uIController = FindObjectOfType<UIController>();
     }
 
@@ -51,14 +52,14 @@ public class InventoriesController : MonoBehaviour {
 
                 //hover info logic
                 if (Input.GetKey(KeyCode.LeftControl) && ui.hoverSlot && ui.hoverSlot.item != null) {
-                    if (!itemInfo) {
+                    if (!itemInfoTransform) {
                         CreateDisplay();
                     } else {
-                        InventoryActions.DisplayInfo(ui, itemInfo, nameText, amountText);
+                        InventoryActions.DisplayInfo(ui, itemInfoTransform, nameText, amountText);
                     }
                 } else {
-                    if (itemInfo) {
-                        Destroy(itemInfo.gameObject);
+                    if (itemInfoTransform) {
+                        Destroy(itemInfoTransform.gameObject);
                     }
                 }
 
@@ -77,10 +78,10 @@ public class InventoriesController : MonoBehaviour {
 
         if (activeItem != null && activeItem.itemType != ItemType.Empty && !MouseOverUI()) {
             if (Input.GetMouseButtonDown(0)) {
-                InventoryActions.DropActive(player, this, activeItem.amount);
+                InventoryActions.DropActive(playerController, this, activeItem.amount);
             }
             if (Input.GetMouseButtonDown(1)) {
-                InventoryActions.DropActive(player, this, 1);
+                InventoryActions.DropActive(playerController, this, 1);
             }
         }
     }
@@ -93,9 +94,9 @@ public class InventoriesController : MonoBehaviour {
     }
 
     private void CreateDisplay() {
-        itemInfo = Instantiate(itemInfoPrefab, Input.mousePosition + InventoryActions.offset, Quaternion.identity, transform);
-        nameText = itemInfo.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        amountText = itemInfo.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
+        itemInfoTransform = Instantiate(itemInfoPrefab, Input.mousePosition + InventoryActions.offset, Quaternion.identity, transform);
+        nameText = itemInfoTransform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+        amountText = itemInfoTransform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
     }
 
     public void DestroyActive() {

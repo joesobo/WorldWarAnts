@@ -33,7 +33,7 @@ public class VoxelChunk : MonoBehaviour {
 
         uiHotBar = FindObjectOfType<UI_HotBar>();
 
-        Startup();
+        StartUp();
 
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         material.SetVector(Resolution, Vector2.one * resolution);
@@ -58,7 +58,7 @@ public class VoxelChunk : MonoBehaviour {
         voxels[i] = new Voxel(x, y, voxelSize);
     }
 
-    public void Startup() {
+    public void StartUp() {
         voxelSize = 1f / resolution;
         halfSize = 0.5f * resolution;
         voxels = new Voxel[resolution * resolution];

@@ -20,7 +20,6 @@ public class LegMovement : MonoBehaviour {
     private void Update() {
         float dist = Vector2.Distance(transform.position, currentTarget.position);
 
-
         if (dist > maxDistance) {
             moving = true;
         }

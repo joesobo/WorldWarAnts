@@ -62,7 +62,7 @@ public class UIDebug : MonoBehaviour {
             gameModeText.text = "Game Mode: " + mode;
 
             playerPosText.text = "Player Position: " + new Vector2(player.position.x, player.position.y);
-            var chunkPos = VoxelMap.ChunkPosFromWorldPos(player.position);
+            var chunkPos = voxelMap.ChunkPosFromWorldPos(player.position);
             chunkPosText.text = "Chunk Position: " + chunkPos;
             var regionPos = chunkSaveLoadManager.RegionPosFromChunkPos(chunkPos);
             regionPosText.text = "Region Position: " + regionPos;

@@ -20,12 +20,9 @@ public class PlayerController : MonoBehaviour {
     private bool facingNeedsUpdating;
     private readonly Vector3 leftFacing = new Vector3(-1, 1, 1);
 
-    [HideInInspector] public PlayerInventoryController playerInventoryController;
-
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<Collider2D>();
-        playerInventoryController = FindObjectOfType<PlayerInventoryController>();
         bodyController = transform.Find("BodyController");
         terrainNoise = FindObjectOfType<TerrainNoise>();
     }

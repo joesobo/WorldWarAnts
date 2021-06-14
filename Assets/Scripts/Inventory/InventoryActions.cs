@@ -32,7 +32,7 @@ public static class InventoryActions {
                 }
             }
 
-            if ((ui.hoverSlot.item == null || ((invController.activeItem != null || invController.activeItem.itemType != ItemType.Empty) && invController.activeItem.itemType == ui.hoverSlot.item.itemType && ui.hoverSlot.item.amount < Item.MAXAmount)) &&
+            if ((ui.hoverSlot.item == null || ((invController.activeItem != null || invController.activeItem.itemType != ItemType.Empty) && invController.activeItem.itemType == ui.hoverSlot.item.itemType && ui.hoverSlot.item.amount < Item.MaxAmount)) &&
                 invController.slotList.Count < invController.activeItem.amount) {
                 invController.slotList.Add(ui.hoverSlot);
                 ui.hoverSlot.SetSelectedColor();
@@ -80,9 +80,9 @@ public static class InventoryActions {
             foreach (var slot in invController.slotList) {
                 if (slot.item != null) {
                     var totalAmount = slot.item.amount + itemsPerSlot;
-                    if (totalAmount > Item.MAXAmount) {
-                        slot.ui.inventory.SetItem(new Item { itemType = invController.activeItem.itemType, amount = Item.MAXAmount }, slot.index);
-                        itemsHeld += totalAmount - Item.MAXAmount;
+                    if (totalAmount > Item.MaxAmount) {
+                        slot.ui.inventory.SetItem(new Item { itemType = invController.activeItem.itemType, amount = Item.MaxAmount }, slot.index);
+                        itemsHeld += totalAmount - Item.MaxAmount;
                     } else {
                         slot.ui.inventory.SetItem(new Item { itemType = invController.activeItem.itemType, amount = totalAmount }, slot.index);
                     }
@@ -115,12 +115,12 @@ public static class InventoryActions {
                 if (tempItem.itemType == invController.activeItem.itemType) {
                     var totalAmount = tempItem.amount + invController.activeItem.amount;
 
-                    if (totalAmount <= Item.MAXAmount) {
+                    if (totalAmount <= Item.MaxAmount) {
                         ui.inventory.SetItem(new Item { itemType = tempItem.itemType, amount = totalAmount }, ui.hoverSlot.index);
                         invController.DestroyActive();
                     } else {
-                        ui.inventory.SetItem(new Item { itemType = tempItem.itemType, amount = Item.MAXAmount }, ui.hoverSlot.index);
-                        invController.activeItem = new Item { itemType = tempItem.itemType, amount = totalAmount - Item.MAXAmount };
+                        ui.inventory.SetItem(new Item { itemType = tempItem.itemType, amount = Item.MaxAmount }, ui.hoverSlot.index);
+                        invController.activeItem = new Item { itemType = tempItem.itemType, amount = totalAmount - Item.MaxAmount };
                         invController.activeTransform.Find("Amount").GetComponent<TextMeshProUGUI>().text = invController.activeItem.amount.ToString();
                     }
                 }
@@ -138,7 +138,7 @@ public static class InventoryActions {
     public static void DisplayInfo(UI_Inventory ui, Transform itemInfo, TextMeshProUGUI nameText, TextMeshProUGUI amountText) {
         itemInfo.position = Input.mousePosition + offset;
         nameText.text = "Name: " + ui.hoverSlot.item.itemType;
-        amountText.text = "Amount: " + ui.hoverSlot.item.amount + "/" + Item.MAXAmount;
+        amountText.text = "Amount: " + ui.hoverSlot.item.amount + "/" + Item.MaxAmount;
     }
 
     public static void Drop(UI_Inventory ui, int count) {

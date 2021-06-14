@@ -5,11 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum CategoryType {
-    Test1,
-    Test2,
-};
-
 public class UI_Crafting : MonoBehaviour {
     public bool isActive = false;
     public GameObject inventoryController;

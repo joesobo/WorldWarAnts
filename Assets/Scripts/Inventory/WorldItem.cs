@@ -8,9 +8,10 @@ public class WorldItem : MonoBehaviour {
 
     public float attractSpeed = 3f;
     public int attractRadius = 3;
-
     public float dropTime;
-    private Item item;
+
+    private PlayerInventoryController playerInventoryController;
+    private Item currentItem;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D itemCollider;
 
@@ -34,6 +35,7 @@ public class WorldItem : MonoBehaviour {
     private void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         itemCollider = GetComponent<BoxCollider2D>();
+        playerInventoryController = GetComponent<PlayerInventoryController>();
     }
 
     private void Update() {
@@ -45,15 +47,15 @@ public class WorldItem : MonoBehaviour {
             var worldItem = hitCollider.gameObject.GetComponent<WorldItem>();
             PlayerController player;
 
-            if (item.IsStackable() && worldItem != null && hitCollider is BoxCollider2D && hitCollider != itemCollider) {
+            if (currentItem.IsStackable() && worldItem != null && hitCollider is BoxCollider2D && hitCollider != itemCollider) {
                 if (distance < minDist) {
                     minDist = distance;
-                    if (worldItem.item.amount < Item.MAXAmount && item.amount < Item.MAXAmount && item.itemType == worldItem.item.itemType) {
+                    if (worldItem.currentItem.amount < Item.MaxAmount && currentItem.amount < Item.MaxAmount && currentItem.itemType == worldItem.currentItem.itemType) {
                         saveCollider = hitCollider;
                     }
                 }
             } else if ((player = hitCollider.GetComponent<PlayerController>()) != null && dropTime <= 0) {
-                if (player.playerInventoryController.HasRoom(item)) {
+                if (playerInventoryController.HasRoom(currentItem)) {
                     saveCollider = hitCollider;
                     break;
                 }
@@ -71,20 +73,20 @@ public class WorldItem : MonoBehaviour {
         var player = collisionInfo.gameObject.GetComponent<PlayerController>();
         var worldItem = collisionInfo.gameObject.GetComponent<WorldItem>();
 
-        if (player != null && player.playerInventoryController.HasRoom(item) && dropTime <= 0) {
-            player.playerInventoryController.AddItem(item);
+        if (player != null && playerInventoryController.HasRoom(currentItem) && dropTime <= 0) {
+            playerInventoryController.AddItem(currentItem);
             DestroySelf();
-        } else if (item.IsStackable() && worldItem != null && worldItem != this && item.itemType == worldItem.item.itemType && item.amount < Item.MAXAmount && worldItem.item.amount < Item.MAXAmount) {
-            if (item.amount > worldItem.item.amount) {
+        } else if (currentItem.IsStackable() && worldItem != null && worldItem != this && currentItem.itemType == worldItem.currentItem.itemType && currentItem.amount < Item.MaxAmount && worldItem.currentItem.amount < Item.MaxAmount) {
+            if (currentItem.amount > worldItem.currentItem.amount) {
                 worldItem.DestroySelf();
             } else {
-                var totalAmount = worldItem.item.amount + item.amount;
-                if (totalAmount <= Item.MAXAmount) {
-                    worldItem.item.amount += item.amount;
+                var totalAmount = worldItem.currentItem.amount + currentItem.amount;
+                if (totalAmount <= Item.MaxAmount) {
+                    worldItem.currentItem.amount += currentItem.amount;
                     DestroySelf();
                 } else {
-                    worldItem.item.amount = Item.MAXAmount;
-                    item.amount = totalAmount - Item.MAXAmount;
+                    worldItem.currentItem.amount = Item.MaxAmount;
+                    currentItem.amount = totalAmount - Item.MaxAmount;
                 }
                 worldItem.dropTime = dropTime;
             }
@@ -92,7 +94,7 @@ public class WorldItem : MonoBehaviour {
     }
 
     private void SetItem(Item newItem) {
-        item = newItem;
+        currentItem = newItem;
         spriteRenderer.sprite = newItem.GetSprite();
     }
 

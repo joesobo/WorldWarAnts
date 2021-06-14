@@ -4,20 +4,16 @@ using UnityEngine;
 public partial class VoxelMap : MonoBehaviour {
     public int regionResolution = 8;
     [Range(8, 56)] public int voxelResolution = 8;
-    private static int res;
     [HideInInspector] public int chunkResolution;
     [Range(1, 16)] public int viewDistance = 3;
-    public float colliderRadius = 1;
-    public bool useColliders;
-    public bool useVoxelReferences;
 
     private VoxelEditor voxelEditor;
     private InfiniteGeneration infiniteGeneration;
     private WorldManager worldManager;
-    [HideInInspector] public ChunkSaveLoadManager chunkSaveLoadManager;
+    private ChunkSaveLoadManager chunkSaveLoadManager;
     [HideInInspector] public Transform player;
 
-    [HideInInspector] public List<VoxelChunk> chunks;
+    [HideInInspector] public List<VoxelChunk> currentChunks;
     public Dictionary<Vector2Int, VoxelChunk> existingChunks;
     public Queue<VoxelChunk> recycleableChunks;
 
@@ -31,10 +27,10 @@ public partial class VoxelMap : MonoBehaviour {
         player = FindObjectOfType<PlayerController>().transform;
 
         chunkResolution = 16;
-        res = voxelResolution;
 
         recycleableChunks = new Queue<VoxelChunk>();
 
+        //TODO: move to ChunkSaveLoadManager
         worldScriptableObject.pathName = worldManager.worldPath + "/" + worldManager.worldName;
         worldScriptableObject.seed = worldManager.seed;
 
@@ -60,17 +56,17 @@ public partial class VoxelMap : MonoBehaviour {
             Destroy(oldChunks[i].gameObject);
         }
 
-        chunks = new List<VoxelChunk>();
+        currentChunks = new List<VoxelChunk>();
         existingChunks = new Dictionary<Vector2Int, VoxelChunk>();
-        voxelEditor.Startup(this);
-        infiniteGeneration.StartUp(this, worldScriptableObject);
-        chunkSaveLoadManager.Startup(infiniteGeneration, worldScriptableObject, regionResolution);
+        voxelEditor.StartUp(this);
+        infiniteGeneration.StartUp(this);
+        chunkSaveLoadManager.StartUp(infiniteGeneration, worldScriptableObject, regionResolution);
 
         GenerateTerrain();
     }
 
-    public static Vector2 ChunkPosFromWorldPos(Vector2 worldPos) {
-        return new Vector2(Mathf.Floor(worldPos.x / res), Mathf.Floor(worldPos.y / res));
+    public Vector2 ChunkPosFromWorldPos(Vector2 worldPos) {
+        return new Vector2(Mathf.Floor(worldPos.x / voxelResolution), Mathf.Floor(worldPos.y / voxelResolution));
     }
 
     private void OnDrawGizmosSelected() {

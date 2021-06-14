@@ -30,7 +30,7 @@ public class ItemSlot : MonoBehaviour {
         localMousePosition = rectTransform.InverseTransformPoint(Input.mousePosition);
 
         if (rectTransform.rect.Contains(localMousePosition)) {
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q)) InventoryActions.Drop(ui, Item.MAXAmount);
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q)) InventoryActions.Drop(ui, Item.MaxAmount);
             else if (Input.GetKeyDown(KeyCode.Q)) InventoryActions.Drop(ui, 1);
             if (Input.GetMouseButtonDown(1)) InventoryActions.Split(ui, inventoriesController);
         }

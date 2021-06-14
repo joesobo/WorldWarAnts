@@ -21,8 +21,6 @@ public class PlayerInventoryController : MonoBehaviour {
 
         hotBarInventory = new Inventory(hotBarSize, playerController);
         mainInventory = new Inventory(inventorySize, playerController);
-
-
     }
 
     private void Start() {

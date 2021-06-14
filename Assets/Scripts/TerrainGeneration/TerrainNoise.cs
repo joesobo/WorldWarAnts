@@ -56,7 +56,7 @@ public class TerrainNoise : MonoBehaviour {
         Perlin,
     }
 
-    public void Startup(int voxelResolution, int chunkResolution) {
+    public void StartUp(int voxelResolution, int chunkResolution) {
         this.voxelResolution = voxelResolution;
         this.chunkResolution = chunkResolution;
 

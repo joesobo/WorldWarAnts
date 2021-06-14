@@ -10,14 +10,10 @@ public class PauseMenu : MonoBehaviour {
 
     private ChunkSaveLoadManager chunkSaveLoadManager;
     private WorldDataHandler worldDataHandler;
-    private UI_Inventory inventory;
-    private UIController uIController;
 
     private void Awake() {
         chunkSaveLoadManager = FindObjectOfType<ChunkSaveLoadManager>();
         worldDataHandler = FindObjectOfType<WorldDataHandler>();
-        inventory = FindObjectOfType<UI_Inventory>();
-        uIController = FindObjectOfType<UIController>();
     }
 
     private void Update() {

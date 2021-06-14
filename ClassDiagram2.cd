@@ -1,0 +1,667 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Tayx.Graphy.CustomizationScene.G_CUIColorPicker" Collapsed="true">
+    <Position X="15.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAGCAIEAEACAAIAAAKAAAAAAAgAAAAgAAAAFE=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scene\Color Picker\G_CUIColorPicker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.CustomizationScene.CustomizeGraphy" Collapsed="true">
+    <Position X="13.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAKiAABMiAEAQEAAA0AgIIIABQGBEEIIgAwhhiCAE=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scene\Customization Scripts\CustomizeGraphy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.CustomizationScene.ForceSliderToMultipleOf3" Collapsed="true">
+    <Position X="20.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAACAAAAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scene\Customization Scripts\ForceSliderToMultipleOf3.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.CustomizationScene.ForceSliderToPowerOf2" Collapsed="true">
+    <Position X="22.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAACgAAAAAAAAAAAAQAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scene\Customization Scripts\ForceSliderToPowerOf2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.CustomizationScene.UpdateTextWithSliderValue" Collapsed="true">
+    <Position X="22.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACgAAgAAAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scene\Customization Scripts\UpdateTextWithSliderValue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Advanced.G_AdvancedData" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gUQAFACEAAFAACAAAAAAAAIAAAAAFhBAAQQGBAEAKAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Advanced\G_AdvancedData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tayx.Graphy.Audio.G_AudioGraph" Collapsed="true">
+    <Position X="3" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JAQAgACgAACAAAIAAAAAAgIAAAAAAAAAEAACAgAAiCI=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Audio\G_AudioGraph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Audio.G_AudioManager" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oAIABICkACAAACAAAAAAAAIAAAABFgAAAQACAAAAIEA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Audio\G_AudioManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tayx.Graphy.Audio.G_AudioMonitor" Collapsed="true">
+    <Position X="12" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBQAGAAEIAAAICAAACAAYAIAAoAAAQAAACgCAAQFA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Audio\G_AudioMonitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Audio.G_AudioText" Collapsed="true">
+    <Position X="13.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQAAACAEAEAAAAAAAAAAAIAIAAAAAAAAAACAAAAAEA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Audio\G_AudioText.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Fps.G_FpsGraph" Collapsed="true">
+    <Position X="0.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAhAChAACAAAIAAAgAAAIAAAAAAAAAAAACAAAAiCI=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Fps\G_FpsGraph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Fps.G_FpsManager" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAIABACEACAAACAAAAgEABIEBAAAFgAAAAACAAAAIEA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Fps\G_FpsManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tayx.Graphy.Fps.G_FpsMonitor" Collapsed="true">
+    <Position X="22.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QEQQEYCAAAAAABAAAEEAAAYAEAICAAAGBEACYCAAAEA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Fps\G_FpsMonitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Fps.G_FpsText" Collapsed="true">
+    <Position X="24.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAEACCAAEAAAAACAgACAIAFAAAAAIAAEACACAAAEA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Fps\G_FpsText.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Graph.G_Graph" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Graph\G_Graph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.GraphyDebugger" Collapsed="true">
+    <Position X="5.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQAAEAAACCBAABAAAgAQAgQAAABAAEAAGIAAAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\GraphyDebugger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.GraphyManager" Collapsed="true">
+    <Position X="7.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>P0TA0Gh2pOEBBoI0Y+kADCQACA8GiTCVTEQqIqQTwJA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\GraphyManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.G_GraphShader" Collapsed="true">
+    <Position X="10.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ECAAAAQAAAEACICANIwEABQAAAABCJAgAAABAAEAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Shader\G_GraphShader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Ram.G_RamGraph" Collapsed="true">
+    <Position X="5.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CEQhkBigAAABAAIAAAAAAAIAAAAAAAQAAAAGQAAAiAI=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Ram\G_RamGraph.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Ram.G_RamManager" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAIABACEACAAgCAAAgAAAAIAAAAAFgAAAACCAAAAIEA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Ram\G_RamManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Tayx.Graphy.Ram.G_RamMonitor" Collapsed="true">
+    <Position X="15.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAgAAAEAAAAAgACAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Ram\G_RamMonitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Ram.G_RamText" Collapsed="true">
+    <Position X="17.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAUACAABEBAAAEAAAEAAIAAAAAAAAAAAACAAAAAEA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Ram\G_RamText.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Utils.G_ExtensionMethods" Collapsed="true">
+    <Position X="17.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Util\G_ExtensionMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Utils.G_Singleton&lt;T&gt;" Collapsed="true">
+    <Position X="6.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAFAAAAAAAAAAAgAAAAAAAAAAAAAAABQAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Util\G_Singleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Utils.NumString.G_FloatString" Collapsed="true">
+    <Position X="19" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAgQAIAAAAAgAACAAABIIAgqQAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Util\G_FloatString.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tayx.Graphy.Utils.NumString.G_IntString" Collapsed="true">
+    <Position X="12" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgQAAAAAAAAAAAAAAAIIAAiQAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\Util\G_Intstring.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Block" Collapsed="true">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAACAAAAAAAAAgACAAAACAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Classes\Block.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlockCollection" Collapsed="true">
+    <Position X="13.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Assets\Scripts\Classes\Block.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChunkData" Collapsed="true">
+    <Position X="19" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAIAAAAAAAQAIAAA=</HashCode>
+      <FileName>Assets\Scripts\Classes\ChunkData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RegionData" Collapsed="true">
+    <Position X="22.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Assets\Scripts\Classes\RegionData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldData" Collapsed="true">
+    <Position X="17.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAIAAAAAEAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Classes\WorldData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CraftingSlot" Collapsed="true">
+    <Position X="10.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQEAAAAAAAAAAAAAAABAAAAAEAAAAAABAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Crafting\CraftingSlot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Recipe" Collapsed="true">
+    <Position X="17.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAIAAQAAAA=</HashCode>
+      <FileName>Assets\Scripts\Crafting\Recipe.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RecipeAssets" Collapsed="true">
+    <Position X="19" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Crafting\RecipeAssets.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_Crafting" Collapsed="true">
+    <Position X="17.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQQAIFgCCAAAgCEAQAAEBCAAAAAgJAAAACAACAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Crafting\UI_Crafting.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIDebug" Collapsed="true">
+    <Position X="20.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARACggAACAAgAAAIBAAQBAAAAAAABEBAgAAAAAAAsQ=</HashCode>
+      <FileName>Assets\Scripts\Debug\UIDebug.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DrawIfAttribute" Collapsed="true">
+    <Position X="17.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAABAAAAAAAIAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Helper\DrawIfAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NumericType" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAgAEgACAAgAAAAABAKAAAAAAAAAAByA=</HashCode>
+      <FileName>Assets\Scripts\Helper\NumericType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="InventoriesController" Collapsed="true">
+    <Position X="22.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QQRgAIEAAACAAAAVAAAAAAgAAAAAAgABAACCAAIAAEA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\InventoriesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Inventory" Collapsed="true">
+    <Position X="24.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAgBACAAIAAAQAAgAAAIACFACIEAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\Inventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InventoryActions" Collapsed="true">
+    <Position X="10.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QACAAAIAAAIQEAAAAAAAACAAAAAAAAAQAQBACAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\InventoryActions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Item" Collapsed="true">
+    <Position X="12" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACEAAAAAAAAAAAAAAAgAAABAACAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemAssets" Collapsed="true">
+    <Position X="13.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAARAAAEIAAAAAAAQAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\ItemAssets.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemSlot" Collapsed="true">
+    <Position X="15.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAAAQAAAAEAAAAAQAAAAAAEAAIAAABAAGAAABAEA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\ItemSlot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerInventoryController" Collapsed="true">
+    <Position X="12" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAUAgAAIAAAAAALFACACAEQ=</HashCode>
+      <FileName>Assets\Scripts\Inventory\PlayerInventoryController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_HotBar" Collapsed="true">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAEAQAAAAAAAgAGAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\UI_HotBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_Inventory" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAEAIAQIAACBAAAAAACASAEAQAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\UI_Inventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_PlayerInventory" Collapsed="true">
+    <Position X="2.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\UI_PlayerInventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_TogglableInventory" Collapsed="true">
+    <Position X="2.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABACCAAAAAAAAAAABAAAAAAABAAACCAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\UI_TogglableInventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldItem" Collapsed="true">
+    <Position X="20.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAEAAAQIABCAAAAQAAAAAACAAABAIACAwAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\WorldItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldItemSpawner" Collapsed="true">
+    <Position X="22.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\WorldItemSpawner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ContinueButton" Collapsed="true">
+    <Position X="24.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACABAAAAAAAAAABAAEAAAAAAAAAAAAAAABAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\ContinueButton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CreationMenu" Collapsed="true">
+    <Position X="12" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAABAAQAAIAJAgAAAAAAAgAAAAgEAAAEAACAA=</HashCode>
+      <FileName>Assets\Scripts\Menu\CreationMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MainMenu" Collapsed="true">
+    <Position X="19" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABIAAABAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\MainMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PauseMenu" Collapsed="true">
+    <Position X="24.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIAABAgABAAJAAAAAAAAAAABBCAACAQAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\PauseMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SelectionMenu" Collapsed="true">
+    <Position X="24.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAACAAAEAAAABACAAADAAAAAAAAAAEBAAAACAA=</HashCode>
+      <FileName>Assets\Scripts\Menu\SelectionMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldDataHandler" Collapsed="true">
+    <Position X="19" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABBACEAAjAAAAAAEAAIAAAAIAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Menu\WorldDataHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArmController" Collapsed="true">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Player\ArmController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DesiredLegTarget" Collapsed="true">
+    <Position X="15.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Player\DesiredLegTarget.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HeadController" Collapsed="true">
+    <Position X="19" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Player\HeadController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LegMovement" Collapsed="true">
+    <Position X="17.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQgAQAAAiAAAAAAAAAAAAAAABAAAQAABAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Player\LegMovement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerController" Collapsed="true">
+    <Position X="10.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAiAAAAAEAIAAABABAAAAAQEAAAYACAAUAFA=</HashCode>
+      <FileName>Assets\Scripts\Player\PlayerController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlockManager" Collapsed="true">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAIAAAAAAAAQAAAAQAAAAAACAgAAAAA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\BlockManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChunkCollider" Collapsed="true">
+    <Position X="17.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAACAQIBAAAAAAAAAAAAADAAAAAAAAAAAABEAA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\ChunkCollider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChunkObjectSpawner" Collapsed="true">
+    <Position X="20.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAECAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\ChunkObjectSpawner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChunkSaveLoadManager" Collapsed="true">
+    <Position X="22.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAgBAgAQQABAFAAgEAQAAAAAAAIAgAIAAQAAIAAwA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\ChunkSaveLoadManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InfiniteGeneration">
+    <Position X="22.5" Y="8.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>MACAEAQAAEAQgAACqAABAgAIAAAAYkEAMQQAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\InfiniteGeneration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TerrainMap" Collapsed="true">
+    <Position X="12" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAAABCAAgAAAIAAIABQAEAACAoGBCIAIBQAIAIA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\TerrainMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TerrainNoise" Collapsed="true">
+    <Position X="13.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IgCIQIAICACAQAAACAkAAGAuAAQEIACgXxIEAACAAAA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\TerrainNoise.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Voxel" Collapsed="true">
+    <Position X="24.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\Voxel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VoxelChunk" Collapsed="true">
+    <Position X="10.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAkGAAAJBBAASIEAAAIoSCAEEAxIACCAEgBEABAAAI=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\VoxelChunk.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VoxelEditor" Collapsed="true">
+    <Position X="12" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EgQAAgAAAXRAAAAAoAAgAQAAACABMgAAIACBAAAEAgA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\VoxelEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VoxelMap" Collapsed="true">
+    <Position X="13.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAACACAIAkIAAAAIkUAAgAAAAAACBQAAAAAAAAkA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\VoxelMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VoxelMesh" Collapsed="true">
+    <Position X="15.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACABEBAAGJAAEkAKAAACAgAAABABIICAAIEAAEBAAiA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\VoxelMesh.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VoxelStencil" Collapsed="true">
+    <Position X="7.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACBAAAQECAAACARoAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\VoxelStencil.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VoxelStencilCircle">
+    <Position X="5.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAIQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\VoxelStencilCircle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldManager" Collapsed="true">
+    <Position X="24.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAQAAAABEAAAAEAAAAAAAAAEAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\WorldManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldScriptableObject" Collapsed="true">
+    <Position X="10.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\WorldScriptableObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIController" Collapsed="true">
+    <Position X="19" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAABAAQAAAAAAAAAAAgAAAAAAAAAAAACAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\UI\UIController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions.FieldNotFoundException" Collapsed="true">
+    <Position X="19" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Helper\FieldNotFoundException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions.NumericTypeExpectedException" Collapsed="true">
+    <Position X="22.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Helper\NumericTypeExpectedException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions.PropertyNotFoundException" Collapsed="true">
+    <Position X="13.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Helper\PropertyNotFoundException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Exceptions.PropertyOrFieldNotFoundException" Collapsed="true">
+    <Position X="15.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Helper\PropertyOrFieldNotFoundException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Utilities.ReflectionUtil" Collapsed="true">
+    <Position X="20.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAABgAgAAAAAAQGAAAAAAIgAEAAAIABAAEAAAAAQA=</HashCode>
+      <FileName>Assets\Scripts\Helper\ReflectionUtil.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Utilities.SerializedPropertyExtentions" Collapsed="true">
+    <Position X="10.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Helper\SerializedPropertyExtentions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Utilities.TypeUtilities" Collapsed="true">
+    <Position X="15.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Helper\TypeUtilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Triangle" Collapsed="true">
+    <Position X="10.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAgAACAAAAAAAAAAAAAAAAAAAoBEAAAA=</HashCode>
+      <FileName>Assets\Scripts\TerrainGeneration\Triangle.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="Tayx.Graphy.UI.IModifiableState" Collapsed="true">
+    <Position X="10.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\UI\IModifiableState.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Tayx.Graphy.UI.IMovable" Collapsed="true">
+    <Position X="12" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Packages\Tayx\Graphy - Ultimate Stats Monitor\Scripts\UI\IMovable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="BlockType">
+    <Position X="10.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAEICAAAABAAAAAAAEAAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\Classes\Block.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CategoryType">
+    <Position X="12" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Crafting\UI_Crafting.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ComparisonType" Collapsed="true">
+    <Position X="13.75" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAEAAAAAAAAAAgAAAAAAAAAAAAEAAAAAAgAQAAAA=</HashCode>
+      <FileName>Assets\Scripts\Helper\ComparisonType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DisablingType" Collapsed="true">
+    <Position X="15.5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Helper\DisablingType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ItemType" Collapsed="true">
+    <Position X="17.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAICAAAAAAAAAAAAEAAACAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\Inventory\Item.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

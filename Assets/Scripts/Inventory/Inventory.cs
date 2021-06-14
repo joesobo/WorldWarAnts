@@ -17,15 +17,15 @@ public class Inventory {
     public void AddItem(Item item) {
         if (item.IsStackable()) {
             var itemAlreadyInInventory = false;
-            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem != null && inventoryItem.itemType == item.itemType && inventoryItem.amount < Item.MAXAmount)) {
+            foreach (var inventoryItem in itemList.Where(inventoryItem => inventoryItem != null && inventoryItem.itemType == item.itemType && inventoryItem.amount < Item.MaxAmount)) {
                 var totalAmount = inventoryItem.amount + item.amount;
-                if (totalAmount <= Item.MAXAmount) {
+                if (totalAmount <= Item.MaxAmount) {
                     inventoryItem.amount += item.amount;
                     itemAlreadyInInventory = true;
                     break;
                 } else {
-                    inventoryItem.amount = Item.MAXAmount;
-                    item.amount = totalAmount - Item.MAXAmount;
+                    inventoryItem.amount = Item.MaxAmount;
+                    item.amount = totalAmount - Item.MaxAmount;
                     itemAlreadyInInventory = true;
                     AddItem(item);
                     break;
@@ -71,17 +71,17 @@ public class Inventory {
         //combine all possible stacks
         foreach (var item in itemList) {
             if (item == null || !item.IsStackable()) continue;
-            if (item.amount < Item.MAXAmount && item.amount != -1) {
+            if (item.amount < Item.MaxAmount && item.amount != -1) {
                 foreach (var testItem in itemList) {
-                    if (testItem != null && item != testItem && item.itemType == testItem.itemType && testItem.amount < Item.MAXAmount && testItem.amount != -1) {
+                    if (testItem != null && item != testItem && item.itemType == testItem.itemType && testItem.amount < Item.MaxAmount && testItem.amount != -1) {
                         var totalAmount = item.amount + testItem.amount;
 
-                        if (totalAmount <= Item.MAXAmount) {
+                        if (totalAmount <= Item.MaxAmount) {
                             item.amount = totalAmount;
                             testItem.amount = -1;
                         } else {
-                            item.amount = Item.MAXAmount;
-                            testItem.amount = totalAmount - Item.MAXAmount;
+                            item.amount = Item.MaxAmount;
+                            testItem.amount = totalAmount - Item.MaxAmount;
                         }
                     }
                 }
@@ -136,7 +136,7 @@ public class Inventory {
             if (inventoryItem == null) {
                 return true;
             }
-            if (inventoryItem.itemType == item.itemType && inventoryItem.amount != Item.MAXAmount) {
+            if (inventoryItem.itemType == item.itemType && inventoryItem.amount != Item.MaxAmount) {
                 return true;
             }
         }
