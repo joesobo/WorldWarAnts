@@ -127,7 +127,7 @@ public class TerrainMap : MonoBehaviour {
         var blockList = BlockManager.Read();
         colorList.Clear();
         foreach (var block in blockList.blocks) {
-            colorList.Add(BlockManager.colorDictionary[block.blockType]);
+            colorList.Add(BlockManager.ColorDictionary[block.blockType]);
         }
     }
 

@@ -194,7 +194,7 @@ public class TerrainNoise : MonoBehaviour {
     }
 
     private static int GetBlockTypeIndex(BlockType type) {
-        return BlockManager.indexDictionary[type];
+        return BlockManager.IndexDictionary[type];
     }
 
     public static bool InRange(float input, float value, float range) {

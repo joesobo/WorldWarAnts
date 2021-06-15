@@ -1,35 +1,34 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 public static class BlockManager {
-    private static string path = Application.persistentDataPath + "/blocks.json";
-    public static Dictionary<BlockType, int> indexDictionary = new Dictionary<BlockType, int>();
-    public static Dictionary<BlockType, Color> colorDictionary = new Dictionary<BlockType, Color>();
+    private static readonly string Path = Application.persistentDataPath + "/blocks.json";
+    public static readonly Dictionary<BlockType, int> IndexDictionary = new Dictionary<BlockType, int>();
+    public static readonly Dictionary<BlockType, Color> ColorDictionary = new Dictionary<BlockType, Color>();
 
     public static void Write(BlockCollection collection, Block element) {
         if (element != null) {
             collection.blocks.Add(element);
         }
 
-        JsonManager.Write<BlockCollection>(path, collection);
+        JsonManager.Write(Path, collection);
     }
 
     public static void Remove(BlockCollection collection, int index) {
-        JsonManager.Remove(path, collection.blocks, index);
+        JsonManager.Remove(Path, collection.blocks, index);
     }
 
     public static BlockCollection Read() {
-        BlockCollection collection = JsonManager.Read<BlockCollection>(path);
+        var collection = JsonManager.Read<BlockCollection>(Path);
 
-        indexDictionary.Clear();
-        colorDictionary.Clear();
+        IndexDictionary.Clear();
+        ColorDictionary.Clear();
         for (var i = 0; i < collection.blocks.Count; i++) {
             var element = collection.blocks[i];
-            if (!indexDictionary.ContainsKey(element.blockType)) {
-                indexDictionary.Add(element.blockType, i);
-                colorDictionary.Add(element.blockType, element.color);
+            if (!IndexDictionary.ContainsKey(element.blockType)) {
+                IndexDictionary.Add(element.blockType, i);
+                ColorDictionary.Add(element.blockType, element.color);
             }
         }
 

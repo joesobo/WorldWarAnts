@@ -14,7 +14,7 @@ public static class JsonManager {
     }
 
     public static void Remove<T>(string path, List<T> collection, int index) {
-        var tempCollection = new List<T>();
+        List<T> tempCollection;
         if (index == collection.Count - 1) {
             tempCollection = collection.GetRange(0, index);
             tempCollection.AddRange(collection.GetRange(index + 1, collection.Count));

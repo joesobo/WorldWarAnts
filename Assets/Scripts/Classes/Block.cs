@@ -31,7 +31,7 @@ public class Block {
 
 [Serializable]
 public class BlockCollection {
-    public List<Block> blocks = new List<Block>();
+    public List<Block> blocks;
 
     public BlockCollection(List<Block> blocks) {
         this.blocks = blocks;

@@ -50,7 +50,7 @@ public partial class VoxelMap : MonoBehaviour {
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
-    public void FreshGeneration() {
+    private void FreshGeneration() {
         var oldChunks = FindObjectsOfType<VoxelChunk>();
         for (var i = oldChunks.Length - 1; i >= 0; i--) {
             Destroy(oldChunks[i].gameObject);

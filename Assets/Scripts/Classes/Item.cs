@@ -42,7 +42,7 @@ public class Item {
 
 [Serializable]
 public class ItemCollection {
-    public List<Item> items = new List<Item>();
+    public List<Item> items;
 
     public ItemCollection(List<Item> items) {
         this.items = items;

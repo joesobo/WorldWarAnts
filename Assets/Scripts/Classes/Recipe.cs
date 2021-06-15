@@ -18,7 +18,9 @@ public class Recipe {
     public CategoryType category;
     public RecipeType recipeType;
     public List<ItemType> inputList = new List<ItemType>();
+    public List<int> inputAmountList = new List<int>();
     public List<ItemType> outputList = new List<ItemType>();
+    public List<int> outputAmountList = new List<int>();
     //public string machine??
     public int craftingTime;
     public bool unlocked;
@@ -26,7 +28,7 @@ public class Recipe {
 
 [Serializable]
 public class RecipeCollection {
-    public List<Recipe> recipes = new List<Recipe>();
+    public List<Recipe> recipes;
 
     public RecipeCollection(List<Recipe> recipes) {
         this.recipes = recipes;
