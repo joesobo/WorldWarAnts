@@ -14,8 +14,8 @@ public enum BlockType {
 
 [Serializable]
 public class Block {
-    public string texturePath;
     public BlockType blockType;
+    public string texturePath;
     public Color color;
     public ItemType itemType;
     public int amount;
@@ -32,4 +32,8 @@ public class Block {
 [Serializable]
 public class BlockCollection {
     public List<Block> blocks = new List<Block>();
+
+    public BlockCollection(List<Block> blocks) {
+        this.blocks = blocks;
+    }
 }

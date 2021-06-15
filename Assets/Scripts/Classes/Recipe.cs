@@ -1,20 +1,34 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public enum CategoryType {
     Test1,
     Test2,
 };
 
+public enum RecipeType {
+    Test1,
+    Test2,
+    Test3
+};
+
 [Serializable]
 public class Recipe {
     //TODO: change to list of item id's
-    public List<Item> inputList = new List<Item>();
-    public List<Item> outputList = new List<Item>();
     public CategoryType category;
+    public RecipeType recipeType;
+    public List<ItemType> inputList = new List<ItemType>();
+    public List<ItemType> outputList = new List<ItemType>();
     //public string machine??
     public int craftingTime;
     public bool unlocked;
+}
+
+[Serializable]
+public class RecipeCollection {
+    public List<Recipe> recipes = new List<Recipe>();
+
+    public RecipeCollection(List<Recipe> recipes) {
+        this.recipes = recipes;
+    }
 }

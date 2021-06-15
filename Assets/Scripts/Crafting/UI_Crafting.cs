@@ -16,12 +16,14 @@ public class UI_Crafting : MonoBehaviour {
     public GameObject displayRequirementPrefab;
 
     private UIController uIController;
-    private RecipeAssets recipeAssets;
+    // private RecipeAssets recipeAssets;
     private PauseMenu pauseMenu;
     private CategoryType currentCategory;
     private UI_PlayerInventory playerInventory;
     private UI_HotBar hotbarInventory;
 
+    private RecipeCollection recipeCollection;
+    private ItemCollection itemCollection;
     private List<Recipe> currentRecipes = new List<Recipe>();
     private List<CraftingSlot> slotList = new List<CraftingSlot>();
     [HideInInspector] public int currentRecipeIndex = -1;
@@ -29,11 +31,14 @@ public class UI_Crafting : MonoBehaviour {
 
     private void Start() {
         uIController = FindObjectOfType<UIController>();
-        recipeAssets = FindObjectOfType<RecipeAssets>();
+        // recipeAssets = FindObjectOfType<RecipeAssets>();
         pauseMenu = FindObjectOfType<PauseMenu>();
         currentCategory = CategoryType.Test1;
         playerInventory = FindObjectOfType<UI_PlayerInventory>();
         hotbarInventory = FindObjectOfType<UI_HotBar>();
+
+        recipeCollection = RecipeManager.Read();
+        itemCollection = ItemManager.Read();
 
         isActive = false;
 
@@ -56,7 +61,7 @@ public class UI_Crafting : MonoBehaviour {
 
                 //set current recipe
                 var img = displayImage.GetComponent<Image>();
-                var displayItem = recipe.outputList[0];
+                var displayItem = itemCollection.items.Find(item => item.itemType == recipe.outputList[0]);
                 img.sprite = displayItem.GetSprite();
                 img.color = Color.white;
 
@@ -67,9 +72,10 @@ public class UI_Crafting : MonoBehaviour {
 
                 //display requirements
                 foreach (var requirement in recipe.inputList) {
+                    var requiredItem = itemCollection.items.Find(item => item.itemType == requirement);
                     var displayRequirement = Instantiate(displayRequirementPrefab, Vector3.zero, Quaternion.identity, displayRequirementsGrid);
-                    displayRequirement.transform.GetChild(0).GetComponent<Image>().sprite = requirement.GetSprite();
-                    displayRequirement.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = requirement.itemType + " x" + requirement.amount;
+                    displayRequirement.transform.GetChild(0).GetComponent<Image>().sprite = requiredItem.GetSprite();
+                    displayRequirement.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = requiredItem.itemType + " x" + requiredItem.amount;
                 }
             } else {
                 var img = displayImage.GetComponent<Image>();
@@ -96,7 +102,7 @@ public class UI_Crafting : MonoBehaviour {
             }
 
             currentRecipes.Clear();
-            foreach (Recipe recipe in recipeAssets.recipes) {
+            foreach (Recipe recipe in recipeCollection.recipes) {
                 if (recipe.category == currentCategory) {
                     currentRecipes.Add(recipe);
                 }
@@ -109,7 +115,8 @@ public class UI_Crafting : MonoBehaviour {
 
             int index = 0;
             foreach (Recipe recipe in currentRecipes) {
-                var displayItem = recipe.outputList[0];
+                var displayItemType = recipe.outputList[0];
+                var displayItem = itemCollection.items.Find(item => item.itemType == displayItemType);
 
                 var craftingSlot = Instantiate(slotPrefab, Vector3.zero, Quaternion.identity, slotContainer);
                 CraftingSlot slot = craftingSlot.GetComponent<CraftingSlot>();
@@ -143,8 +150,9 @@ public class UI_Crafting : MonoBehaviour {
         bool hasAllRequirements = true;
         foreach (var requirement in recipe.inputList) {
             bool hasRequirement = false;
+            var requiredItem = itemCollection.items.Find(item => item.itemType == requirement);
             foreach (var inventory in inventories) {
-                if (inventory.HasItem(requirement)) {
+                if (inventory.HasItem(requiredItem)) {
                     hasRequirement = true;
                     removeInventory.Add(inventory);
                     break;
@@ -160,12 +168,14 @@ public class UI_Crafting : MonoBehaviour {
         if (hasAllRequirements) {
             for (int i = 0; i < recipe.inputList.Count; i++) {
                 var requirement = recipe.inputList[i];
+                var requiredItem = itemCollection.items.Find(item => item.itemType == requirement);
                 var inv = removeInventory[i];
-                inv.RemoveFirstFoundItem(requirement);
+                inv.RemoveFirstFoundItem(requiredItem);
             }
 
             //add new item
-            foreach (var craftedItem in recipe.outputList) {
+            foreach (var craftedType in recipe.outputList) {
+                var craftedItem = itemCollection.items.Find(item => item.itemType == craftedType);
                 foreach (var inventory in inventories) {
                     if (inventory.HasRoom(craftedItem)) {
                         inventory.AddItem(craftedItem);

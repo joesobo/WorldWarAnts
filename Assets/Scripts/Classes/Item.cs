@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum ItemType {
@@ -11,6 +12,7 @@ public enum ItemType {
 
 [Serializable]
 public class Item {
+    public string name;
     public ItemType itemType;
     public int amount;
     public static int MaxAmount = 64;
@@ -35,5 +37,14 @@ public class Item {
             case ItemType.Test: return false;
             case ItemType.GrassBlade: return true;
         }
+    }
+}
+
+[Serializable]
+public class ItemCollection {
+    public List<Item> items = new List<Item>();
+
+    public ItemCollection(List<Item> items) {
+        this.items = items;
     }
 }

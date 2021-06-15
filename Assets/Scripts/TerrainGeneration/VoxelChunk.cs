@@ -40,7 +40,7 @@ public class VoxelChunk : MonoBehaviour {
         GetComponent<MeshRenderer>().material = material;
         mesh.name = "VoxelChunk Mesh";
 
-        blockCollection = BlockManager.ReadBlocks();
+        blockCollection = BlockManager.Read();
 
         ResetValues();
 
@@ -131,7 +131,7 @@ public class VoxelChunk : MonoBehaviour {
                     }
                     // Placing
                     if (stencil.fillType != 0 && voxels[i].state == 0) {
-                        var placingItemType = BlockManager.ReadBlocks().blocks[stencil.fillType].itemType;
+                        var placingItemType = BlockManager.Read().blocks[stencil.fillType].itemType;
                         voxels[i].state = stencil.Apply(x, y, voxels[i].state);
 
                         uiHotBar.Place();

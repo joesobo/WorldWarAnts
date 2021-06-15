@@ -35,7 +35,7 @@ public class WorldItem : MonoBehaviour {
     private void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         itemCollider = GetComponent<BoxCollider2D>();
-        playerInventoryController = GetComponent<PlayerInventoryController>();
+        playerInventoryController = FindObjectOfType<PlayerInventoryController>();
     }
 
     private void Update() {

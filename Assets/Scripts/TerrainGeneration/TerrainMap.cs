@@ -124,10 +124,10 @@ public class TerrainMap : MonoBehaviour {
     }
 
     private void RefreshColors() {
-        var blockList = BlockManager.ReadBlocks();
+        var blockList = BlockManager.Read();
         colorList.Clear();
         foreach (var block in blockList.blocks) {
-            colorList.Add(BlockManager.BlockColorDictionary[block.blockType]);
+            colorList.Add(BlockManager.colorDictionary[block.blockType]);
         }
     }
 

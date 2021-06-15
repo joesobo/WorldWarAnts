@@ -45,7 +45,7 @@ public class VoxelEditor : MonoBehaviour {
         worldManager = FindObjectOfType<WorldManager>();
         uiHotBar = FindObjectOfType<UI_HotBar>();
 
-        var blockCollection = BlockManager.ReadBlocks();
+        var blockCollection = BlockManager.Read();
         if (worldManager.creativeMode) {
             foreach (var block in blockCollection.blocks) {
                 fillTypeNames.Add(block.blockType.ToString());
@@ -162,7 +162,7 @@ public class VoxelEditor : MonoBehaviour {
             activeStencil.Initialize(fillTypeIndex, radiusIndex);
         } else {
             var fillType = 0;
-            var blocks = BlockManager.ReadBlocks().blocks;
+            var blocks = BlockManager.Read().blocks;
 
             for (int i = 0; i < blocks.Count; i++) {
                 if (isBreaking) {

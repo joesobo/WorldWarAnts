@@ -44,7 +44,7 @@ public class BlockMap : EditorWindow {
             SaveTexture2DArray();
         }
         if (GUILayout.Button("Save JSON structure")) {
-            BlockManager.WriteBlocks(blockList, null);
+            BlockManager.Write(blockList, null);
         }
         EditorGUILayout.EndHorizontal();
 
@@ -98,20 +98,20 @@ public class BlockMap : EditorWindow {
         };
 
         reorderableList.onReorderCallback = (list) => {
-            BlockManager.WriteBlocks(blockList, null);
+            BlockManager.Write(blockList, null);
             Refresh();
         };
 
         reorderableList.onAddCallback = (list) => {
             var block = new Block(BlockType.Empty, Color.black, "", ItemType.Empty, 0);
-            BlockManager.WriteBlocks(blockList, block);
+            BlockManager.Write(blockList, block);
             Refresh();
         };
 
         reorderableList.onRemoveCallback = (list) => {
             if (EditorUtility.DisplayDialog("Warning!", "Are you sure you want to delete this block?", "Yes", "No")) {
                 ReorderableList.defaultBehaviours.DoRemoveButton(list);
-                BlockManager.RemoveBlock(blockList, selectedIndex);
+                BlockManager.Remove(blockList, selectedIndex);
             }
         };
 
@@ -121,7 +121,7 @@ public class BlockMap : EditorWindow {
     }
 
     private void Refresh() {
-        blockList = BlockManager.ReadBlocks();
+        blockList = BlockManager.Read();
         textures = new List<Texture2D>();
         reorderableList = new ReorderableList(blockList.blocks,
             typeof(Block),
